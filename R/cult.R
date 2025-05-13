@@ -43,9 +43,14 @@ cult <- function(x, wd = NULL, ndigits = 3) {
 
   # Check inputs.
   stopifnot("Input 'x' must be a list"= is.list(x))
-  stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% names(y)))))
-  stopifnot("Wrong element 'cultra' in input list 'x'" = all(sapply(x, function(y) cultra %in% names(y$cultra))))
-  stopifnot("Wrong element 'clteff' in input list 'x'" = all(sapply(x, function(y) clteff %in% names(y$clteff))))
+  stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% tolower(names(y))))))
+  x <- lapply(x, function(y) {
+    names(y) <- tolower(names(y))
+    y
+  })
+
+  stopifnot("Wrong element 'cultra' in input list 'x'" = all(sapply(x, function(y) cultra %in% tolower(names(y$cultra)))))
+  stopifnot("Wrong element 'clteff' in input list 'x'" = all(sapply(x, function(y) clteff %in% tolower(names(y$clteff)))))
 
   if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
 
