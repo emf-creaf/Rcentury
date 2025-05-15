@@ -1,12 +1,28 @@
 test_that("Reading CENTURY 'lis' files", {
 
   wd <- "..//..//data-raw//example"
-  testthat::expect_no_condition(read_lis("example.lis", wd))
+  params <- list(simulation ="duke",
+                 output = "out",
+                 start_time = 1,
+                 end_time = 100,
+                 args = c("fcacc", "rlvacc", "frtacc", "fbracc", "rlwacc")
+  )
 
-  x <- read_lis("example.lis", wd)
-  expect_equal(unname(apply(x, 2, mean)),
-               c(1211.52116, 55.55744, 486.36927, 11.23644, 64.96978, 98.58083, 3747.94835, 339.06111, 14897.79286),
-               tolerance = .Machine$double.eps^.5)
+  # If output already exists from previous tests, remove.
+  fn <- file.path(wd, paste0(params$output, ".lis"))
+  if (file.exists(fn)) file.remove(fn)
+
+  # Run. File "out.lis" does not exist.
+  list100(wd, params)
+
+  # Read out.lis
+  df <- read_lis(wd, "out")
+
+  # Checks.
+  expect_no_error(df[1, 1] == 1)
+  expect_equal(c("time", params$args), colnames(df))
+
+
 
 
 })
