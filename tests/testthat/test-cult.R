@@ -9,7 +9,7 @@ test_that("Create 'cult' file", {
   names(x[[2]]$clteff) <- paste0("CLTEFF(", 1:4, ")")
 
   # All ok.
-  wd <- "../../data-raw/"
+  wd <- "..//..//data-raw//example"
   expect_no_error(cult(x, wd))
 
   # Errorw.
