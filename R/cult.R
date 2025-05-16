@@ -22,7 +22,7 @@
 #' x[[1]] <- list(label = "E", title = "Example", cultra = runif(7), clteff = runif(4))
 #' names(x[[1]]$cultra) <- paste0("cultra(", 1:7, ")")
 #' names(x[[1]]$clteff) <- paste0("clteff(", 1:4, ")")
-#' x[[2]] <- list(label = "E", title = "Example", cultra = runif(7), clteff = runif(4))
+#' x[[2]] <- list(label = "A", title = "Another Example", cultra = runif(7), clteff = runif(4))
 #' names(x[[2]]$cultra) <- paste0("cultra(", 1:7, ")")
 #' names(x[[2]]$clteff) <- paste0("clteff(", 1:4, ")")
 #'
@@ -30,9 +30,22 @@
 #' x[[1]]$cultra[3] <- 0.3
 #'
 #' # Create file locally.
-#' cult(x, ndigits = 4)
+#' wd <- ".//data-raw//example"
+#' cult(x, wd, ndigits = 4)
 
-cult <- function(x, wd = NULL, ndigits = 3) {
+cult <- function(x, wd = NULL, ndigits = 3, overwrite = TRUE) {
+
+
+  # Output file should not exist.
+  fn <- "cult.100"
+  if (!is.null(wd)) fn <- file.path(wd, fn)
+  if (!overwrite) stopifnot("Output File already exists" = !file.exists(fn))
+
+
+  # Make a list with parameters that will go into the file.
+  elem_names <- c("cultra", "clteff")
+  elem_num <- setNames(list(7, 4), elem_names)
+  elements <- list_elements(elem_names, elem_num)
 
 
   # Elements in 'x'.
@@ -92,8 +105,7 @@ cult <- function(x, wd = NULL, ndigits = 3) {
 
 
   # Save file on disk.
-  filnam <- "cult.100"
-  if (!is.null(wd)) filnam <- file.path(wd, filnam)
-  write.table(df, file = filnam, sep = "        ", quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+  write.table(df, file = fn, sep = "        ", quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }

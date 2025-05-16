@@ -14,3 +14,35 @@ check_length_digits <- function(x, ndigits) {
   return(x)
 
 }
+
+
+check_elements <- function() {
+
+}
+
+#' Title
+#'
+#' @param x
+#'
+#' @returns
+#'
+#' @examples
+
+list_elements <- function(elem_names, elem_num) {
+
+  elements <- lapply(elem_names, function(x) {
+    if (length(elem_num[[x]]) == 1) {
+      paste0(x, "(", seq(1, elem_num[[x]], by = 1), ")")
+    } else {
+      dxy <- elem_num[[x]]
+      y <- NULL
+      for (i in 1:dxy[1]) {
+        for (j in 1:dxy[2]) {
+          y <- c(y, paste0(x, "(", i, ",", j, ")"))
+        }
+      }
+      y
+    }
+  })
+  return(elements)
+}

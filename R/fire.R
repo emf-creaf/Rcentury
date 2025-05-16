@@ -8,32 +8,34 @@
 #' @export
 #'
 #' @examples
-fire <- function(x, wd = NULL, ndigits = 3) {
+fire <- function(x, wd = NULL, ndigits = 3, overwrite = TRUE) {
 
 
-  # Elements in 'x'.
+  # Output file should not exist.
+  fn <- "fire.100"
+  if (!is.null(wd)) fn <- file.path(wd, fn)
+  if (!overwrite) stopifnot("Output File already exists" = !file.exists(fn))
+
+
+  # First we make a list with parameters that will go into the file.
   elem_names <- c("fdfrem", "fret", "fnue")
   elem_num <- setNames(list(4, c(3, 4), 2), elem_names)
-  elements <- lapply(elem_names, function(x) {
-    if (length(elem_num[[x]]) == 1) {
-      paste0(x, "(", seq(1, elem_num[[x]], by = 1), ")")
-    } else {
-      dxy <- elem_num[[x]]
-      y <- NULL
-      for (i in 1:dxy[1]) {
-        for (j in 1:dxy[2]) {
-          y <- c(y, paste0(x, "(", i, ",", j, ")"))
-        }
-      }
-      y
-    }
-  })
-
+  elements <- list_elements(elem_names, elem_num)
   elements <- c("flfrem", elements[c(1, 2)], "frtsh", elements[3])
+  elements <- setNames(elements, c("flfrem", elem_names[c(1, 2)], "frtsh", elem_names[3]))
+  elements <- c(list(label = NULL, title = NULL), elements)
 
-  flfrem <- paste0("cultra(", 1:7, ")")
-  clteff <- paste0("clteff(", 1:4, ")")
 
 
-  elements <- c("label", "title", elements)
+  # Next we check that input list 'x' has them all.
+  stopifnot("Input 'x' must be a list"= is.list(x))
+  stopifnot("Input list 'x' must not be empty" = length(x) > 0)
+  x <- lapply(x, function(y) {
+    names(y) <- tolower(names(y))
+    y
+  })
+  stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% names(y)))))
+
+
+browser()
 }
