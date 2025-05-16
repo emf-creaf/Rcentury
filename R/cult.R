@@ -19,75 +19,57 @@
 #'
 #' # Example list with two elements.
 #' x <- list()
-#' x[[1]] <- list(label = "E", title = "Example", cultra = runif(7), clteff = runif(4))
-#' names(x[[1]]$cultra) <- paste0("cultra(", 1:7, ")")
-#' names(x[[1]]$clteff) <- paste0("clteff(", 1:4, ")")
-#' x[[2]] <- list(label = "A", title = "Another Example", cultra = runif(7), clteff = runif(4))
-#' names(x[[2]]$cultra) <- paste0("cultra(", 1:7, ")")
-#' names(x[[2]]$clteff) <- paste0("clteff(", 1:4, ")")
+#' x[[1]] <- list("E1", "Example1")
+#' x[[1]] <- append(x[[1]], runif(11))
+#' names(x[[1]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
+#' x[[2]] <- list("E1", "Example1")
+#' x[[2]] <- append(x[[2]], runif(11))
+#' names(x[[2]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
 #'
 #' # Fewer digits.
-#' x[[1]]$cultra[3] <- 0.3
+#' x[[1]]$`cultra(3)` <- 0.3
 #'
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
-#' cult(x, wd, ndigits = 4)
+#' cult(x, wd, ndigits = 2)
 
 cult <- function(x, wd = NULL, ndigits = 3, overwrite = TRUE) {
 
 
-  # Output file should not exist.
+  # Check correct path and file.
+  if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
   fn <- "cult.100"
   if (!is.null(wd)) fn <- file.path(wd, fn)
   if (!overwrite) stopifnot("Output File already exists" = !file.exists(fn))
 
 
-  # Make a list with parameters that will go into the file.
-  elem_names <- c("cultra", "clteff")
-  elem_num <- setNames(list(7, 4), elem_names)
-  elements <- list_elements(elem_names, elem_num)
-
-
-  # Elements in 'x'.
-  elements <- c("label", "title", "cultra", "clteff")
-  cultra <- paste0("cultra(", 1:7, ")")
-  clteff <- paste0("clteff(", 1:4, ")")
-
-
-  # Check inputs.
+  # Check that input 'x' has all the necessary variables, plus 'label' and 'title'.
   stopifnot("Input 'x' must be a list"= is.list(x))
-  stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% tolower(names(y))))))
+  stopifnot("Input list 'x' must not be empty" = length(x) > 0)
+  elements <- c("label", "title", data100$cult.100$Variable)
   x <- lapply(x, function(y) {
     names(y) <- tolower(names(y))
     y
   })
+  stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% names(y)))))
 
-  stopifnot("Wrong element 'cultra' in input list 'x'" = all(sapply(x, function(y) cultra %in% tolower(names(y$cultra)))))
-  stopifnot("Wrong element 'clteff' in input list 'x'" = all(sapply(x, function(y) clteff %in% tolower(names(y$clteff)))))
 
-  if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
-
+  # Check digits for numerical results.
   stopifnot("Wrong 'ndigits' value" = all(ndigits > 0 & round(ndigits) == ndigits))
   if (ndigits > 8) warning("Input 'ndigits' value is probably too high")
-
-
-  # Check values in 'x' are ok.
-  stopifnot("Elements in 'cultra' element of 'x' must have values within interval [0, 1]" =
-              all(sapply(x, function(y) all(y$cultra >= 0 & y$cultra <= 1))))
-  stopifnot("Elements in 'clteff' element of 'x' must have values within interval [0, 1]" =
-              all(sapply(x, function(y) all(y$clteff >= 0 & y$clteff <= 1))))
-
-
-  # Round numbers.
-  nx <- length(x)
-  for (i in 1:nx) {
-    x[[i]]$cultra <- round(x[[i]]$cultra, digits = ndigits)
-    x[[i]]$clteff <- round(x[[i]]$clteff, digits = ndigits)
-  }
+  for (i in 1:length(x)) x[[i]][-c(1, 2)] <- round(unlist(x[[i]][-c(1, 2)]), digits = ndigits)
+browser()
+  # Check 'x' are ok.
+  # stopifnot("Elements in 'cultra' element of 'x' must have values within interval [0, 1]" =
+  #             all(sapply(x, function(y) all(y$cultra >= 0 & y$cultra <= 1))))
+  # stopifnot("Elements in 'clteff' element of 'x' must have values within interval [0, 1]" =
+  #             all(sapply(x, function(y) all(y$clteff >= 0 & y$clteff <= 1))))
 
 
   # We convert into a data.frame with numbers as characters.
   df <- NULL
+
+  # as.data.frame(unname(unlist(x[[1]][-c(1, 2)])))
   for (i in 1:length(x)) {
     xx <- x[[i]]
     df <- rbind(df, c(xx$label, xx$title))
