@@ -14,7 +14,7 @@ test_that("Creating Century files", {
 
   # Create file locally.
   wd <- "..//..//data-raw//example"
-  century_file(x, "cult.100", wd = wd)
+  century_file(x, "cult", wd = wd)
 
 
 })

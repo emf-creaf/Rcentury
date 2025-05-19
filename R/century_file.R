@@ -4,8 +4,8 @@
 #' \code{century_file} allows users to create input files (extension '.100') for the Century soil model
 #'
 #'
-#' @param x \code{list} containing a
-#' @param file
+#' @param x \code{list} with as many elements as events as needed. Each event starts with a short label and a long title.
+#' @param file \code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.
 #' @param wd directory to save '*.100' file.
 #' @param ndigits number of digits for numeric values.
 #' @param overwrite \code{logical}, if set to TRUE file will be overwritten if it already exists on disk.
@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-#' # Example list with two elements..
+#' # Example list with two elements.
 #' set.seed(100)
 #' x <- list()
 #' x[[1]] <- list("E1", "Example1")
@@ -31,15 +31,16 @@
 #'
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
-#' century_file(x, "cult.100", wd = wd)
+#' century_file(x, "cult", wd = wd)
 century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ") {
 
 
   # Check correct path and file.
   if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
-  fn <- match.arg(file, paste0(c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"), ".100"))
-  if (!is.null(wd)) fn <- file.path(wd, fn)
-  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(fn))
+  file <- fn <- match.arg(file, c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"))
+  file <- paste0(file, ".100")
+  if (!is.null(wd)) file <- file.path(wd, file)
+  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(file))
 
 
   # Check that input 'x' is alist and has all the necessary variables.
@@ -47,7 +48,7 @@ century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE,
   stopifnot("Input list 'x' must not be empty" = length(x) > 0)
 
   data("data100")
-  elements <- c("label", "title", data100[[file]]$Variable)
+  elements <- c("label", "title", data100[[fn]]$Variable)
   x <- lapply(x, function(y) {
     names(y) <- tolower(names(y))
     y
@@ -68,6 +69,6 @@ century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE,
 
 
   # Save file on disk.
-  write.table(df, file = fn, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(df, file = file, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }

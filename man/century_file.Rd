@@ -4,10 +4,19 @@
 \alias{century_file}
 \title{Write *.100 input files for Century}
 \usage{
-century_file(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE)
+century_file(
+  x,
+  file = "",
+  wd = NULL,
+  ndigits = 3,
+  overwrite = TRUE,
+  sep = "       "
+)
 }
 \arguments{
-\item{x}{\code{list} containing a}
+\item{x}{\code{list} with as many elements as events as needed. Each event starts with a short label and a long title.}
+
+\item{file}{\code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.}
 
 \item{wd}{directory to save '*.100' file.}
 
@@ -23,11 +32,12 @@ Nothing. File is created on disk.
 }
 \examples{
 # Example list with two elements.
+set.seed(100)
 x <- list()
 x[[1]] <- list("E1", "Example1")
 x[[1]] <- append(x[[1]], runif(11))
 names(x[[1]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
-x[[2]] <- list("E1", "Example1")
+x[[2]] <- list("E2", "Example2")
 x[[2]] <- append(x[[2]], runif(11))
 names(x[[2]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
 
@@ -36,5 +46,5 @@ x[[1]]$`cultra(3)` <- 0.3
 
 # Create file locally.
 wd <- ".//data-raw//example"
-century_file(x, "cult.100", wd = wd)
+century_file(x, "cult", wd = wd)
 }
