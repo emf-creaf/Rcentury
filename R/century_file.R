@@ -1,21 +1,28 @@
-#' Title
+#' Write *.100 input files for Century
 #'
-#' @param x
+#' @description
+#' \code{century_file} allows users to create input files (extension '.100') for the Century soil model
+#'
+#'
+#' @param x \code{list} containing a
 #' @param file
-#' @param wd
-#' @param ndigits
-#' @param overwrite
+#' @param wd directory to save '*.100' file.
+#' @param ndigits number of digits for numeric values.
+#' @param overwrite \code{logical}, if set to TRUE file will be overwritten if it already exists on disk.
 #'
 #' @returns
+#' Nothing. File is created on disk.
+#'
 #' @export
 #'
 #' @examples
-#' # Example list with two elements.
+#' # Example list with two elements..
+#' set.seed(100)
 #' x <- list()
 #' x[[1]] <- list("E1", "Example1")
 #' x[[1]] <- append(x[[1]], runif(11))
 #' names(x[[1]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
-#' x[[2]] <- list("E1", "Example1")
+#' x[[2]] <- list("E2", "Example2")
 #' x[[2]] <- append(x[[2]], runif(11))
 #' names(x[[2]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
 #'
@@ -25,25 +32,42 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' century_file(x, "cult.100", wd = wd)
-century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE) {
+century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ") {
 
 
   # Check correct path and file.
   if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
-  file <- match.arg(file, paste0(c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"), ".100"))
-  if (!is.null(wd)) file <- file.path(wd, file)
-  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(file))
+  fn <- match.arg(file, paste0(c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"), ".100"))
+  if (!is.null(wd)) fn <- file.path(wd, fn)
+  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(fn))
 
 
   # Check that input 'x' is alist and has all the necessary variables.
   stopifnot("Input 'x' must be a list"= is.list(x))
   stopifnot("Input list 'x' must not be empty" = length(x) > 0)
-print(file)
+
+  data("data100")
   elements <- c("label", "title", data100[[file]]$Variable)
-  x <- elements_tolower(x)
+  x <- lapply(x, function(y) {
+    names(y) <- tolower(names(y))
+    y
+  })
   stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% names(y)))))
 
-print(elements)
 
+  # We convert into a data.frame with numbers as characters. We also add empty spaces to number column to align them.
+  df <- data.frame()
+  for (i in 1:length(x)) {
+    xx <- x[[i]]
+    y <- unlist(xx[elements[-c(1, 2)]])
+    y <- round(y, ndigits)
+    y <- sapply(y, function(z) check_length_digits(z, ndigits))
+    y <- rbind(c(xx$label, xx$title), cbind(y, elements[-c(1, 2)], deparse.level = 0), make.row.names = FALSE)
+    df <- rbind(df, y, make.row.names = FALSE, deparse.level = 0)
+  }
+
+
+  # Save file on disk.
+  write.table(df, file = fn, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }

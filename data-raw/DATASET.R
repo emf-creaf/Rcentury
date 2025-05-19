@@ -19,4 +19,4 @@ dataharvest <- suppressMessages(readxl::read_xlsx(path, sheet = "harvest.csv", p
 
 
 # Save as internal dataset.
-usethis::use_data(data100, databin, dataharvest, overwrite = TRUE, internal = TRUE)
+usethis::use_data(data100, databin, dataharvest, overwrite = TRUE)
