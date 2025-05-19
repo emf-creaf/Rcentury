@@ -25,7 +25,7 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' century_file(x, "cult.100", wd = wd)
-century_file <- function(x, file = "cult", wd = NULL, ndigits = 3, overwrite = TRUE) {
+century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE) {
 
 
   # Check correct path and file.
