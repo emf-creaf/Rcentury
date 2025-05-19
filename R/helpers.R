@@ -46,3 +46,13 @@ list_elements <- function(elem_names, elem_num) {
   })
   return(elements)
 }
+
+
+
+elements_tolower <- function(x) {
+  x <- lapply(x, function(y) {
+    names(y) <- tolower(names(y))
+    y
+  })
+  return(x)
+}
