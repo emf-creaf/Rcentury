@@ -21,13 +21,15 @@ century_list100 <- function(file = file, fileout = fileout, wd = wd, params = pa
 
 
   # Check correct paths and files.
-  fin <- paste0(file, ".bin")
-  fout <- paste0(fileout, ".lis")
-  if (!is.null(wd)) {
-    stopifnot("Path 'wd' does not exist" = file.exists(wd))
-    fin <- file.path(wd, fin)
-    fout <- file.path(wd, fout)
-  }
+  # fin <- paste0(file, ".bin")
+  # fout <- paste0(fileout, ".lis")
+  # if (!is.null(wd)) {
+  #   stopifnot("Path 'wd' does not exist" = file.exists(wd))
+  #   fin <- file.path(wd, fin)
+  #   fout <- file.path(wd, fout)
+  # }
+  fin <- check_file(file, ".bin", wd)
+  fout <- check_file(fileout, ".lis", wd)
   stopifnot("Could not find CENTURY simulation results" = file.exists(fin))
   if (file.exists(fout)) {
     if (overwrite) unlink(fout) else stop("Output file already exists. Set 'overwrite' to TRUE?")

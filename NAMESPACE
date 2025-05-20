@@ -2,6 +2,6 @@
 
 export(century_file)
 export(century_list100)
-export(cult)
-export(fire)
+export(check_file)
+export(find_extension)
 export(read_lis)
