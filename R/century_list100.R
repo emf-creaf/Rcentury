@@ -21,10 +21,12 @@ century_list100 <- function(file = file, fileout = fileout, wd = wd, params = pa
 
 
   # Check correct paths and files.
+  fin <- paste0(file, ".bin")
+  fout <- paste0(fileout, ".lis")
   if (!is.null(wd)) {
     stopifnot("Path 'wd' does not exist" = file.exists(wd))
-    fin <- file.path(wd, paste0(file, ".bin"))
-    fout <- file.path(wd, paste0(fileout, ".lis"))
+    fin <- file.path(wd, fin)
+    fout <- file.path(wd, fout)
   }
   stopifnot("Could not find CENTURY simulation results" = file.exists(fin))
   if (file.exists(fout)) {
@@ -41,6 +43,11 @@ century_list100 <- function(file = file, fileout = fileout, wd = wd, params = pa
               all(with(params, is.numeric(c(params$start_time)) & start_time > 0 & end_time > 0 &
                          round(start_time) == start_time & round(end_time) == end_time)))
   stopifnot("There must be at least one element in 'args'" = length(params$args) > 0)
+
+
+  # Check that variables in 'args' are correct.
+  data(databin)
+  stopifnot("Some variables in 'args' are incorrect" = all(params$args %in% databin$Variable))
 
 
   # Add file names to list100 inputs.

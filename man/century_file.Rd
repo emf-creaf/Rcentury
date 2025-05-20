@@ -6,7 +6,7 @@
 \usage{
 century_file(
   x,
-  file = "",
+  fileout = "",
   wd = NULL,
   ndigits = 3,
   overwrite = TRUE,
@@ -16,13 +16,13 @@ century_file(
 \arguments{
 \item{x}{\code{list} with as many elements as events as needed. Each event starts with a short label and a long title.}
 
-\item{file}{\code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.}
-
 \item{wd}{directory to save '*.100' file.}
 
 \item{ndigits}{number of digits for numeric values.}
 
 \item{overwrite}{\code{logical}, if set to TRUE file will be overwritten if it already exists on disk.}
+
+\item{file}{\code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.}
 }
 \value{
 Nothing. File is created on disk.

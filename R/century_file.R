@@ -32,15 +32,15 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' century_file(x, "cult", wd = wd)
-century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ") {
+century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ") {
 
 
   # Check correct path and file.
   if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
-  file <- fn <- match.arg(file, c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"))
-  file <- paste0(file, ".100")
-  if (!is.null(wd)) file <- file.path(wd, file)
-  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(file))
+  fileout <- fn <- match.arg(fileout, c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"))
+  fileout <- paste0(fileout, ".100")
+  if (!is.null(wd)) fileout <- file.path(wd, fileout)
+  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(fileout))
 
 
   # Check that input 'x' is alist and has all the necessary variables.
@@ -69,6 +69,6 @@ century_file <- function(x, file = "", wd = NULL, ndigits = 3, overwrite = TRUE,
 
 
   # Save file on disk.
-  write.table(df, file = file, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(df, file = fileout, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }

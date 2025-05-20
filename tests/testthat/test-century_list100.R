@@ -1,23 +1,43 @@
 test_that("list100 works", {
 
-
   wd <- "..//..//data-raw//example"
-  # expect_no_error(list100("duke", wd))
-
+  file_in <- "duke"
+  file_out <- "out"
   params <- list(start_time = 1,
                  end_time = 100,
                  args = c("fcacc", "rlvacc", "frtacc", "fbracc", "rlwacc")
   )
 
-  # If output already exists from previous tests, remove.
-  fn <- file.path(wd, paste0(params$output, ".lis"))
-  if (file.exists(fn)) file.remove(fn)
+  # Nothing is wrong.
+  expect_no_error(century_list100(file_in, file_out, wd, params = params))
 
-  # Run. File "out.lis" does not exist.
-  century_list100("duke", "out", wd, params)
-  expect_no_error(file.exists(wd, paste0(params$output, ".lis")))
+  # Wrong inputs.
+  wwd <- "./dummy"
+  expect_error(century_list100(file_in, file_out, wwd, params = params))
 
-  # Run. File does exist and will throw an error.
-  expect_error(century_list100(wd, params))
+
+  fin <- "dumb"
+  expect_error(century_list100(fin, file_out, wd, params = params))
+
+  pp <- params
+  pp$start_time <- .1
+  expect_error(century_list100(file_in, fout, wd, params = pp))
+
+  pp <- params
+  pp$start_time <- -1
+  expect_error(century_list100(file_in, fout, wd, params = pp))
+
+  pp <- params
+  pp$end_time <- .1
+  expect_error(century_list100(file_in, fout, wd, params = pp))
+
+  pp <- params
+  pp$end_time <- -1
+  expect_error(century_list100(file_in, fout, wd, params = pp))
+
+  pp <- params
+  pp$args <- "dumb"
+  expect_error(century_list100(file_in, file_out, wd, params = pp))
+
 
   })

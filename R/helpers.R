@@ -16,9 +16,41 @@ check_length_digits <- function(x, ndigits) {
 }
 
 
-check_elements <- function() {
+#' Title
+#'
+#' @param file_search
+#' @param wd
+#' @param string
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+find_extension <- function(file_search, wd = wd, extension = extension) {
+
+  if (!is.null(wd)) {
+    stopifnot("Path 'wd' does not exist" = file.exists(wd))
+    fn <- file.path(wd, file_search)
+  }
+  stopifnot("Could not find input 'file_search' name" = file.exists(fn))
+  stopifnot("Please provide a string to search" = !is.null(search_string))
+
+
+  # Read file at once.
+  x <- readLines(fn)
+
+  # Look for search_string.
+  y <- grepl(search_string, x)
+  stopifnot("Could not find 'search_string' in file" = any(y))
+  i <- which(y)
+  stopifnot("There should not be more than one match of the 'search_string'" = length(i) == 1)
+  y <- x[i]
+  if (remove) y <- trimws(sub(search_string, "", y, ignore.case = TRUE))
+
+  return(y)
 
 }
+
 
 #' Title
 #'
