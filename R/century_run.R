@@ -1,13 +1,11 @@
-century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extended = FALSE, overwrite = TRUE) {
+century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extended = FALSE, overwrite = TRUE, verbose = TRUE) {
 
 
   # Check correct paths and files.
-  fsch <- century_check_path(schedule, ".sch", wd)
-  fout <- century_check_path(fileout, ".bin", wd)
+  fsch <- century_check_path(schedule, ".sch", wd = wd, verbose = verbose)
+  fout <- century_check_path(fileout, ".bin", wd = wd, verbose = verbose)
   stopifnot("Could not find 'schedule' file" = file.exists(fsch))
-  if (file.exists(fout)) {
-    if (overwrite) unlink(fout) else stop("Output file already exists. Set 'overwrite' to TRUE?")
-  }
+  check_overwrite(fout, verbose = verbose)
   stopifnot("Could not find 'century_47.exe'" = file.exists(file.path(wd, "century_47.exe")))
 
 
@@ -32,7 +30,7 @@ century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extende
   # There may not be any error message if the program does not find the weather or site files.
   # We check the output for an "STOP" string.
   if (any(grepl("STOP", out))) {
-    cat("\n century_47.exe terminated with errors. Check the output below:\n\n\n")
+    cli::cli_abort(paste0("\n century_47.exe terminated with errors. Check the output below:\n\n\n"))
     print(out)
     stop()
   }

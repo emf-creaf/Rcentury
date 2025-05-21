@@ -10,7 +10,8 @@ century_file(
   wd = NULL,
   ndigits = 3,
   overwrite = TRUE,
-  sep = "       "
+  sep = "       ",
+  verbose = TRUE
 )
 }
 \arguments{

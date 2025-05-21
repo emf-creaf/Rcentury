@@ -9,7 +9,8 @@ century_list100(
   fileout = fileout,
   wd = wd,
   params = params,
-  overwrite = TRUE
+  overwrite = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{

@@ -4,7 +4,7 @@
 \alias{century_check_path}
 \title{Title}
 \usage{
-century_check_path(file = file, extension = NULL, wd = wd)
+century_check_path(file = file, extension = NULL, wd = wd, verbose = TRUE)
 }
 \arguments{
 \item{wd}{}

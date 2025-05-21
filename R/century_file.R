@@ -32,13 +32,13 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' century_file(x, "cult", wd = wd)
-century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ") {
+century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ", verbose = TRUE) {
 
 
   # Check correct path and file.
   fileout <- fn <- match.arg(fileout, c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"))
-  fileout <- century_check_path(fileout, ".100", wd)
-  if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(fileout))
+  fileout <- century_check_path(fileout, ".100", wd, verbose = verbose)
+  fileout <- check_overwrite(fileout, overwrite = overwrite, verbose = verbose)
 
 
   # Check that input 'x' is a list and has all the necessary variables.

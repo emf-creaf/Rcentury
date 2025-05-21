@@ -17,23 +17,14 @@
 #'   end_time = 1000,
 #'   args = c("fcacc", "rlvacc", "frtacc", "fbracc", "rlwacc"))
 #' century_list100(file_in, file_out, wd, params)
-century_list100 <- function(file = file, fileout = fileout, wd = wd, params = params, overwrite = TRUE) {
+century_list100 <- function(file = file, fileout = fileout, wd = wd, params = params, overwrite = TRUE, verbose = TRUE) {
 
 
   # Check correct paths and files.
-  # fin <- paste0(file, ".bin")
-  # fout <- paste0(fileout, ".lis")
-  # if (!is.null(wd)) {
-  #   stopifnot("Path 'wd' does not exist" = file.exists(wd))
-  #   fin <- file.path(wd, fin)
-  #   fout <- file.path(wd, fout)
-  # }
-  fin <- century_check_path(file, ".bin", wd)
-  fout <- century_check_path(fileout, ".lis", wd)
+  fin <- century_check_path(file, ".bin", wd, verbose = verbose)
+  fout <- century_check_path(fileout, ".lis", wd, verbose = verbose)
   stopifnot("Could not find CENTURY simulation results" = file.exists(fin))
-  if (file.exists(fout)) {
-    if (overwrite) unlink(fout) else stop("Output file already exists. Set 'overwrite' to TRUE?")
-  }
+  fout <- check_overwrite(fout, overwrite = overwrite, verbose = verbose)
   stopifnot("Could not find 'list100_47.exe'" = file.exists(file.path(wd, "list100_47.exe")))
 
 

@@ -5,10 +5,11 @@
 #' @param wd
 #'
 #' @returns
-#' @export
 #'
 #' @examples
-century_check_path <- function(file = file, extension = NULL, wd = wd) {
+century_check_path <- function(file = file, extension = NULL, wd = wd, verbose = TRUE) {
+
+  if (verbose) cli::cli_alert_info(paste0("Checking path for file ", file))
 
   stopifnot("Please provide an extension for the file" = !is.null(extension))
   stopifnot("Extension string should have a dot, as in e.g. '.lis'" = grepl(".", extension))
