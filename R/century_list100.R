@@ -28,8 +28,8 @@ century_list100 <- function(file = file, fileout = fileout, wd = wd, params = pa
   #   fin <- file.path(wd, fin)
   #   fout <- file.path(wd, fout)
   # }
-  fin <- check_file(file, ".bin", wd)
-  fout <- check_file(fileout, ".lis", wd)
+  fin <- century_check_path(file, ".bin", wd)
+  fout <- century_check_path(fileout, ".lis", wd)
   stopifnot("Could not find CENTURY simulation results" = file.exists(fin))
   if (file.exists(fout)) {
     if (overwrite) unlink(fout) else stop("Output file already exists. Set 'overwrite' to TRUE?")

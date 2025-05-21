@@ -2,8 +2,8 @@ century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extende
 
 
   # Check correct paths and files.
-  fsch <- check_file(schedule, ".sch", wd)
-  fout <- check_file(fileout, ".bin", wd)
+  fsch <- century_check_path(schedule, ".sch", wd)
+  fout <- century_check_path(fileout, ".bin", wd)
   stopifnot("Could not find 'schedule' file" = file.exists(fsch))
   if (file.exists(fout)) {
     if (overwrite) unlink(fout) else stop("Output file already exists. Set 'overwrite' to TRUE?")

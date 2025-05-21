@@ -36,14 +36,12 @@ century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, overwrite = TR
 
 
   # Check correct path and file.
-  if (!is.null(wd)) stopifnot("Path 'wd' does not exist" = file.exists(wd))
   fileout <- fn <- match.arg(fileout, c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"))
-  fileout <- paste0(fileout, ".100")
-  if (!is.null(wd)) fileout <- file.path(wd, fileout)
+  fileout <- century_check_path(fileout, ".100", wd)
   if (!overwrite) stopifnot("Output file already exists. Set 'overwrite' to TRUE?" = !file.exists(fileout))
 
 
-  # Check that input 'x' is alist and has all the necessary variables.
+  # Check that input 'x' is a list and has all the necessary variables.
   stopifnot("Input 'x' must be a list"= is.list(x))
   stopifnot("Input list 'x' must not be empty" = length(x) > 0)
 
