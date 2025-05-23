@@ -2,8 +2,8 @@ century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extende
 
 
   # Check correct paths and files.
-  fsch <- century_check_path(schedule, ".sch", wd = wd, verbose = verbose)
-  fout <- century_check_path(fileout, ".bin", wd = wd, verbose = verbose)
+  fsch <- check_path(schedule, ".sch", wd = wd, verbose = verbose)
+  fout <- check_path(fileout, ".bin", wd = wd, verbose = verbose)
   stopifnot("Could not find 'schedule' file" = file.exists(fsch))
   check_overwrite(fout, verbose = verbose)
   stopifnot("Could not find 'century_47.exe'" = file.exists(file.path(wd, "century_47.exe")))

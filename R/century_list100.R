@@ -21,8 +21,8 @@ century_list100 <- function(file = file, fileout = fileout, wd = wd, params = pa
 
 
   # Check correct paths and files.
-  fin <- century_check_path(file, ".bin", wd, verbose = verbose)
-  fout <- century_check_path(fileout, ".lis", wd, verbose = verbose)
+  fin <- check_path(file, ".bin", wd, verbose = verbose)
+  fout <- check_path(fileout, ".lis", wd, verbose = verbose)
   stopifnot("Could not find CENTURY simulation results" = file.exists(fin))
   fout <- check_overwrite(fout, overwrite = overwrite, verbose = verbose)
   stopifnot("Could not find 'list100_47.exe'" = file.exists(file.path(wd, "list100_47.exe")))

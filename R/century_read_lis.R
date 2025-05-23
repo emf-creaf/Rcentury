@@ -19,7 +19,7 @@ century_read_lis <- function(file = file, wd = wd, verbose = verbose) {
 
 
   # Checks.
-  file <- century_check_path(file, ".lis", wd, verbose)
+  file <- check_path(file, ".lis", wd, verbose)
 
 
   # Read file

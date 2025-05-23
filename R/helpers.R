@@ -17,6 +17,22 @@ check_length_digits <- function(x, ndigits) {
 
 
 
+#' Title
+#'
+#' @param x
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+check_natural <- function(x) {
+  stopifnot("Input must be a numeric vector" = is.vector(x, mode = "numeric"))
+  stopifnot("Input must consist of positive integers only" = all((round(x) == x) & (x >= 0)))
+  return(x)
+}
+
+
+
 
 #' Title
 #'
