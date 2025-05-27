@@ -34,6 +34,8 @@ century_weather <- function(df = df, fileout = fileout, wd = "", overwrite = TRU
   stopifnot("Wrong column names in input data.frame" = c("month", "year", "prec", "tmin", "tmax") %in% colnames(df))
   nyear <- df |> dplyr::count(year)
   stopifnot("There must be 12 months in each year" = all(nyear$n == 12))
+  stopifnot("There cannot be NA in weather values" = all(!is.na(df[, c("prec", "tmin", "tmax")])))
+  stopifnot("Precipitation must always be positive" = all(df$prec >= 0))
 
 browser()
   # Check output file.
