@@ -11,14 +11,19 @@
 #'
 #'
 #' @examples
+#'
 split_string <- function(x, by = "or") {
+
+  # Checks.
+  stopifnot("Input vector 'x' must be character" = is.character(x))
   stopifnot("Input vector 'x' must have a single element" = length(x) == 1)
   stopifnot("Input 'by' is empty or is not a character" = (by != "" & is.character(by)))
-  y <- unlist(strsplit(x, by))
-  if (length(y) > 1) {
-    for (i in 1:length(y)) y <- ifelse()
-  }
 
 
+  # Split.
+  y <- trimws(unlist(strsplit(x, by)))
+
+
+  return(y)
 
 }

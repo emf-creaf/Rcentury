@@ -16,6 +16,7 @@
 check_numeric_character <- function(y, type = "min") {
   y <- trimws(y)
   stopifnot("Input 'type' must be equal to 'min' or 'max'" = type %in% c("min", "max"))
+
   if (y == "?") {
     z <- ifelse(type == "min", -Inf, Inf)
   } else {
