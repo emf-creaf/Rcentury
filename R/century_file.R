@@ -32,7 +32,7 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' century_file(x, "cult", wd = wd)
-century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, overwrite = TRUE, sep = "       ", verbose = TRUE) {
+century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, check_values = FALSE, overwrite = TRUE, sep = "       ", verbose = TRUE) {
 
 
   # Check correct path and file.
@@ -64,6 +64,7 @@ century_file <- function(x, fileout = "", wd = NULL, ndigits = 3, overwrite = TR
     y <- rbind(c(xx$label, xx$title), cbind(y, elements[-c(1, 2)], deparse.level = 0), make.row.names = FALSE)
     df <- rbind(df, y, make.row.names = FALSE, deparse.level = 0)
   }
+  df$V2 <- paste0("'", toupper(df$V2), "'")
 
 
   # Save file on disk.

@@ -12,27 +12,27 @@ test_that("Creating Century files", {
   names(x[[2]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
 
   # Nothing is wrong.
-  expect_no_error(century_file(x, "cult", wd))
+  expect_no_error(century_file(x, "cult", wd, verbose = FALSE))
 
   # Wrong inputs.
   xx <- x
   xx[[1]]$label <- NULL
-  expect_error(century_file(xx, "cult", wd = wd))
+  expect_error(century_file(xx, "cult", wd = wd, verbose = FALSE))
 
   xx <- x
   xx[[1]]$title <- NULL
-  expect_error(century_file(xx, "cult", wd = wd))
+  expect_error(century_file(xx, "cult", wd = wd, verbose = FALSE))
 
   xx <- x
   xx[[1]]$`cultra(1)` <- "a"
-  expect_error(century_file(xx, "cult", wd = wd))
+  expect_error(century_file(xx, "cult", wd = wd, verbose = FALSE))
 
   xx <- list()
-  expect_error(century_file(xx, "cult", wd = wd))
+  expect_error(century_file(xx, "cult", wd = wd, verbose = FALSE))
 
-  expect_error(century_file(x, "dumb", wd = wd))
+  expect_error(century_file(x, "dumb", wd = wd, verbose = FALSE))
 
-  expect_error(century_file(x, "cult", wd = "./dummy"))
+  expect_error(century_file(x, "cult", wd = "./dummy", verbose = FALSE))
 
 
 })

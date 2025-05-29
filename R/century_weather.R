@@ -37,7 +37,7 @@ century_weather <- function(df = df, fileout = fileout, wd = "", overwrite = TRU
   stopifnot("There cannot be NA in weather values" = all(!is.na(df[, c("prec", "tmin", "tmax")])))
   stopifnot("Precipitation must always be positive" = all(df$prec >= 0))
 
-browser()
+
   # Check output file.
   fileout <- check_path(fileout, ".wth", wd, verbose = verbose)
   fileout <- check_overwrite(fileout, overwrite = overwrite, verbose = verbose)

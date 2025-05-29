@@ -1,3 +1,16 @@
+#' Title
+#'
+#' @param schedule
+#' @param fileout
+#' @param wd
+#' @param extended
+#' @param overwrite
+#' @param verbose
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extended = FALSE, overwrite = TRUE, verbose = TRUE) {
 
 

@@ -9,6 +9,7 @@ century_file(
   fileout = "",
   wd = NULL,
   ndigits = 3,
+  check_values = FALSE,
   overwrite = TRUE,
   sep = "       ",
   verbose = TRUE
