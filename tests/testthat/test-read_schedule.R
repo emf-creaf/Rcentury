@@ -6,7 +6,7 @@ test_that("multiplication works", {
 
 
   path <- "C://Roberto//Proyectos europeos//CARDIMED - Pilar Andrés//Century 5 soil model download//Century+Examples//Century Examples//1.soil_texture_ppt"
-
+  x <- read_schedule(file.path(path, "high_ppt.sch"))
 
 
 })
