@@ -27,27 +27,24 @@ usethis::use_data(data100, databin, dataharvest, overwrite = TRUE)
 
 ###### EXAMPLE FILES.
 
-# NOT FINISHED! READING cult.100 GIVES ERROR MESSAGES BECAUSE WE MUST SEPARATE BETWEEN TREATMENTS.
+
+# Making data sets for forest example.
+path <- "C://Roberto//Proyectos europeos//CARDIMED - Pilar Andrés//Century 5 soil model download//Century+Examples//Century Examples//4.forest"
+
+sheet_names <- c("crop.100", "cult.100", "fire.100", "fix.100", "graz.100", "tree.100", "trem.100")
+dat <- list()
+for (x in sheet_names) {
+  df <- read.table(file.path(path, x), header = FALSE, sep = "", dec = ".")
+  dat[[x]] <- fill_list(df, x)
+}
+
+duke <- list(weather = read.table(file.path(path, "duke.wth"), header = FALSE, sep = "", dec = "."))
+
+# Reading a schedule file is more complicated.
+
+x <- readLines(file.path(path, "duke.sch"), n = 15)
 
 
+             schedule = read.table(file.path(path, "duke.sch"), header = FALSE, sep = "", dec = ".")
 
-
-# Reading Excel file.
-path <- ".//data-raw//Century47//Example forest files.xlsx"
-sheet_names <- c("crop.100", "cult.100")
-data_example <- lapply(sheet_names, function(x) {
-  y <- data.frame(suppressMessages(readxl::read_xlsx(path, sheet = x, col_names = FALSE, progress = FALSE)))
-  browser()
-  if (x == "cult.100") {
-    i <- which(sapply(y[, 1], function(z) is_numeric_string(z), USE.NAMES = FALSE))
-    yy <- vector("list", length(i))
-    for (j in 1:length(i)) {
-      yy[[j]] <- vector("list", 11)
-      yy[[j]] <- lapply(1:11, function(k) yy[[j]][[k]] <- as.numeric(y[i[j]+k, 1]))
-      names(yy[[j]]) <- toupper(y[2:12, 2])
-      yy[[j]]$label = y[i[j], 1]
-      yy[[j]]$title = y[i[j], 2]
-    }
-  }
-})
 

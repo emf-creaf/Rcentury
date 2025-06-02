@@ -20,7 +20,9 @@ fill_list <- function(df, type = NULL) {
 
 
   # Number of simulations.
-  i <- which(sapply(df[, 1], function(z) is_numeric_string(z), USE.NAMES = FALSE))
+  i <- sapply(df[, 1], function(z) is_numeric_string(z), USE.NAMES = FALSE)
+  stopifnot("There must be at least one simulation with label and title" = any(i))
+  i <- which(i)
 
 
   # Making the list 'x' with simulations.
