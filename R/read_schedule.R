@@ -1,6 +1,28 @@
-read_schedule <- function(filename) {
+#' Read *.sch CENTURY files.
+#'
+#' @description
+#' \code{read_schedule} reads *.sch CENTURY soil model files and saves their content in a list.
+#'
+#' @param path \code{character} string containing a valid path to a *.sch file.
+#' @param filename \code{character} string with the name of the schedule file. It must include the extension '.sch'.
+#'
+#' @returns
+#' \code{list} with two elements named 'header' and 'block_inf', each one being also a \code{list}.
+#' The former list includes basic schedule information that is common to all blocks and that is stored at the
+#' beginning of the file. The latter list has as many elements as treatment blocks, and within each block there are some
+#' info bits specific to that block and a three-column \code{data.frame}, stored in an element named 'Schedule', with the timing
+#' of treatment. Columns are labelled 'year', 'month' and 'option'.
+#' @export
+#'
+#' @examples
+read_schedule <- function(path, filename) {
 
 
+  # Checks.
+  stopifnot("File does not exist" = file.exists(file.path(path, filename)))
+
+
+  # Labels to be found inside *.sch CENTURY files.
   labels <- c("Starting year", "Last year", "Site file name", "Labeling type", "Labeling year",
               "Microcosm", "CO2 Systems", "pH shift", "Soil warming", "N input scalar option",
               "OMAD scalar option", "Climate scalar option", "Initial system", "Initial crop",
@@ -10,7 +32,7 @@ read_schedule <- function(filename) {
 
   # Read first 15 lines containing general information.
   header <- list()
-  x <- readLines(filename)
+  x <- readLines(file.path(path, filename))
   nr <- length(x)
   for (i in 1:15) {
     j <- regexpr(labels[i], x[i], ignore.case = TRUE)
@@ -26,18 +48,22 @@ read_schedule <- function(filename) {
 
 
   # Split into blocks and read each.
-  i_start <- i[-length(i)]
-  i_end <- i[-1]-1
-  y <- vector("list", length = length(i))
-  for (j in 1:length(i_start)) {
-    xx <- x[i_start[j]:i_end[j]]
-    yy <- list()
+  block_list <- vector("list", length = length(i))
+  for (j in 1:length(i)) {
 
-    # First line may have a comment/description to its right.
+    # Temporary list for block info.
+    bck_info <- list()
+
+
+    # Extract lines to facilitate workflow.
+    xx <- x[i[j]:nr]
+
+
+    # First line may have a comment/description on the right.
     l <- regexpr(labels[16], xx[1], ignore.case = TRUE)
     xx1 <- as.numeric(trimws(substring(xx[1], 1, l[1]-1)))
     xx2 <- trimws(substring(xx[1], l[1]+7))
-    yy$'Block #' <- setNames(xx1, xx2)
+    bck_info[["Block #"]] <- setNames(xx1, xx2)
 
 
     # Lines 1 to 6 have particular info for this block.
@@ -45,29 +71,41 @@ read_schedule <- function(filename) {
     for (k in 2:7) {
       l <- regexpr(labels[15+k], xx[k], ignore.case = TRUE)
       z <- trimws(substring(xx[k], 1, l[1]-1))
-      yy[[labels[15+k]]] <- ifelse(k == 7, z, as.numeric(z))
+      bck_info[[labels[15+k]]] <- ifelse(k == 7, z, as.numeric(z))
     }
+
+
+    # Line 3 specifies the name of the site file, but does it exist?
+    stopifnot("Site file does not exist" = file.exists(file.path(path, filename)))
 
 
     # If line 7 has an "F", the name of a weather file will be included in line 8.
-    if (yy[[labels[15+k]]] == "F") {
+    # We also check that it exists.
+    if (bck_info[[labels[15+k]]] == "F") {
       k <- 8
-      yy[["Weather file"]] <- xx[k]
+      bck_info[["Weather file"]] <- xx[k]
     }
 
 
-    #
+    # Next comes the schedule as a three-column table: year, month, option.
+    # It ends with a "-999 -999 X" line.
+    df_sch <- data.frame(year = numeric(0), month = numeric(0), option = character(0))
+    repeat {
+      k <- k + 1
+      z <- unlist(strsplit(trimws(xx[k]), " +"))
+      if (length(z) == 4) z <- c(z[1:2], paste(z[-c(1, 2)], collapse = " "))
+      if (all(z == c("-999", "-999", "X"))) break
+      df_sch <- rbind(df_sch, data.frame(year = as.numeric(z[1]), month = as.numeric(z[2]), option = z[3]))
+    }
+    bck_info[["Schedule"]] <- df_sch
 
 
-
-browser()
+    # Save in list.
+    block_list[[j]] <- bck_info
 
   }
 
 
-browser()
-
-
-
+  return(list(header = header, block_info = block_list))
 
 }
