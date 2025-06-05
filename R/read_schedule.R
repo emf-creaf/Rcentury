@@ -1,3 +1,4 @@
+#' @title title
 #' Read *.sch CENTURY files.
 #'
 #' @description
@@ -23,11 +24,7 @@ read_schedule <- function(path, filename) {
 
 
   # Labels to be found inside *.sch CENTURY files.
-  labels <- c("Starting year", "Last year", "Site file name", "Labeling type", "Labeling year",
-              "Microcosm", "CO2 Systems", "pH shift", "Soil warming", "N input scalar option",
-              "OMAD scalar option", "Climate scalar option", "Initial system", "Initial crop",
-              "Initial tree", "Block #", "Last year", "Repeats # years", "Output starting year",
-              "Output month", "Output interval", "Weather choice")
+  data("labels_schedule")
 
 
   # Read first 15 lines containing general information.
@@ -35,10 +32,15 @@ read_schedule <- function(path, filename) {
   x <- readLines(file.path(path, filename))
   nr <- length(x)
   for (i in 1:15) {
-    j <- regexpr(labels[i], x[i], ignore.case = TRUE)
+    j <- regexpr(labels_schedule[i], x[i], ignore.case = TRUE)
     y <- trimws(substring(x[i], 1, j[1]-1))
-    header[[labels[i]]] <- ifelse(!(i == 3 | i == 14 | i == 15), as.numeric(y), y)
+    header[[labels_schedule[i]]] <- ifelse(!(i == 3 | i == 14 | i == 15), as.numeric(y), y)
   }
+
+
+  # If either "Initial crop" or "Initial tree" are empty, add blanks.
+  if (header[["Initial crop"]] == "") header[["Initial crop"]] <- "    "
+  if (header[["Initial tree"]] == "") header[["Initial tree"]] <- "    "
 
 
   # Next come an empty line (16th) and another line (17th) with the text "Year Month Option". After
@@ -60,7 +62,7 @@ read_schedule <- function(path, filename) {
 
 
     # First line may have a comment/description on the right.
-    l <- regexpr(labels[16], xx[1], ignore.case = TRUE)
+    l <- regexpr(labels_schedule[16], xx[1], ignore.case = TRUE)
     xx1 <- as.numeric(trimws(substring(xx[1], 1, l[1]-1)))
     xx2 <- trimws(substring(xx[1], l[1]+7))
     bck_info[["Block #"]] <- setNames(xx1, xx2)
@@ -69,9 +71,9 @@ read_schedule <- function(path, filename) {
     # Lines 1 to 6 have particular info for this block.
     # Then, line 7 tells about the weather data.
     for (k in 2:7) {
-      l <- regexpr(labels[15+k], xx[k], ignore.case = TRUE)
+      l <- regexpr(labels_schedule[15+k], xx[k], ignore.case = TRUE)
       z <- trimws(substring(xx[k], 1, l[1]-1))
-      bck_info[[labels[15+k]]] <- ifelse(k == 7, z, as.numeric(z))
+      bck_info[[labels_schedule[15+k]]] <- ifelse(k == 7, z, as.numeric(z))
     }
 
 
@@ -81,7 +83,7 @@ read_schedule <- function(path, filename) {
 
     # If line 7 has an "F", the name of a weather file will be included in line 8.
     # We also check that it exists.
-    if (bck_info[[labels[15+k]]] == "F") {
+    if (bck_info[[labels_schedule[15+k]]] == "F") {
       k <- 8
       bck_info[["Weather file"]] <- xx[k]
     }
