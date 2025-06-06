@@ -3,10 +3,9 @@
 \docType{data}
 \name{labels_schedule}
 \alias{labels_schedule}
-\title{L
-Labels in header to CENTURY schedule file}
+\title{Labels in header to CENTURY schedule file}
 \format{
-A simple vector with
+A simple vector with \code{character} strings.
 }
 \source{
 CENTURY user manual.

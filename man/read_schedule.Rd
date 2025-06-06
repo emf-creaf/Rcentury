@@ -2,7 +2,8 @@
 % Please edit documentation in R/read_schedule.R
 \name{read_schedule}
 \alias{read_schedule}
-\title{Read *.sch CENTURY files.}
+\title{title
+Read *.sch CENTURY files.}
 \usage{
 read_schedule(path, filename)
 }
