@@ -1,12 +1,12 @@
 #' Write *.100 input files for Century
 #'
 #' @description
-#' \code{century_file} allows users to create input files (extension '.100') for the Century soil model
-#'
+#' \code{century_file} allows users to create input files (extension '.100') for the Century soil model.
 #'
 #' @param x \code{list} with as many elements as events as needed. Each event starts with a short label and a long title.
-#' @param file \code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.
-#' @param wd directory to save '*.100' file.
+#' @param path directory to save '*.100' file.
+#' @param filename \code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.
+
 #' @param ndigits number of digits for numeric values.
 #' @param overwrite \code{logical}, if set to TRUE file will be overwritten if it already exists on disk.
 #'
@@ -32,11 +32,12 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' write_100(x, "cult", wd = wd)
-write_100 <- function(x, fileout = "", wd = NULL, ndigits = 3, check_values = FALSE, overwrite = TRUE, sep = "       ", verbose = TRUE) {
+write_100 <- function(x, path = path, filename = filename, ndigits = 3, check_values = FALSE, overwrite = TRUE, sep = "       ", verbose = TRUE) {
 
 
   # Check correct path and file.
-  fileout <- fn <- match.arg(fileout, c("crop", "cult", "fert", "fix", "harv", "irri", "omad", "graz", "fire", "tree", "trem"))
+  data(files_100)
+  fileout <- fn <- match.arg(filename, names(files_100))
   fileout <- check_path(fileout, ".100", wd, verbose = verbose)
   fileout <- check_overwrite(fileout, overwrite = overwrite, verbose = verbose)
 
@@ -45,7 +46,7 @@ write_100 <- function(x, fileout = "", wd = NULL, ndigits = 3, check_values = FA
   stopifnot("Input 'x' must be a list"= is.list(x))
   stopifnot("Input list 'x' must not be empty" = length(x) > 0)
 
-  data("data100")
+
   elements <- c("label", "title", data100[[fn]]$Variable)
   x <- lapply(x, function(y) {
     names(y) <- tolower(names(y))
@@ -68,6 +69,6 @@ write_100 <- function(x, fileout = "", wd = NULL, ndigits = 3, check_values = FA
 
 
   # Save file on disk.
-  write.table(df, file = fileout, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(df, file = filename, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }

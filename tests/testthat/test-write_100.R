@@ -2,14 +2,10 @@ test_that("Creating Century files", {
 
   path1 <- paste0("..//..//data-raw//Century+Examples//Century Examples//", c("1.soil_texture_ppt", "3.plant_production", "4.forest"))
   path2 <- paste0("..//..//data-raw//Example simulations//", c("1.soil_texture_ppt", "3.plant_production", "4.forest"))
-  filename <- list()
-  filename[[1]] <- c("clay.sch", "high_ppt.sch", "low_ppt.sch", "sandy.sch", "XILI.sch")
-  filename[[2]] <- c("G1.sch", "G3.sch", "G4.sch", "G5.sch")
-  filename[[3]] <- c("duke.sch", "harvard.sch")
+  data(filenames_100)
 
 
-  # Example input.
-  wd <- "..//..//data-raw//example"
+  #
 
   x <- list()
   x[[1]] <- list("E1", "Example1")
