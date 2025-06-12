@@ -15,29 +15,23 @@
 #' @export
 #'
 #' @examples
+#' # Read one of the CENTURY example files included in the package.
+#' path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+#' x <- read_100(path, "harv.100")
+#'
 read_100 <- function(path, filename, remove_blanks = TRUE) {
 
 
   # Checks.
-  stopifnot("File does not exist" = file.exists(file.path(path, filename)))
-
-
-  # *.sch and *.wth files are not read with this function.
-  ext <- tools::file_ext(filename)
-  stopifnot("Only files with extension '.100' are read with this function" = ext == "100")
-
-
-  # Site files, which also have a *.100 extension, should not be read with this function.
-  data(files_100)
-  stopifnot("This file cannot be read with this function. Is it a 'site' file?" = filename %in% names(files_100))
+  check_100(path, filename, check_site = FALSE)
 
 
   # Minimum number of rows to be expected in *.100 CENTURY files.
-  data("files_100")
+  data(files_100)
   nrows <- files_100[filename]
 
 
-  # Read the file.
+  # Read the file as a character vector.
   x <- readLines(file.path(path, filename))
 
 
@@ -62,14 +56,23 @@ read_100 <- function(path, filename, remove_blanks = TRUE) {
   for (i in 1:nblocks) {
     k <- k + 1
     l_small <- list()
+
+    # Label and title.
     z <- splitin2(x[k], "title")
     l_small$label <- unlist(z[1])
     l_small$title <- unlist(z[2])
+
+    # Data set.
     df <- data.frame(numeric(0), character(0))
     for (j in 2:nrows) {
       k <- k + 1
       df <- rbind(df, splitin2(x[k], "data"))
     }
+
+    # To lower case.
+    df[, 2] <- tolower(df[, 2])
+
+    # Save into big list.
     l_small$df <- df
     l_big[[i]] <- l_small
   }

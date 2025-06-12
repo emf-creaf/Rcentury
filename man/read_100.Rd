@@ -20,3 +20,9 @@ A list with the contents of the file.
 \code{read_100} reads almost all CENTURY files with extension '*.100'.
 The only *.100 files that cannot be read with \code{read_100} are site files.
 }
+\examples{
+# Read one of the CENTURY example files included in the package.
+path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+x <- read_100(path, "harv.100")
+
+}

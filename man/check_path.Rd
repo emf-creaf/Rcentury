@@ -2,13 +2,13 @@
 % Please edit documentation in R/check_path.R
 \name{check_path}
 \alias{check_path}
-\title{Title}
+\title{Check that path exists and that file name, together with extension, has been correctly specified}
 \usage{
-check_path(file = file, extension = NULL, wd = "", verbose = TRUE)
+check_path(path = path, filename = filename, extension = NULL, verbose = TRUE)
 }
 \arguments{
 \item{verbose}{}
 }
 \description{
-Title
+Check that path exists and that file name, together with extension, has been correctly specified
 }

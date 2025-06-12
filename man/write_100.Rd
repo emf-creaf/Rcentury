@@ -6,11 +6,10 @@
 \usage{
 write_100(
   x,
-  filename = "",
-  wd = NULL,
+  path = path,
+  filename = filename,
   ndigits = 3,
   check_values = FALSE,
-  overwrite = TRUE,
   sep = "       ",
   verbose = TRUE
 )
@@ -18,19 +17,20 @@ write_100(
 \arguments{
 \item{x}{\code{list} with as many elements as events as needed. Each event starts with a short label and a long title.}
 
+\item{path}{directory to save '*.100' file.}
+
 \item{filename}{\code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.}
 
 \item{ndigits}{number of digits for numeric values.}
-
-\item{overwrite}{\code{logical}, if set to TRUE file will be overwritten if it already exists on disk.}
-
-\item{path}{directory to save '*.100' file.}
 }
 \value{
 Nothing. File is created on disk.
 }
 \description{
 \code{century_file} allows users to create input files (extension '.100') for the Century soil model.
+}
+\details{
+File is overwritten.
 }
 \examples{
 # Example list with two elements.
@@ -49,4 +49,10 @@ x[[1]]$`cultra(3)` <- 0.3
 # Create file locally.
 wd <- ".//data-raw//example"
 write_100(x, "cult", wd = wd)
+
+# Read one of the CENTURY example files included in the package.
+path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+x <- read_100(path, "harv.100")
+
+
 }

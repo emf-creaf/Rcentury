@@ -6,12 +6,13 @@
 #' @param x \code{list} with as many elements as events as needed. Each event starts with a short label and a long title.
 #' @param path directory to save '*.100' file.
 #' @param filename \code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.
-
 #' @param ndigits number of digits for numeric values.
-#' @param overwrite \code{logical}, if set to TRUE file will be overwritten if it already exists on disk.
 #'
 #' @returns
 #' Nothing. File is created on disk.
+#'
+#' @details
+#' File is overwritten.
 #'
 #' @export
 #'
@@ -32,43 +33,73 @@
 #' # Create file locally.
 #' wd <- ".//data-raw//example"
 #' write_100(x, "cult", wd = wd)
-write_100 <- function(x, path = path, filename = filename, ndigits = 3, check_values = FALSE, overwrite = TRUE, sep = "       ", verbose = TRUE) {
+#'
+#' # Read one of the CENTURY example files included in the package.
+#' path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+#' x <- read_100(path, "harv.100")
+#'
+#'
+write_100 <- function(x, path = path, filename = filename, ndigits = 3, check_values = FALSE, sep = "       ", verbose = TRUE) {
 
 
-  # Check correct path and file.
-  data(files_100)
-  fileout <- fn <- match.arg(filename, names(files_100))
-  fileout <- check_path(fileout, ".100", wd, verbose = verbose)
-  fileout <- check_overwrite(fileout, overwrite = overwrite, verbose = verbose)
+  # Check correct path and file, and remove previous file if overwrite has been set to TRUE.
+  check_write(path, filename, overwrite = TRUE)
+
+
+  # Check that name of the file with extension *.100 is correct.
+  check_100(path, filename, check_site = FALSE)
 
 
   # Check that input 'x' is a list and has all the necessary variables.
-  stopifnot("Input 'x' must be a list"= is.list(x))
-  stopifnot("Input list 'x' must not be empty" = length(x) > 0)
+  if (!is.list(x)) cli::cli_abort("Input object 'x' must be a list")
+  if (length(x) == 0) cli::cli_abort("Input list 'x' must not be empty")
 
 
-  elements <- c("label", "title", data100[[fn]]$Variable)
+  # Translate variable names to lower case.
   x <- lapply(x, function(y) {
     names(y) <- tolower(names(y))
     y
   })
-  stopifnot("Elements in list 'x' have wrong names" = all(sapply(x, function(y) all(elements %in% names(y)))))
 
 
-  # We convert into a data.frame with numbers as characters. We also add empty spaces to number column to align them.
-  df <- data.frame()
+  # Check names in input list are correct.
+  data(data_100)
+  elements <- c("label", "title", data_100[[filename]]$Variable)
+
+
+  if (!all(sapply(x, function(y) {
+    j <- 1
+    for (y in x) {
+      print(j)
+      if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
+      j <- j + 1
+    }
+    if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
+    }))) {
+    cli::cli_abort("Elements in input list 'x' have wrong names")
+  }
+
+
+  # Convert into a data.frame with numbers as characters.
   for (i in 1:length(x)) {
     xx <- x[[i]]
-    y <- unlist(xx[elements[-c(1, 2)]])
-    y <- round(y, ndigits)
-    y <- sapply(y, function(z) check_length_digits(z, ndigits))
-    y <- rbind(c(xx$label, xx$title), cbind(y, elements[-c(1, 2)], deparse.level = 0), make.row.names = FALSE)
-    df <- rbind(df, y, make.row.names = FALSE, deparse.level = 0)
+
+    # Check label and title.
+    if (xx$label == "" | xx$title == "") cli::cli_abort("Label and title cannot be empty")
+
+    # Select elements
+    df <- unlist(xx[elements[-c(1, 2)]])
+
+    # Convert numbers to characters.
+    df <- round(df, ndigits)
+    df <- sapply(df, function(z) check_length_digits(z, ndigits))
+
+    # Write data.frame to disk.
+    df <- data.frame(names(df), unname(df))
+    colnames(df) <- xx[c("label", "title")]
+    suppressWarnings(write.table(df, file = file.path(path, filename), sep = sep,
+                                 quote = FALSE, row.names = FALSE, col.names = TRUE,
+                                 append = ifelse(i == 1, FALSE, TRUE)))
   }
-  df$V2 <- paste0("'", toupper(df$V2), "'")
-
-
-  # Save file on disk.
-  write.table(df, file = filename, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }
