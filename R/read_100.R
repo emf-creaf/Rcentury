@@ -37,7 +37,7 @@ read_100 <- function(path, filename, remove_blanks = TRUE) {
 
   # Sometimes the last lines of the file are filled with blanks.
   # if 'remove_blanks' is set to TRUE, we will remove them.
-  x <- x[which(trimws(x) != "")]
+  if (remove_blanks) x <- x[which(trimws(x) != "")]
 
 
   # Two cases: the number of lines in 'x' is exactly the corresponding number in files_100,
@@ -50,34 +50,6 @@ read_100 <- function(path, filename, remove_blanks = TRUE) {
   stopifnot("Wrong number of rows" = round(nblocks) == nblocks)
 
 
-  # Look for line with label and title plus lines with data information.
-  l_big <- list()
-  k <- 0
-  for (i in 1:nblocks) {
-    k <- k + 1
-    l_small <- list()
-
-    # Label and title.
-    z <- splitin2(x[k], "title")
-    l_small$label <- unlist(z[1])
-    l_small$title <- unlist(z[2])
-
-    # Data set.
-    df <- data.frame(numeric(0), character(0))
-    for (j in 2:nrows) {
-      k <- k + 1
-      df <- rbind(df, splitin2(x[k], "data"))
-    }
-
-    # To lower case.
-    df[, 2] <- tolower(df[, 2])
-
-    # Save into big list.
-    l_small$df <- df
-    l_big[[i]] <- l_small
-  }
-
-
-  return(l_big)
+  return(x)
 
 }

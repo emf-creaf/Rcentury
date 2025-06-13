@@ -15,7 +15,8 @@ test_that("Reading *.100 CENTURY files works", {
 print(j)
       if (file.exists(file.path(i, j))) {
         x <- read_100(i, j)
-        write_100(x, path_out, j)
+        y <- check_fields(x, j)
+        # write_100(x, path_out, j)
 browser()
       }
     }

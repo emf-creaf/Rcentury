@@ -2,12 +2,13 @@
 #'
 #' @param x
 #' @param input_type
-#' @param remove_quotes
+#' element.
 #'
 #' @returns
+#' A \code{data.frame} with one row and two columns.
 #'
 #' @examples
-splitin2 <- function(x, input_type = match.arg(input_type, c("data", "title")), remove_quotes = TRUE) {
+splitin2 <- function(x, input_type = match.arg(input_type, c("data", "title"))) {
 
   # Input must be an ASCII vector of length = 1.
   stopifnot("Please supply an input argument 'x'" = !missing(x))
@@ -16,15 +17,10 @@ splitin2 <- function(x, input_type = match.arg(input_type, c("data", "title")), 
 
   # Split into two parts.
   y <- unlist(strsplit(x, "\\s+"))
-  y1 <- y[1]
-  if (input_type == "data") y1 <- as.numeric(y1)
-
-
-  # Remove single quotation marks if 'remove_single' is TRUE.
-  # Used Gemini AI for this part.
-  if (remove_quotes) y[2] <- remove_single_quotes(y[2])
+  y1 <- ifelse (input_type == "data", as.numeric(y[1]), y[1])
+  df <- data.frame(y1, y[2], fix.empty.names = FALSE)
 
 
   # Return a data.frame without column names.
-  return(data.frame(y1, y[2], fix.empty.names = FALSE))
+  return(df)
 }
