@@ -31,11 +31,12 @@ read_100 <- function(path, filename, remove_blanks = TRUE) {
   nrows <- files_100[filename]
 
 
-  # Read the file as a character vector.
-  x <- readLines(file.path(path, filename))
+  # Read the file as a character vector. We wrap it in 'suppressWarnings'
+  # in case file does not end with a new line.
+  x <- suppressWarnings(readLines(file.path(path, filename)))
 
 
-  # Sometimes the last lines of the file are filled with blanks.
+  # Sometimes the last lines of the file are filled with too many blanks.
   # if 'remove_blanks' is set to TRUE, we will remove them.
   if (remove_blanks) x <- x[which(trimws(x) != "")]
 
@@ -48,6 +49,26 @@ read_100 <- function(path, filename, remove_blanks = TRUE) {
   }
   nblocks <- length(x) / nrows
   stopifnot("Wrong number of rows" = round(nblocks) == nblocks)
+
+
+  # Split input list 'x' by factor.
+  group_factor <- rep(1:nblocks, each = nrows, length.out = length(x))
+  x <- split(x, group_factor)
+
+
+  # Build a sublist in each list element.
+  x <- lapply(x, function(y) {
+    z <- splitin2(y[1], "title")            # First line includes a label and a title.
+    l <- list(label = z[1, 1], title = z[1, 2])
+    df <- data.frame(value = numeric(0), field = character(0))
+    for (i in 2:nrows) df <- rbind(df, splitin2(y[i], "data"))
+    l$df <- df
+    l
+  })
+
+
+  # Add filename to list.
+  x$filename <- filename
 
 
   return(x)

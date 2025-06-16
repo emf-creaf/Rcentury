@@ -1,75 +1,75 @@
 #' Check correctness of field names for a '.100' data set.
 #'
 #' @param x \code{list} containing the structure of a CENTURY '.100' file
-#' @param filename \code{character} string (with extension '.100') specifying the file type 'x' corresponds to.
 #'
 #' @returns
-#' Same as 'x' where each \code{data.frame} has a new \code{logical} column labelled 'name_is_correct' showing
-#' TRUE/FALSE if name of the field is correct/wrong.
-#'
 #' @export
 #'
 #' @examples
-check_fields <- function(x, filename = filename) {
+check_fields <- function(x) {
 
 
-  # Sometimes the last lines of the file are filled with blanks.
-  # if 'remove_blanks' is set to TRUE, we will remove them.
-  x <- x[which(trimws(x) != "")]
+  # Input must be a list.
+  if (!is.list(x)) cli::cli_abort("Input 'x' must be a list")
+  if (length(x) == 0) cli::cli_abort("Input list 'x' must not be empty")
 
 
-  # Minimum number of rows to be expected in *.100 CENTURY files.
+  # An element named 'filename' must exist and should be an actual file name.
+  if (is.null(x[["filename"]])) cli::cli_abort("Element 'filename' could not be found in input list 'x'")
   data(files_100)
-  nrows <- files_100[filename]
+  if (!(x$filename %in% names(files_100))) cli::cli_abort(paste("Element 'filename' =", filename, "is wrong"))
+
+
+  # Each element in list 'x' must be elements 'label', 'title' and 'df', and they should not be NULL.
+  check_names <- sapply(2:length(x), function(i) {
+    y <- x[[i-1]]
+    !is.null(y$label) & !is.null(y$title) & !is.null(y$df)
+  })
+  if (!all(check_names)) cli::cli_abort("Each sublist in 'x' should have 3 elements names 'label', 'title' and 'df'")
+
+
+  # Number of rows to be expected in each simulation in *.100 CENTURY files. We remove one because the
+  # first should correspond to label and title.
+  xx <- x
+  xx[["filename"]] <- NULL
+  n_rows <- files_100[x$filename]-1
 
 
   # Two cases: the number of lines in 'x' is exactly the corresponding number in files_100,
   # or a multiple of it. Multiple blocks should not happen in fix.100 files; in those cases,
   # it stops with a message.
-  # This is also tested in 'read_100.R'.
-  if (filename == "fix.100") {
-    if (length(x) != nrows) cli::cli_abort(paste0("File fix.100 should have exactly ", nrows, " lines"))
-  }
-  nblocks <- length(x) / nrows
-  stopifnot("Wrong number of rows" = round(nblocks) == nblocks)
-
-
-  # Look for line with label and title, plus lines with data information.
-  l_big <- list()
-  k <- 0
-  for (i in 1:nblocks) {
-    k <- k + 1
-
-    # Label and title.
-    z <- splitin2(x[k], "title")
-    l_small <- list(label = remove_single_quotes(z[[1]]), title = remove_single_quotes(z[[2]]))
-
-    # Data set for as many rows as 'nrows' minus 1.
-    df <- data.frame(value = numeric(0), field = character(0))
-    for (j in 2:nrows) {
-      k <- k + 1
-      y <- splitin2(x[k], "data")
-      df <- rbind(df, data.frame(value = y[[1]], field = remove_single_quotes(y[[2]])))
-    }
-
-    # To lower case.
-    df[, 2] <- tolower(df[, 2])
-
-    # Save into big list.
-    l_small$df <- df
-    l_big[[i]] <- l_small
+  nblocks <- length(xx)
+  if (x$filename == "fix.100") {
+    if (nblocks != 1) cli::cli_abort("Wrong input list 'x' for 'filename' = 'fix.100'")
+    if (nrow(x[[1]]$df) != n_rows) cli::cli_abort(paste0("Element 'df' in input list 'x' should have exactly ", n_rows, " lines"))
+  } else {
+    nr <- sapply(1:nblocks, function(i) nrow(xx[[i]]$df))
+    if (!all(nr == n_rows)) cli::cli_abort("All elements 'df' in input list 'x' should have exactly ", n_rows, " lines")
   }
 
 
-  # Check names in input list are correct.
-  data(data_100)
-  elements <- c("label", "title", data_100[[filename]]$Variable)
-  l_compare <- lapply(l_big, function(x) {
-    list(label = l_small$label, title = l_small$title, df = data.frame(x$df, name_is_correct = x$df[, 2] %in% elements))
-  })
 
 
-  # Return.
-  return(l_compare)
+  # TODO:
+  # # Check names in input list are correct.
+  # data(data_100)
+  # elements <- c("label", "title", data_100[[filename]]$Variable)
+  #
+  #
+  # if (!all(sapply(x, function(y) {
+  #   j <- 1
+  #   for (y in x) {
+  #     print(j)
+  #     if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
+  #     j <- j + 1
+  #   }
+  #   if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
+  #   }))) {
+  #   cli::cli_abort("Elements in input list 'x' have wrong names")
+  # }
+
+
+
+  return(x)
 
 }

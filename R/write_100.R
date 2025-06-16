@@ -5,7 +5,6 @@
 #'
 #' @param x \code{list} with as many elements as events as needed. Each event starts with a short label and a long title.
 #' @param path directory to save '*.100' file.
-#' @param filename \code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.
 #' @param ndigits number of digits for numeric values.
 #'
 #' @returns
@@ -39,64 +38,36 @@
 #' x <- read_100(path, "harv.100")
 #'
 #'
-write_100 <- function(x, path = path, filename = filename, ndigits = 3, check_values = FALSE, sep = "       ", verbose = TRUE) {
+write_100 <- function(x, path = path, ndigits = 4, sep = "    ", verbose = TRUE) {
+
+  # Check that input list is correct.
+  x <- check_fields(x)
 
 
   # Check correct path and file, and remove previous file if overwrite has been set to TRUE.
-  check_write(path, filename, overwrite = TRUE)
+  check_write(path, x$filename, overwrite = TRUE)
 
 
   # Check that name of the file with extension *.100 is correct.
-  check_100(path, filename, check_site = FALSE)
+  check_100(path, x$filename, check_site = FALSE)
 
 
-  # Check that input 'x' is a list and has all the necessary variables.
-  if (!is.list(x)) cli::cli_abort("Input object 'x' must be a list")
-  if (length(x) == 0) cli::cli_abort("Input list 'x' must not be empty")
-
-
-  # Translate variable names to lower case.
-  x <- lapply(x, function(y) {
-    names(y) <- tolower(names(y))
-    y
-  })
-
-
-  # Check names in input list are correct.
-  data(data_100)
-  elements <- c("label", "title", data_100[[filename]]$Variable)
-
-
-  if (!all(sapply(x, function(y) {
-    j <- 1
-    for (y in x) {
-      print(j)
-      if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
-      j <- j + 1
-    }
-    if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
-    }))) {
-    cli::cli_abort("Elements in input list 'x' have wrong names")
-  }
+  # Remove 'filename' from list 'x', so that its length is the right one for the loop below.
+  filename <- x$filename
+  x$filename <- NULL
 
 
   # Convert into a data.frame with numbers as characters.
   for (i in 1:length(x)) {
-    xx <- x[[i]]
 
-    # Check label and title.
-    if (xx$label == "" | xx$title == "") cli::cli_abort("Label and title cannot be empty")
+    # Select elements and translate column with names to lower case.
+    df <- x[[i]]$df
+    df[, 2] <- paste0("'", toupper(df[, 2]), "'")
 
-    # Select elements
-    df <- unlist(xx[elements[-c(1, 2)]])
-
-    # Convert numbers to characters.
-    df <- round(df, ndigits)
-    df <- sapply(df, function(z) check_length_digits(z, ndigits))
 
     # Write data.frame to disk.
-    df <- data.frame(names(df), unname(df))
-    colnames(df) <- xx[c("label", "title")]
+    df[, 1] <- round(df[, 1], ndigits)
+    colnames(df) <- c(x[[i]]$label, x[[i]]$title)
     suppressWarnings(write.table(df, file = file.path(path, filename), sep = sep,
                                  quote = FALSE, row.names = FALSE, col.names = TRUE,
                                  append = ifelse(i == 1, FALSE, TRUE)))

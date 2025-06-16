@@ -18,16 +18,19 @@ test_that("multiplication works", {
       print(j)
       if (file.exists(file.path(i, j))) {
         y <- read_100(i, j)
-        x[[k]] <- list(path = i, filename = j, df = check_fields(y, j))
+        x[[k]] <- list(path = i, filename = j, df = check_fields(y))
         k <- k + 1
       }
     }
   }
 
   nl <- lapply(x, function(y) {
-    sapply(y$df, function(z) {
+    list(path = y$path,
+         filename = y$filename,
+         nl = sapply(y$df, function(z) {
       sum(!z$df$name_is_correct)
     })
+    )
   })
 
 })
