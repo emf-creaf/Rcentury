@@ -1,0 +1,3 @@
+write_weather <- function() {
+
+}
