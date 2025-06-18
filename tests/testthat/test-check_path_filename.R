@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("Path and filename are correct", {
 
   # Path to files.
   path_in <- c(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
@@ -27,5 +27,7 @@ test_that("multiplication works", {
   # Wrong path.
   for (x in path_in) expect_error(check_path_filename(paste0(x, "dummy"), "crop.100"))
 
+  # Files do not exist.
+  for (x in path_in) expect_error(check_path_filename(x, "dummy.100", file_exists = TRUE))
 
 })

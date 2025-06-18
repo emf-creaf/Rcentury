@@ -19,7 +19,7 @@
 #' path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
 #' x <- read_100(path, "harv.100")
 #'
-read_100 <- function(path, filename, remove_blanks = TRUE) {
+read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
 
 
   # Checks.

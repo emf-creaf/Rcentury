@@ -1,4 +1,15 @@
-check_path_filename <- function(path = path, filename = filename, file_site = FALSE) {
+#' Title
+#'
+#' @param path
+#' @param filename
+#' @param file_site
+#' @param file_exists \code{logical}, if set to TRUE the existence of the file in the indicated folder is checked.
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+check_path_filename <- function(path = path, filename = filename, file_site = FALSE, file_exists = FALSE) {
 
   # Check path is correct.
   if (!is.character(path)) cli::cli_abort("Input 'path' must be of character type")
@@ -36,6 +47,13 @@ check_path_filename <- function(path = path, filename = filename, file_site = FA
   }
 
 
-  return(TRUE)
+  # Check that file exists.
+  file_path <- file.path(path, filename)
+  if (file_exists) {
+    if (!file.exists(file_path)) cli::cli_abort(paste("File", file_path, "does not exist"))
+  }
+
+
+  return(file_path)
 
 }
