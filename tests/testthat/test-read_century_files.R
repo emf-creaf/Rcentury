@@ -11,7 +11,7 @@ test_that("Read all input CENTURY files", {
   # Simple check that everything is ok.
   for (x in path_in) {
     for (y in names(files_100)) {
-      if (file.exists(file.path(x, y))) expect_no_error(read_century_files(x, y, file_site = FALSE, file_exists = TRUE))
+      if (file.exists(file.path(x, y))) expect_no_error(read_century_files(x, y, file_site = FALSE))
     }
   }
 

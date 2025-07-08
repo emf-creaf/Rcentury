@@ -27,7 +27,5 @@ test_that("Path and filename are correct", {
   # Wrong path.
   for (x in path_in) expect_error(check_path_filename(paste0(x, "dummy"), "crop.100"))
 
-  # Files do not exist.
-  for (x in path_in) expect_error(check_path_filename(x, "dummy.100", file_exists = TRUE))
 
 })
