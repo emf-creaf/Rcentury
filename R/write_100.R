@@ -38,7 +38,7 @@
 #' x <- read_100(path, "harv.100")
 #'
 #'
-write_100 <- function(x, path = path, ndigits = 4, sep = "    ", verbose = TRUE) {
+write_100 <- function(x, path = path, filename = filename, ndigits = 4, sep = "    ", verbose = TRUE) {
 
   # Check that input list is correct.
   x <- check_fields(x)

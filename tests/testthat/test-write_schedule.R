@@ -1,34 +1,50 @@
 test_that("Read and write schedule files", {
 
-  path1 <- paste0("..//..//data-raw//Century+Examples//Century Examples//", c("1.soil_texture_ppt", "3.plant_production", "4.forest"))
-  path2 <- paste0("..//..//data-raw//Example simulations//", c("1.soil_texture_ppt", "3.plant_production", "4.forest"))
-  filename <- list()
-  filename[[1]] <- c("clay.sch", "high_ppt.sch", "low_ppt.sch", "sandy.sch", "XILI.sch")
-  filename[[2]] <- c("G1.sch", "G3.sch", "G4.sch", "G5.sch")
-  filename[[3]] <- c("duke.sch", "harvard.sch")
+  # Files.
+  path_in <- list(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
+               system.file("extdata/3.plant_production",  package = "Rcentury"),
+               system.file("extdata/4.forest",  package = "Rcentury"))
+  files <- list(c("clay.sch", "high_ppt.sch", "low_ppt.sch", "sandy.sch", "XILI.sch"),
+                c("G1.sch", "G3.sch", "G4.sch", "G5.sch"),
+                c("duke.sch", "harvard.sch"))
+  names(files) <- path_in
+
+  path_out <- system.file("extdata/Example",  package = "Rcentury")
+
+
+  # In case files have not been deleted.
+  for (i in path_in) {
+    for (j in files[[i]]) {
+      unlink(file.path(path_out, paste0("delete_", j)))
+    }
+  }
 
   # Test that it will not overwrite if overwrite is FALSE and file already exists.
-  for (i in 1:3) {
-    pa1 <- path1[[i]]
-    pa2 <- path2[[i]]
-    for (j in filename[[i]]) {
-      x <- read_schedule(pa1, j)
-      expect_no_error(write_schedule(x, pa2, paste0("delete_", j), overwrite = FALSE, verbose = FALSE))
+  for (i in path_in) {
+    for (j in files[[i]]) {
+      x <- read_schedule(i, j)
+      expect_no_error(write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE, verbose = FALSE))
     }
   }
 
 
   # Test with overwrite = TRUE
-  for (i in 1:3) {
-    pa1 <- path1[[i]]
-    pa2 <- path2[[i]]
-    for (j in filename[[i]]) {
-      x <- read_schedule(pa1, j)
-      expect_no_error(suppressWarnings(write_schedule(x, pa2, paste0("delete_", j), overwrite = TRUE, verbose = FALSE)))
-      unlink(file.path(pa2, paste0("delete_", j)))
+  for (i in path_in) {
+    for (j in files[[i]]) {
+      x <- read_schedule(i, j)
+      expect_no_error(suppressWarnings(write_schedule(x, path_out, paste0("delete_", j), overwrite = TRUE, verbose = FALSE)))
+      unlink(file.path(path_out, paste0("delete_", j)))
     }
   }
 
-
+  # Read, write and read again.
+  for (i in path_in) {
+    for (j in files[[i]]) {
+      x <- read_schedule(i, j)
+      write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE, verbose = FALSE)
+      y <- read_schedule(path_out, paste0("delete_", j))
+      expect_equal(x, y)
+    }
+  }
 
 })

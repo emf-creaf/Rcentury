@@ -1,12 +1,23 @@
-test_that("multiplication works", {
+test_that("Reading schedule files", {
 
-  path <- ".//data-raw//Century+Examples//4.forest"
-  x <- read_schedule(path, "duke.sch")
+  # Files.
+  path <- list(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
+                  system.file("extdata/3.plant_production",  package = "Rcentury"),
+                  system.file("extdata/4.forest",  package = "Rcentury"))
+  files <- list(c("clay.sch", "high_ppt.sch", "low_ppt.sch", "sandy.sch", "XILI.sch"),
+                c("G1.sch", "G3.sch", "G4.sch", "G5.sch"),
+                c("duke.sch", "harvard.sch"))
+  names(files) <- path
 
 
+  # Read them.
+  for (i in path) {
+    for (j in files[[i]]) {
+      x <- read_schedule(i, j)
+    }
+  }
 
-  path <- "C://Roberto//Proyectos europeos//CARDIMED - Pilar Andrés//Century 5 soil model download//Century+Examples//Century Examples//1.soil_texture_ppt"
-  x <- read_schedule(path, "high_ppt.sch")
+
 
 
 })

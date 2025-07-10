@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("Checking fields of '.100' files", {
 
   # Path to files.
   path_in <- list(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
@@ -11,26 +11,21 @@ test_that("multiplication works", {
   data("files_100")
 
   # Check every single *.100 file.
-  x <- list()
-  k <- 1
   for (i in path_in) {
-    for (j in names(files_100)) {
-      print(j)
+    print("")
+    print(i)
+    for (j in names(files_100)[-1]) {
       if (file.exists(file.path(i, j))) {
         y <- read_100(i, j)
-        x[[k]] <- list(path = i, filename = j, df = check_fields(y))
-        k <- k + 1
+        print(j)
+        if (i == path_in[[1]] & j == "crop.100") {
+          expect_error(check_fields(y, j))
+        } else {
+          expect_no_error(check_fields(y, j))
+        }
       }
     }
   }
 
-  nl <- lapply(x, function(y) {
-    list(path = y$path,
-         filename = y$filename,
-         nl = sapply(y$df, function(z) {
-      sum(!z$df$name_is_correct)
-    })
-    )
-  })
 
 })

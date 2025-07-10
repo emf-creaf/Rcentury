@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-check_fields <- function(x) {
+check_fields <- function(x, filename = filename) {
 
 
   # Input must be a list.
@@ -20,7 +20,7 @@ check_fields <- function(x) {
   if (!(x$filename %in% names(files_100))) cli::cli_abort(paste("Element 'filename' =", filename, "is wrong"))
 
 
-  # Each element in list 'x' must be elements 'label', 'title' and 'df', and they should not be NULL.
+  # Each element in list 'x' must have elements 'label', 'title' and 'df', and they should not be NULL.
   check_names <- sapply(2:length(x), function(i) {
     y <- x[[i-1]]
     !is.null(y$label) & !is.null(y$title) & !is.null(y$df)
@@ -48,26 +48,19 @@ check_fields <- function(x) {
   }
 
 
+  # Check names in input list are correct.
+  data(data_100)
+  elements <- c("label", "title", data_100[[filename]]$Variable)
 
-
-  # TODO:
-  # # Check names in input list are correct.
-  # data(data_100)
-  # elements <- c("label", "title", data_100[[filename]]$Variable)
-  #
-  #
-  # if (!all(sapply(x, function(y) {
-  #   j <- 1
-  #   for (y in x) {
-  #     print(j)
-  #     if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
-  #     j <- j + 1
-  #   }
-  #   if (!all(elements %in% c(names(y[1:2]), y$df[, 2]))) browser()
-  #   }))) {
-  #   cli::cli_abort("Elements in input list 'x' have wrong names")
-  # }
-
+browser()
+  j <- 0
+  for (y in x) {
+    j <- j + 1
+    q <- elements %in% c(tolower(names(y[1:2])), tolower(y$df[, 2]))
+    if (!all(q)) {
+      cli::cli_abort(paste("Elements in input list 'x' of", filename, "have wrong names"))
+    }
+  }
 
 
   return(x)

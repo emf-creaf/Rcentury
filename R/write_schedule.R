@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-write_schedule <- function(x, path, filename, overwrite = TRUE, verbose = TRUE) {
+write_schedule <- function(x, path = path, filename = filename, overwrite = TRUE, verbose = TRUE) {
 
 
   # Load labels for schedule files.
@@ -22,9 +22,18 @@ write_schedule <- function(x, path, filename, overwrite = TRUE, verbose = TRUE) 
 
 
   # Checks.
-  stopifnot("Input must be a 'list'" = is.list(x))
-  stopifnot("Cannot find 'header' and 'block_info' elements in input 'list'" = all(c("header", "block_info") %in% names(x)))
-  stopifnot("Elements in sub-list 'header' are wrong" = all(labels_schedule[1:15] %in% names(x$header)))
+  if (!is.list(x)) {
+    cli::cli_abort("Input 'x' must be a list")
+  }
+  if (!(all(c("header", "block_info") %in% names(x)))) {
+    cli::cli_abort("Cannot find 'header' and 'block_info' elements in input list 'x'")
+  }
+  if (!(all(labels_schedule[1:15] %in% names(x$header)))) {
+    cli::cli_abort("Elements in sub-list 'header' are wrong")
+  }
+  if (!tools::file_ext(filename) != "sch") {
+    cli::cli_abort("Filename must include extension 'sch'")
+  }
   check_overwrite(file.path(path, filename), overwrite = overwrite, verbose = verbose)
 
 

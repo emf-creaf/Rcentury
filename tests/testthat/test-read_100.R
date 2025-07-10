@@ -18,8 +18,6 @@ test_that("Reading *.100 CENTURY files works", {
         y <- read_100(path_out, j)
 
         # Tests.
-        expect_identical(x$filename, y$filename)
-
         expect_identical(length(x), length(y))
 
         xx <- x

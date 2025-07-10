@@ -16,11 +16,13 @@
 #' @export
 #'
 #' @examples
-read_schedule <- function(path, filename) {
+read_schedule <- function(path = path, filename = filename, verbose = TRUE) {
 
 
   # Checks.
-  stopifnot("File does not exist" = file.exists(file.path(path, filename)))
+  if (!file.exists(file.path(path, filename))) {
+    cli::cli_abort(paste0("Schedule file does not exist", file.path(path, filename)))
+  }
 
 
   # Labels to be found inside *.sch CENTURY files.

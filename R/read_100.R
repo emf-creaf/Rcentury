@@ -67,10 +67,6 @@ read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
   })
 
 
-  # Add filename to list.
-  x$filename <- filename
-
-
   return(x)
 
 }
