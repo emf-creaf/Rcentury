@@ -2,13 +2,17 @@
 % Please edit documentation in R/remove_single_quotes.R
 \name{remove_single_quotes}
 \alias{remove_single_quotes}
-\title{Title}
+\title{Removal of leading and end single quotation marks.}
 \usage{
 remove_single_quotes(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{\code{character} vector.}
+}
+\value{
+A \code{character} vector of the same length as 'x' with all leading and end single quotation marks removed.
+Input is unchanged if it is numeric.
 }
 \description{
-Title
+Removal of leading and end single quotation marks.
 }

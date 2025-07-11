@@ -5,7 +5,7 @@
 \title{title
 Read *.sch CENTURY files.}
 \usage{
-read_schedule(path, filename)
+read_schedule(path = path, filename = filename, verbose = TRUE)
 }
 \arguments{
 \item{path}{\code{character} string containing a valid path to a *.sch file.}

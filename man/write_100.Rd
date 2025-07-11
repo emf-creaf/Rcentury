@@ -8,9 +8,8 @@ write_100(
   x,
   path = path,
   filename = filename,
-  ndigits = 3,
-  check_values = FALSE,
-  sep = "       ",
+  ndigits = 4,
+  sep = "    ",
   verbose = TRUE
 )
 }
@@ -18,8 +17,6 @@ write_100(
 \item{x}{\code{list} with as many elements as events as needed. Each event starts with a short label and a long title.}
 
 \item{path}{directory to save '*.100' file.}
-
-\item{filename}{\code{character} string with the name of the file to be created. Only names accepted by CENTURY are accepted.}
 
 \item{ndigits}{number of digits for numeric values.}
 }

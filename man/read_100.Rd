@@ -4,7 +4,7 @@
 \alias{read_100}
 \title{Read *.100 files.}
 \usage{
-read_100(path, filename, remove_blanks = TRUE)
+read_100(path = path, filename = filename, remove_blanks = TRUE)
 }
 \arguments{
 \item{path}{\code{character} string with valid path to write the file to.}

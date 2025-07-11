@@ -11,20 +11,23 @@ test_that("Checking fields of '.100' files", {
   data("files_100")
 
   # Check every single *.100 file.
+  k <- 1
   for (i in path_in) {
-    print("")
-    print(i)
-    for (j in names(files_100)[-1]) {
+    for (j in names(files_100)) {
       if (file.exists(file.path(i, j))) {
         y <- read_100(i, j)
-        print(j)
-        if (i == path_in[[1]] & j == "crop.100") {
-          expect_error(check_fields(y, j))
+        if (k != 3) {
+          if (j %in% c("crop.100", "tree.100")) {
+            expect_condition(check_fields(y, j))
+          } else {
+            expect_no_condition(check_fields(y, j))
+          }
         } else {
-          expect_no_error(check_fields(y, j))
+          expect_no_condition(check_fields(y, j))
         }
       }
     }
+    k <- k + 1
   }
 
 

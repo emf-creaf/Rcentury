@@ -4,7 +4,13 @@
 \alias{write_schedule}
 \title{Save to disk a *.sch CENTURY file}
 \usage{
-write_schedule(x, path, filename, overwrite = TRUE, verbose = TRUE)
+write_schedule(
+  x,
+  path = path,
+  filename = filename,
+  overwrite = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{x}{\code{list} with content of the schedule file.}

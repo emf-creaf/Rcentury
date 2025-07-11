@@ -4,14 +4,15 @@
 \alias{splitin2}
 \title{Title}
 \usage{
-splitin2(
-  x,
-  input_type = match.arg(input_type, c("data", "title")),
-  remove_quotes = TRUE
-)
+splitin2(x, input_type = input_type, remove_quotes = TRUE)
 }
 \arguments{
+\item{input_type}{element.}
+
 \item{remove_quotes}{}
+}
+\value{
+A \code{data.frame} with one row and two columns.
 }
 \description{
 Title

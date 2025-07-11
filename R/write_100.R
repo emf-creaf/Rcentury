@@ -40,21 +40,16 @@
 #'
 write_100 <- function(x, path = path, filename = filename, ndigits = 4, sep = "    ", verbose = TRUE) {
 
-  # Check that input list is correct.
-  x <- check_fields(x)
+  # Check that input list is correct. TODO!!!
+  # x <- check_fields(x, filename)
 
 
   # Check correct path and file, and remove previous file if overwrite has been set to TRUE.
-  check_write(path, x$filename, overwrite = TRUE)
+  check_write(path, filename, overwrite = TRUE)
 
 
   # Check that name of the file with extension *.100 is correct.
-  check_100(path, x$filename, check_site = FALSE)
-
-
-  # Remove 'filename' from list 'x', so that its length is the right one for the loop below.
-  filename <- x$filename
-  x$filename <- NULL
+  check_100(path, filename, check_site = FALSE)
 
 
   # Convert into a data.frame with numbers as characters.

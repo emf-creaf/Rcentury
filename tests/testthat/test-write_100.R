@@ -14,29 +14,24 @@ test_that("Creating Century files", {
   colnames(df) <- NULL
   x[[2]] <- list(label = "E1", title = "Example1", df = df)
 
-  x$filename <- "cult.100"
-
   # Wrong path.
-  expect_error(write_100(x, paste0(path_out, "KK"), verbose = FALSE))
+  expect_error(write_100(x, paste0(path_out, "KK"), "cult.100", verbose = FALSE))
 
   # Wrong name.
-  x$filename <- "cult.10"
-  expect_error(write_100(x, path_out, verbose = FALSE))
-  x$filename <- "dumb.100"
-  expect_error(write_100(x, path_out, verbose = FALSE))
+  expect_error(write_100(x, path_out, "cult.100", verbose = FALSE))
+  expect_error(write_100(x, path_out, "dumb.100", verbose = FALSE))
 
   # Nothing is wrong.
-  x$filename <- "cult.100"
-  expect_no_error(write_100(x, path_out, verbose = FALSE))
+  expect_no_error(write_100(x, path_out, "cult.100", verbose = FALSE))
 
   # Wrong inputs.
   xx <- x
   xx[[1]]$label <- NULL
-  expect_error(write_100(xx, path_out, verbose = FALSE))
+  expect_error(write_100(xx, path_out, "cult.100", verbose = FALSE))
 
   xx <- x
   xx[[1]]$title <- NULL
-  expect_error(write_100(xx, path_out, verbose = FALSE))
+  expect_error(write_100(xx, path_out, "cult.100", verbose = FALSE))
 
   expect_error(write_100(x, verbose = FALSE))
 
