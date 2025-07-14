@@ -14,26 +14,13 @@ test_that("Reading *.100 CENTURY files works", {
     for (j in names(files_100)) {
       if (file.exists(file.path(i, j))) {
         x <- read_100(i, j)
-        write_100(x, path_out)
+        write_100(x, path_out, j)
         y <- read_100(path_out, j)
 
-        # Tests.
-        expect_identical(length(x), length(y))
+        # Test.
+        expect_identical(x, y)
 
-        xx <- x
-        xx$filename <- NULL
-        yy <- y
-        yy$filename <- NULL
-
-        for (i in 1:length(xx)) expect_identical(xx[[i]]$label, yy[[i]]$label)
-
-        for (i in 1:length(xx)) expect_identical(nrow(xx[[i]]$df), nrow(yy[[i]]$df))
-
-        for (i in 1:length(xx)) expect_identical(ncol(xx[[i]]$df), ncol(yy[[i]]$df))
-
-        for (i in 1:length(xx)) expect_identical(xx[[i]]$df[, 1], yy[[i]]$df[, 1])
-
-        for (i in 1:length(xx)) expect_identical(xx[[i]]$df[, 2], yy[[i]]$df[, 2])
+        unlink(file.path(path_out, j))
       }
     }
   }

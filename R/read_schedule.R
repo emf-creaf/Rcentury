@@ -19,9 +19,13 @@
 read_schedule <- function(path = path, filename = filename, verbose = TRUE) {
 
 
+  # Are inputs there?
+  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
+
+
   # Checks.
   if (!file.exists(file.path(path, filename))) {
-    cli::cli_abort(paste0("Schedule file does not exist", file.path(path, filename)))
+    stop(paste0("Schedule file does not exist", file.path(path, filename)))
   }
 
 

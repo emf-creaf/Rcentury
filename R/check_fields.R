@@ -8,17 +8,16 @@
 #' @examples
 check_fields <- function(x, filename = filename) {
 
+  # Are inputs there?
+  if (missing(filename)) stop("Missing input 'filename'")
+
 
   # Input must be a list.
   if (!is.list(x)) stop("Input 'x' must be a list")
   if (length(x) == 0) stop("Input list 'x' must not be empty")
 
 
-  # Number of rows.
-  data(files_100)
-
-
-  # Each element in list 'x' must have elements 'label', 'title' and 'df', and they should not be NULL.
+  # Each element in list 'x' must have elements 'label', 'title' and 'df'.
   check_names <- sapply(1:length(x), function(i) {
     !is.null(x[[i]]$label) & !is.null(x[[i]]$title) & !is.null(x[[i]]$df)
   })
@@ -27,6 +26,7 @@ check_fields <- function(x, filename = filename) {
 
   # Number of rows to be expected in each simulation in *.100 CENTURY files. We remove one because the
   # first should correspond to label and title.
+  data(files_100)
   n_rows <- files_100[filename]-1
 
 

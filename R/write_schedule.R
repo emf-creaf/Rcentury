@@ -17,24 +17,28 @@
 write_schedule <- function(x, path = path, filename = filename, overwrite = TRUE, verbose = TRUE) {
 
 
+  # Are inputs there?
+  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
+
+
   # Load labels for schedule files.
   data("labels_schedule")
 
 
   # Checks.
   if (!is.list(x)) {
-    cli::cli_abort("Input 'x' must be a list")
+    stop("Input 'x' must be a list")
   }
   if (!(all(c("header", "block_info") %in% names(x)))) {
-    cli::cli_abort("Cannot find 'header' and 'block_info' elements in input list 'x'")
+    stop("Cannot find 'header' and 'block_info' elements in input list 'x'")
   }
   if (!(all(labels_schedule[1:15] %in% names(x$header)))) {
-    cli::cli_abort("Elements in sub-list 'header' are wrong")
+    stop("Elements in sub-list 'header' are wrong")
   }
-  if (!tools::file_ext(filename) != "sch") {
-    cli::cli_abort("Filename must include extension 'sch'")
+  if (tools::file_ext(filename) != "sch") {
+    stop("Filename must include extension 'sch'")
   }
-  check_overwrite(file.path(path, filename), overwrite = overwrite, verbose = verbose)
+  check_write(path = path, filename = filename, overwrite = overwrite)
 
 
   # Write header. A blank line is added, then a "Year Month Option" line.

@@ -23,7 +23,7 @@ test_that("Read and write schedule files", {
   for (i in path_in) {
     for (j in files[[i]]) {
       x <- read_schedule(i, j)
-      expect_no_error(write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE, verbose = FALSE))
+      expect_no_error(write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE))
     }
   }
 
@@ -32,7 +32,7 @@ test_that("Read and write schedule files", {
   for (i in path_in) {
     for (j in files[[i]]) {
       x <- read_schedule(i, j)
-      expect_no_error(suppressWarnings(write_schedule(x, path_out, paste0("delete_", j), overwrite = TRUE, verbose = FALSE)))
+      expect_no_error(suppressWarnings(write_schedule(x, path_out, paste0("delete_", j), overwrite = TRUE)))
       unlink(file.path(path_out, paste0("delete_", j)))
     }
   }
@@ -41,7 +41,7 @@ test_that("Read and write schedule files", {
   for (i in path_in) {
     for (j in files[[i]]) {
       x <- read_schedule(i, j)
-      write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE, verbose = FALSE)
+      write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE)
       y <- read_schedule(path_out, paste0("delete_", j))
       expect_equal(x, y)
     }

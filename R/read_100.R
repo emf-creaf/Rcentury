@@ -22,21 +22,20 @@
 read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
 
 
+  # Are inputs there?
+  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
+
+
   # Checks.
-  check_100(path, filename, check_site = FALSE)
-
-
-  # Minimum number of rows to be expected in *.100 CENTURY files.
-  data(files_100)
-  nrows <- files_100[filename]
+  check_100(path, filename)
 
 
   # Read the file as a character vector. We wrap it in 'suppressWarnings'
-  # in case file does not end with a new line.
+  # in case it does not end with a new line.
   x <- suppressWarnings(readLines(file.path(path, filename)))
 
 
-  # Sometimes the last lines of the file are filled with too many blanks.
+  # Sometimes the last lines of the file are filled with blanks.
   # if 'remove_blanks' is set to TRUE, we will remove them.
   if (remove_blanks) x <- x[which(trimws(x) != "")]
 
@@ -44,11 +43,16 @@ read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
   # Two cases: the number of lines in 'x' is exactly the corresponding number in files_100,
   # or a multiple of it. Multiple blocks should not happen in fix.100 files; in those cases,
   # it stops with a message.
+  data(files_100)
+  nrows <- files_100[filename]
   if (filename == "fix.100") {
-    if (length(x) != nrows) cli::cli_abort(paste0("File fix.100 should have exactly ", nrows, " lines"))
+    if (length(x) != nrows) stop(paste0("File fix.100 should have exactly ", nrows, " lines"))
   }
+
+
+  # Number of rows to be expected in 'filename'.
   nblocks <- length(x) / nrows
-  stopifnot("Wrong number of rows" = round(nblocks) == nblocks)
+  if (round(nblocks) != nblocks) stop(paste("Wrong number of rows in", filename))
 
 
   # Split input list 'x' by factor.

@@ -14,11 +14,11 @@ test_that("Creating Century files", {
   colnames(df) <- NULL
   x[[2]] <- list(label = "E1", title = "Example1", df = df)
 
-  # Wrong path.
+  # Wrong path.-out
   expect_error(write_100(x, paste0(path_out, "KK"), "cult.100", verbose = FALSE))
 
   # Wrong name.
-  expect_error(write_100(x, path_out, "cult.100", verbose = FALSE))
+  expect_no_condition(write_100(x, path_out, "cult.100", verbose = FALSE))
   expect_error(write_100(x, path_out, "dumb.100", verbose = FALSE))
 
   # Nothing is wrong.
@@ -27,11 +27,11 @@ test_that("Creating Century files", {
   # Wrong inputs.
   xx <- x
   xx[[1]]$label <- NULL
-  expect_error(write_100(xx, path_out, "cult.100", verbose = FALSE))
+  expect_error(check_fields(xx, "cult.100"))
 
   xx <- x
   xx[[1]]$title <- NULL
-  expect_error(write_100(xx, path_out, "cult.100", verbose = FALSE))
+  expect_error(check_fields(xx, "cult.100"))
 
   expect_error(write_100(x, verbose = FALSE))
 

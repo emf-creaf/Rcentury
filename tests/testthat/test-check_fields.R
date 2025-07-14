@@ -17,13 +17,26 @@ test_that("Checking fields of '.100' files", {
       if (file.exists(file.path(i, j))) {
         y <- read_100(i, j)
         if (k != 3) {
+
+          # These example files have problems.
           if (j %in% c("crop.100", "tree.100")) {
-            expect_condition(check_fields(y, j))
+            expect_warning(check_fields(y, j))
           } else {
+
+            # Let's introduce a wrong data.frame.
             expect_no_condition(check_fields(y, j))
+
+            yy <- y
+            yy[[1]]$df <- "asdf"
+            expect_error(check_fields(yy, j))
+
           }
         } else {
           expect_no_condition(check_fields(y, j))
+
+          yy <- y
+          yy[[1]]$df <- "asdf"
+          expect_error(check_fields(yy, j))
         }
       }
     }
