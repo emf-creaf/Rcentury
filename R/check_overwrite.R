@@ -18,19 +18,18 @@
 #' check_overwrite("example.txt", overwrite = FALSE)
 #' unlink("example.txt")
 #'
-check_overwrite <- function(fileout = fileout, overwrite = TRUE, verbose = TRUE) {
+check_overwrite <- function(path = path, filename = filename, remove = FALSE) {
 
-  if (file.exists(fileout)) {
-    if (overwrite) {
-      if (verbose) cli::cli_alert_info(paste0("File ", fileout, " already exists. Deleting it..."))
-      unlink(fileout)
-      } else {
-        # Fail because cannot decide whether or not to overwrite.
-        cli::cli_abort(paste0("File ", fileout, " already exists. Set 'overwrite' to TRUE?"))
-      }
-  } else {
-    if (verbose) cli::cli_alert_info(paste0("File ", fileout, " does not exist. No need to check for overwrite"))
+
+  # Overwrite or not?
+  if (file.exists(file.path(path, filename))) {
+    if (remove) {
+      unlink(file.path(path, filename))
+    } else {
+      stop(paste("File", filename, "already exists in folder. Should 'remove' be set to TRUE?"))
+    }
   }
+
 
   return(fileout)
 

@@ -1,6 +1,11 @@
 test_that("Creating Century files", {
 
+
   # Path to files.
+  path_in <- list(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
+                  system.file("extdata/3.plant_production",  package = "Rcentury"),
+                  system.file("extdata/4.forest",  package = "Rcentury"))
+
   path_out <-  system.file("extdata/Example",  package = "Rcentury")
 
   # Fake data.
@@ -14,15 +19,15 @@ test_that("Creating Century files", {
   colnames(df) <- NULL
   x[[2]] <- list(label = "E1", title = "Example1", df = df)
 
-  # Wrong path.-out
-  expect_error(write_100(x, paste0(path_out, "KK"), "cult.100", verbose = FALSE))
+  # Wrong path.
+  expect_error(write_100(x, paste0(path_out, "KK"), "cult.100"))
 
   # Wrong name.
-  expect_no_condition(write_100(x, path_out, "cult.100", verbose = FALSE))
-  expect_error(write_100(x, path_out, "dumb.100", verbose = FALSE))
+  expect_no_condition(write_100(x, path_out, "cult.100", overwrite = TRUE))
+  expect_error(write_100(x, path_out, "dumb.100"))
 
   # Nothing is wrong.
-  expect_no_error(write_100(x, path_out, "cult.100", verbose = FALSE))
+  expect_no_error(write_100(x, path_out, "cult.100", overwrite = TRUE))
 
   # Wrong inputs.
   xx <- x
@@ -34,6 +39,13 @@ test_that("Creating Century files", {
   expect_error(check_fields(xx, "cult.100"))
 
   expect_error(write_100(x, verbose = FALSE))
+
+  # Read, write on disk and read again.
+  x <- read_100(path_out, "cult.100")
+  write_100(x, path_out, "cult.100", overwrite = TRUE)
+  y <- read_100(path_out, "cult.100")
+  expect_identical(x, y)
+
 
 
 })

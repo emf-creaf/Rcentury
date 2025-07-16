@@ -22,12 +22,18 @@
 read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
 
 
-  # Are inputs there?
-  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
-
-
   # Checks.
-  check_100(path, filename)
+  check_read(path, filename)
+  if (tools::file_ext(filename) != "100") stop(paste("File", filename, "should have '.100' extension"))
+
+
+  # Check that, if extension is '*.100', it is not a site file (which have a different structure).
+  if (tools::file_ext(filename) == "100") {
+    data(files_100)
+    if (!(filename %in% names(files_100))) {
+      warning(paste("Extension is '.100' but", filename, "could not be matched to a valid input CENTURY '*.100' name. Is it a site file?"))
+    }
+  }
 
 
   # Read the file as a character vector. We wrap it in 'suppressWarnings'

@@ -14,7 +14,7 @@ test_that("Reading *.100 CENTURY files works", {
     for (j in names(files_100)) {
       if (file.exists(file.path(i, j))) {
         x <- read_100(i, j)
-        write_100(x, path_out, j)
+        write_100(x, path_out, j, overwrite = TRUE)
         y <- read_100(path_out, j)
 
         # Test.

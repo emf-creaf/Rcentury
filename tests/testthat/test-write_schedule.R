@@ -43,7 +43,7 @@ test_that("Read and write schedule files", {
       x <- read_schedule(i, j)
       write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE)
       y <- read_schedule(path_out, paste0("delete_", j))
-      expect_equal(x, y)
+      expect_identical(x, y)
     }
   }
 

@@ -16,17 +16,12 @@
 #' @export
 #'
 #' @examples
-read_schedule <- function(path = path, filename = filename, verbose = TRUE) {
-
-
-  # Are inputs there?
-  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
+read_schedule <- function(path = path, filename = filename) {
 
 
   # Checks.
-  if (!file.exists(file.path(path, filename))) {
-    stop(paste0("Schedule file does not exist", file.path(path, filename)))
-  }
+  check_read(path, filename)
+  if (tools::file_ext(filename) != "sch") stop(paste("File", filename, "should have '.sch' extension"))
 
 
   # Labels to be found inside *.sch CENTURY files.

@@ -31,19 +31,12 @@
 #' path <- tempdir()
 #' write_100(x, path, "cult.100")
 #'
-write_100 <- function(x, path = path, filename = filename, ndigits = 6, sep = "    ", verbose = TRUE) {
+write_100 <- function(x, path = path, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
 
 
-  # Are inputs there?
-  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
-
-
-  # Check that name of the file with extension *.100 is correct.
-  check_100(path, filename)
-
-
-  # Remove previous file if overwrite has been set to TRUE.
-  check_write(path, filename, overwrite = TRUE)
+  # checks.
+  check_write(path, filename, overwrite = overwrite)
+  if (tools::file_ext(filename) != "100") stop(paste("File", filename, "should have '.100' extension"))
 
 
   # Convert into a data.frame with numbers as characters.

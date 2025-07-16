@@ -14,11 +14,12 @@
 #' @export
 #'
 #' @examples
-write_schedule <- function(x, path = path, filename = filename, overwrite = TRUE, verbose = TRUE) {
+write_schedule <- function(x, path = path, filename = filename, overwrite = FALSE) {
 
 
-  # Are inputs there?
-  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
+  # Checks.
+  check_write(path, filename, overwrite = overwrite)
+  if (tools::file_ext(filename) != "sch") stop(paste("File", filename, "should have '.wth' extension"))
 
 
   # Load labels for schedule files.
@@ -38,7 +39,7 @@ write_schedule <- function(x, path = path, filename = filename, overwrite = TRUE
   if (tools::file_ext(filename) != "sch") {
     stop("Filename must include extension 'sch'")
   }
-  check_write(path = path, filename = filename, overwrite = overwrite)
+  check_write(path, filename, overwrite = overwrite)
 
 
   # Write header. A blank line is added, then a "Year Month Option" line.
