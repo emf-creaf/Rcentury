@@ -21,7 +21,7 @@ read_schedule <- function(path = path, filename = filename) {
 
   # Checks.
   check_read(path, filename)
-  if (tools::file_ext(filename) != "sch") stop(paste("File", filename, "should have '.sch' extension"))
+  check_ext(filename, "sch")
 
 
   # Labels to be found inside *.sch CENTURY files.
