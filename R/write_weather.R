@@ -37,9 +37,9 @@ write_weather <- function(df, path = path, filename = filename, overwrite = FALS
 
   # Check input data.frame.
   stopifnot("Input 'df' must be a data.frame" = is.data.frame(df))
-  stopifnot("Wrong column names in input data.frame" = c("month", "year", "prec", "tmin", "tmax") %in% colnames(df))
-  nyear <- df |> dplyr::count(year)
-  stopifnot("There must be 12 months in each year" = all(nyear$n == 12))
+  stopifnot("Wrong column names in input data.frame" = c("year", "month", "prec", "tmin", "tmax") %in% colnames(df))
+  nyear <- table(df$year == 12)
+  stopifnot("There must be 12 months in each year" = all(nyear == 12))
   stopifnot("There cannot be NA in weather values" = all(!is.na(df[, c("prec", "tmin", "tmax")])))
   stopifnot("Precipitation must always be positive" = all(df$prec >= 0))
 
