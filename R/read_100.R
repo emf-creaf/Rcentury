@@ -24,7 +24,7 @@ read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
 
   # Checks.
   check_read(path, filename)
-  if (tools::file_ext(filename) != "100") stop(paste("File", filename, "should have '.100' extension"))
+  check_ext(filename, "100")
 
 
   # Check that, if extension is '*.100', it is not a site file (which have a different structure).

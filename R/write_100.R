@@ -36,7 +36,7 @@ write_100 <- function(x, path = path, filename = filename, ndigits = 6, sep = " 
 
   # checks.
   check_write(path, filename, overwrite = overwrite)
-  if (tools::file_ext(filename) != "100") stop(paste("File", filename, "should have '.100' extension"))
+  check_ext(filename, "100")
 
 
   # Convert into a data.frame with numbers as characters.

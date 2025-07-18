@@ -32,7 +32,8 @@ write_weather <- function(df, path = path, filename = filename, overwrite = FALS
 
   # First checks.
   check_write(path, filename, overwrite = overwrite)
-  if (tools::file_ext(filename) != "wth") stop(paste("File", filename, "should have '.wth' extension"))
+  check_ext(filename, "wth")
+
 
   # Check input data.frame.
   stopifnot("Input 'df' must be a data.frame" = is.data.frame(df))
