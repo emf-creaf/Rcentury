@@ -16,6 +16,8 @@
 #' namely 'year', 'month', 'prec', 'tmax' and 'tmin'. Columns are sorted in ascending
 #' order by year and month.
 #'
+#' NA values in CENTURY weather files are identified by -99.99 by default.
+#'
 #' @export
 #'
 #' @examples
@@ -55,6 +57,10 @@ read_weather <- function(path = path, filename = filename) {
   colnames(df_wide)[3:5] <- sub("^value\\.", "", colnames(df_wide)[3:5])
   df_wide <- df_wide[order(df_wide$year, df_wide$month), ]
   rownames(df_wide) <- NULL
+
+
+  # Assign NA to -99.99 values.
+  df_wide$prec[df_wide$prec == -99.99] <- NA
 
 
   return(df_wide)

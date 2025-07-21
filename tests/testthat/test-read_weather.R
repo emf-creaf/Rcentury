@@ -1,4 +1,4 @@
-test_that("read_weather tests", {
+test_that("Reading CENTURY weather files", {
 
 
   # Files.
