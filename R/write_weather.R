@@ -38,16 +38,9 @@ write_weather <- function(df, path = path, filename = filename, overwrite = FALS
   # Check input data.frame.
   stopifnot("Input 'df' must be a data.frame" = is.data.frame(df))
   stopifnot("Wrong column names in input data.frame" = c("year", "month", "prec", "tmin", "tmax") %in% colnames(df))
-  nyear <- table(df$year == 12)
+  nyear <- table(df$year)
   stopifnot("There must be 12 months in each year" = all(nyear == 12))
-  stopifnot("There cannot be NA in weather values" = all(!is.na(df[, c("prec", "tmin", "tmax")])))
-  stopifnot("Precipitation must always be positive" = all(df$prec >= 0))
-
-
-  # Check output file.
-  fileout <- check_path(fileout, ".wth", wd)
-  fileout <- check_overwrite(fileout, overwrite = overwrite)
-  ndigits <- check_natural(ndigits)
+  stopifnot("Precipitation must always be positive" = sum(df$prec < 0, na.rm = TRUE) == 0)
 
 
   # From long to wide format.
@@ -65,6 +58,6 @@ write_weather <- function(df, path = path, filename = filename, overwrite = FALS
 
 
   # Save file on disk.
-  write.table(df_wide, file = fileout, sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(df_wide, file = file.path(path, filename), sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }
