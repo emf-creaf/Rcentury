@@ -8,9 +8,9 @@ write_100(
   x,
   path = path,
   filename = filename,
-  ndigits = 4,
+  ndigits = 6,
   sep = "    ",
-  verbose = TRUE
+  overwrite = FALSE
 )
 }
 \arguments{
@@ -31,25 +31,18 @@ File is overwritten.
 }
 \examples{
 # Example list with two elements.
-set.seed(100)
 x <- list()
-x[[1]] <- list("E1", "Example1")
-x[[1]] <- append(x[[1]], runif(11))
-names(x[[1]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
-x[[2]] <- list("E2", "Example2")
-x[[2]] <- append(x[[2]], runif(11))
-names(x[[2]]) <- c("label", "title", paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")"))
 
-# Fewer digits.
-x[[1]]$`cultra(3)` <- 0.3
+df <- data.frame(runif(11), c(paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")")))
+colnames(df) <- NULL
+x[[1]] <- list(label = "E1", title = "Example1", df = df)
 
-# Create file locally.
-wd <- ".//data-raw//example"
-write_100(x, "cult", wd = wd)
+df <- data.frame(runif(11), c(paste0("cultra(", 1:7, ")"), paste0("clteff(", 1:4, ")")))
+colnames(df) <- NULL
+x[[2]] <- list(label = "E1", title = "Example1", df = df)
 
-# Read one of the CENTURY example files included in the package.
-path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
-x <- read_100(path, "harv.100")
-
+# Create temporary path.
+path <- tempdir()
+write_100(x, path, "cult.100")
 
 }

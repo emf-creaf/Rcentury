@@ -4,15 +4,12 @@
 \alias{check_100}
 \title{Check that path and name of the file with extension *.100 is correct}
 \usage{
-check_100(path, filename, check_site = FALSE)
+check_100(path = path, filename = filename)
 }
 \arguments{
 \item{path}{\code{character} string with valid path to a folder.}
 
 \item{filename}{\code{character} string with an actual file name. It must include the extension '.100'.}
-
-\item{check_site}{\code{logical}, if set to TRUE \code{check_100} takes into account
-that file may be a 'site' file, and thus its name may vary.}
 }
 \description{
 Check that path and name of the file with extension *.100 is correct

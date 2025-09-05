@@ -4,7 +4,7 @@
 \alias{check_overwrite}
 \title{Title}
 \usage{
-check_overwrite(fileout = fileout, overwrite = TRUE, verbose = TRUE)
+check_overwrite(path = path, filename = filename, remove = FALSE)
 }
 \arguments{
 \item{overwrite}{}

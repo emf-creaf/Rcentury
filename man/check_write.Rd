@@ -4,10 +4,14 @@
 \alias{check_write}
 \title{Title}
 \usage{
-check_write(path, filename, overwrite = TRUE)
+check_write(path = path, filename = filename, overwrite = FALSE)
 }
 \arguments{
-\item{overwrite}{}
+\item{path}{\code{character} string with valid path to a folder.}
+
+\item{filename}{\code{character} string with an actual file name.}
+
+\item{overwrite}{\code{logical}, see 'Details'.}
 }
 \value{
 Nothing.
@@ -16,6 +20,7 @@ Nothing.
 Title
 }
 \details{
-\code{check_write} checks that a) path to folder exists and that b) file is removed if 'overwrite' is set to TRUE (default).
-This clears the way for functions that write CENTURY files to folders.
+\code{check_write} does nothing if 'filename' does not exist on disk.
+If it does, then if 'overwrite' is set to TRUE, 'filename' is deleted from disk, and if set to FALSE,
+(default) execution stops with a message.
 }
