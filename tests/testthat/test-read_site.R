@@ -13,11 +13,8 @@ test_that("Reading site files", {
   # Reading files.
   for (i in path) {
     for (j in filename[[i]]) {
-      x <- read_site(i, j)
+      expect_no_condition(x <- read_site(i, j))
     }
   }
 
-
-  i=path[[1]]
-  j=filename[[i]][[1]]
 })
