@@ -50,6 +50,9 @@ write_100 <- function(x, path = path, filename = filename, ndigits = 6, sep = " 
     # Write data.frame to disk.
     df[, 1] <- round(df[, 1], ndigits)
     colnames(df) <- c(x[[i]]$label, x[[i]]$title)
+    suppressWarnings(write.table(i, file = file.path(path, filename), sep = sep,
+                                 quote = FALSE, row.names = FALSE, col.names = TRUE,
+                                 append = ifelse(i == 1, FALSE, TRUE)))
     suppressWarnings(write.table(df, file = file.path(path, filename), sep = sep,
                                  quote = FALSE, row.names = FALSE, col.names = TRUE,
                                  append = ifelse(i == 1, FALSE, TRUE)))

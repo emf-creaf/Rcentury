@@ -49,6 +49,7 @@ read_site <- function(path = path, filename = filename) {
   for (i in 1:(length(j)-1)) {
     y <- lapply(x[seq(j[i]+1, j[i+1]-1)], function(z) splitin2(z, "data"))
     l[[names_j[i]]]$df <- do.call(rbind, y)
+    colnames(l[[names_j[i]]]$df) <- c("value", "field")
   }
 
   return(l)
