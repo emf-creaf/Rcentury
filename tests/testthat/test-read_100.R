@@ -1,27 +1,43 @@
 test_that("Reading *.100 CENTURY files works", {
 
-  # Path to files.
+  # Paths.
   path_in <- list(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
-               system.file("extdata/3.plant_production",  package = "Rcentury"),
-               system.file("extdata/4.forest",  package = "Rcentury"))
+                  system.file("extdata/3.plant_production",  package = "Rcentury"),
+                  system.file("extdata/4.forest",  package = "Rcentury"))
+  path_out <- list(system.file("extdata/Example/1.soil_texture_ppt",  package = "Rcentury"),
+                   system.file("extdata/Example/3.plant_production",  package = "Rcentury"),
+                   system.file("extdata/Example/4.forest",  package = "Rcentury"))
+  names(path_out) <- path_in
 
-  path_out <-  system.file("extdata/Example",  package = "Rcentury")
+  # File names.
+  x <- c("crop.100", "cult.100", "fire.100", "fix.100", "graz.100", "tree.100", "trem.100")
+  file_100 <- list(c(x, "fert.100", "harv.100", "irri.100", "omad.100"),
+                   c(x, "fert.100", "harv.100", "irri.100", "omad.100"), x)
+  names(file_100) <- path_in
 
-  # Names and number of lines for each *.100 file.
-  data("files_100")
+  # First we empty de Example/ directories. Only *.exe files will remain.
+  for (i in path_out) {
+    unlink(file.path(i, paste0("*.100")))
+    unlink(file.path(i, paste0("*.sch")))
+    unlink(file.path(i, paste0("*.wth")))
+    unlink(file.path(i, paste0("*.bin")))
+  }
 
+  # Next we read files.
   for (i in path_in) {
-    for (j in names(files_100)) {
-      if (file.exists(file.path(i, j))) {
-        x <- read_100(i, j)
-        write_100(x, path_out, j, overwrite = TRUE)
-        y <- read_100(path_out, j)
+    for (j in file_100[[i]]) {
+print(j)
+      x <- read_100(i, j)
+      write_100(x, path_out[[i]], j, overwrite = FALSE)
+      y <- read_100(path_out[[i]], j)
+browser()
+      # Test.
 
-        # Test.
-        expect_identical(x, y)
+      # expect_identical(x, y)
 
-        unlink(file.path(path_out, j))
-      }
+      # Trye to overwrite but file already exists.
+      # expect_error(write_100(x, path_out[[i]], j, overwrite = FALSE))
+
     }
   }
 

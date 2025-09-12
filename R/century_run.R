@@ -11,15 +11,30 @@
 #' @export
 #'
 #' @examples
-century_run <- function(schedule = schedule, fileout = fileout, wd = wd, extended = FALSE, overwrite = TRUE, verbose = TRUE) {
+century_run <- function(path = path, list = list_files, overwrite = TRUE, verbose = TRUE) {
 
 
-  # Check correct paths and files.
+  # Check path.
+  if (!file.exists(file.path(path))) stop("Input 'path' is wrong")
+
+
+  # Check whether file names in 'list_files' is
+
+  # Check whether input files are there.
+  if (file.exists(file.path(path, list_files["schedule"])))
+
+
+
+
+
   fsch <- check_path(schedule, ".sch", verbose = verbose)
   fout <- check_path(fileout, ".bin", verbose = verbose)
   stopifnot("Could not find 'schedule' file" = file.exists(fsch))
   check_overwrite(fout, verbose = verbose)
   stopifnot("Could not find 'century_47.exe'" = file.exists(file.path(wd, "century_47.exe")))
+
+  if (!file.exists(file.path(path, "century_47.exe"))) stop("Could not find 'century_47.exe' in directory")
+
 
 
   # Site and weather files are given with their extensions inside the schedule file.
