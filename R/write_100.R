@@ -31,11 +31,11 @@
 #' path <- tempdir()
 #' write_100(x, path, "cult.100")
 #'
-write_100 <- function(x, path = path, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
+write_100 <- function(x, path_out = path_out, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
 
 
   # checks.
-  check_write(path, filename, overwrite = overwrite)
+  check_write(path_out, filename, overwrite = overwrite)
   check_ext(filename, "100")
 
 
@@ -50,10 +50,14 @@ write_100 <- function(x, path = path, filename = filename, ndigits = 6, sep = " 
     # Write data.frame to disk.
     df[, 1] <- round(df[, 1], ndigits)
     colnames(df) <- c(x[[i]]$label, x[[i]]$title)
-    suppressWarnings(write.table(i, file = file.path(path, filename), sep = sep,
-                                 quote = FALSE, row.names = FALSE, col.names = TRUE,
-                                 append = ifelse(i == 1, FALSE, TRUE)))
-    suppressWarnings(write.table(df, file = file.path(path, filename), sep = sep,
+    # suppressWarnings(write.table(i, file = file.path(path, filename), sep = sep,
+    #                              quote = FALSE, row.names = FALSE, col.names = TRUE,
+    #                              append = ifelse(i == 1, FALSE, TRUE)))
+# print(path_out)
+# print(file.path(path_out))
+# testthat::test_path(path_out)
+# print(file.path(path_out, filename))
+    suppressWarnings(write.table(df, file = file.path(path_out, filename), sep = sep,
                                  quote = FALSE, row.names = FALSE, col.names = TRUE,
                                  append = ifelse(i == 1, FALSE, TRUE)))
   }
