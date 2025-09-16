@@ -7,7 +7,7 @@ test_that("Write site files", {
   filename <- list(c("clay.100", "sandy.100", "low_ppt.100", "high_ppt.100", "XILIN.100"),
                    c("XILIN.100"),
                    c("duke.100", "harvard.100"))
-  path_out <-  system.file("extdata/Example",  package = "Rcentury")
+  path_out <- tempdir()
   names(filename) <- path
 
 

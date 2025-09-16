@@ -1,16 +1,15 @@
 test_that("check overwrite", {
 
 
-  write.table("Example", "example.txt")
-  expect_message(check_overwrite("example.txt"), "File example.txt already exists. Deleting it...")
-  expect_message(check_overwrite("example.txt", overwrite = FALSE), "File example.txt does not exist. No need to check for overwrite")
-  expect_message(check_overwrite("e.txt"), "File e.txt does not exist. No need to check for overwrite")
-  unlink("example.txt")
+  # Paths.
+  pathname <- tempdir()
 
-  # This will generate an error message
-  write.table("Example", "example.txt")
-  expect_error(check_overwrite("example.txt", overwrite = FALSE))
-  unlink("example.txt")
+  # First write an empty file.
+  filename <- "example.txt"
+  write.table(data.frame(), file.path(pathname, filename))
+  expect_error(check_overwrite(pathname, filename))
+  unlink(file.path(pathname, "example.txt"))
 
+  expect_no_condition(check_overwrite(pathname, filename))
 
 })

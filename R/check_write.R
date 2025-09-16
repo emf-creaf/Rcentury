@@ -4,7 +4,7 @@
 #'
 #'
 #'
-#' @param path \code{character} string with valid path to a folder.
+#' @param pathname \code{character} string with valid path to a folder.
 #' @param filename \code{character} string with an actual file name.
 #' @param overwrite \code{logical}, see 'Details'.
 #'
@@ -17,21 +17,12 @@
 #' Nothing.
 #'
 #' @examples
-check_write <- function(path = path, filename = filename, overwrite = FALSE) {
-
-  # Are inputs there?
-  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
-
-
-  # Valid extension?
-  ext <- tools::file_ext(filename)
-  if (!(ext %in% c("100", "sch", "wth"))) stop(paste("Wrong extension for file", filename))
-
+check_write <- function(path = pathname, filename = filename, overwrite = FALSE) {
 
   # Overwrite or not?
-  if (file.exists(file.path(path, filename))) {
+  if (file.exists(file.path(pathname, filename))) {
     if (overwrite) {
-      unlink(file.path(path, filename))
+      unlink(file.path(pathname, filename))
     } else {
       stop(paste("File", filename, "already exists in folder. Should 'overwrite' be set to TRUE?"))
     }

@@ -1,5 +1,6 @@
 #' Title
 #'
+#' @param pathname
 #' @param fileout
 #' @param overwrite
 #'
@@ -18,19 +19,15 @@
 #' check_overwrite("example.txt", overwrite = FALSE)
 #' unlink("example.txt")
 #'
-check_overwrite <- function(path = path, filename = filename, remove = FALSE) {
-
+check_overwrite <- function(pathname = pathname, filename = filename, overwrite = FALSE) {
 
   # Overwrite or not?
-  if (file.exists(file.path(path, filename))) {
-    if (remove) {
-      unlink(file.path(path, filename))
+  if (file.exists(file.path(pathname, filename))) {
+    if (overwrite) {
+      file.remove(file.path(pathname, filename))
     } else {
-      stop(paste("File", filename, "already exists in folder. Should 'remove' be set to TRUE?"))
+      stop(paste("File", filename, "already exists in folder. Should 'overwrite' be set to TRUE?"))
     }
   }
-
-
-  return(fileout)
 
 }

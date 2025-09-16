@@ -1,7 +1,7 @@
 #' Title
 #'
 #' @param x
-#' @param path
+#' @param pathname
 #' @param filename
 #' @param overwrite
 #'
@@ -9,12 +9,12 @@
 #' @export
 #'
 #' @examples
-write_site <- function(x, path = path, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
+write_site <- function(x, pathname = pathname, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
 
 
   # Checks.
-  check_write(path, filename, overwrite = overwrite)
-  check_ext(filename, "100")
+  check_path_file(pathname, filename)
+  check_overwrite(pathname,filename, overwrite= overwrite)
 
 
   # To check out whether x has the required fields.
@@ -29,7 +29,7 @@ write_site <- function(x, path = path, filename = filename, ndigits = 6, sep = "
 
 
   # First, write title field.
-  suppressWarnings(write.table(x$title, file = file.path(path, filename), sep = "",
+  suppressWarnings(write.table(x$title, file = file.path(pathname, filename), sep = "",
                                quote = FALSE, row.names = FALSE, col.names = FALSE,
                                append = FALSE))
 
@@ -44,10 +44,10 @@ write_site <- function(x, path = path, filename = filename, ndigits = 6, sep = "
 
 
     # Write data.frame to disk.
-    suppressWarnings(write.table(paste0("*** ", toupper(i)), file = file.path(path, filename), sep = sep,
+    suppressWarnings(write.table(paste0("*** ", toupper(i)), file = file.path(pathname, filename), sep = sep,
                                  quote = FALSE, row.names = FALSE, col.names = FALSE,
                                  append = TRUE))
-    suppressWarnings(write.table(df, file = file.path(path, filename), sep = sep,
+    suppressWarnings(write.table(df, file = file.path(pathname, filename), sep = sep,
                                  quote = FALSE, row.names = FALSE, col.names = FALSE,
                                  append = TRUE))
   }

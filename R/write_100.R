@@ -4,7 +4,8 @@
 #' \code{century_file} allows users to create input files (extension '.100') for the Century soil model.
 #'
 #' @param x \code{list} with as many elements as events as needed. Each event starts with a short label and a long title.
-#' @param path directory to save '*.100' file.
+#' @param pathname directory to save '*.100' file.
+#' @param filename description
 #' @param ndigits number of digits for numeric values.
 #'
 #' @returns
@@ -31,12 +32,17 @@
 #' path <- tempdir()
 #' write_100(x, path, "cult.100")
 #'
-write_100 <- function(x, path_out = path_out, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
+write_100 <- function(x, pathname = pathname, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
 
 
-  # checks.
-  check_write(path_out, filename, overwrite = overwrite)
-  check_ext(filename, "100")
+  # Various checks.
+  check_path_file(pathname, filename)
+  check_overwrite(pathname, filename, overwrite = overwrite)
+
+
+  # Check names.
+  data(files_100)
+  if (!(filename %in% names(files_100))) stop(paste0("File name", filename, " is not correct"))
 
 
   # Convert into a data.frame with numbers as characters.
@@ -50,14 +56,7 @@ write_100 <- function(x, path_out = path_out, filename = filename, ndigits = 6, 
     # Write data.frame to disk.
     df[, 1] <- round(df[, 1], ndigits)
     colnames(df) <- c(x[[i]]$label, x[[i]]$title)
-    # suppressWarnings(write.table(i, file = file.path(path, filename), sep = sep,
-    #                              quote = FALSE, row.names = FALSE, col.names = TRUE,
-    #                              append = ifelse(i == 1, FALSE, TRUE)))
-# print(path_out)
-# print(file.path(path_out))
-# testthat::test_path(path_out)
-# print(file.path(path_out, filename))
-    suppressWarnings(write.table(df, file = file.path(path_out, filename), sep = sep,
+    suppressWarnings(write.table(df, file = file.path(pathname, filename), sep = sep,
                                  quote = FALSE, row.names = FALSE, col.names = TRUE,
                                  append = ifelse(i == 1, FALSE, TRUE)))
   }

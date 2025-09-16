@@ -1,12 +1,11 @@
 test_that("Creating Century files", {
 
 
-  # Path to files.
-  path_in <- list(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
-                  system.file("extdata/3.plant_production",  package = "Rcentury"),
-                  system.file("extdata/4.forest",  package = "Rcentury"))
-
-  path_out <-  system.file("extdata/Example",  package = "Rcentury")
+  # Paths.
+  path_in <- c(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
+               system.file("extdata/3.plant_production",  package = "Rcentury"),
+               system.file("extdata/4.forest",  package = "Rcentury"))
+  path_out <- tempdir()
 
   # Fake data.
   x <- list()
@@ -46,6 +45,7 @@ test_that("Creating Century files", {
   y <- read_100(path_out, "cult.100")
   expect_identical(x, y)
 
-
+  # Remove.
+  file.remove(file.path(path_out, "cult.100"))
 
 })

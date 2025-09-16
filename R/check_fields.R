@@ -1,6 +1,7 @@
 #' Check correctness of field names for a '.100' data set.
 #'
 #' @param x \code{list} containing the structure of a CENTURY '.100' file
+#' @param filename
 #'
 #' @returns
 #' @export

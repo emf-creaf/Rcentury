@@ -1,18 +1,17 @@
 #' Title
 #'
-#' @param path
+#' @param pathname
 #' @param filename
 #'
 #' @returns
 #' @export
 #'
 #' @examples
-read_site <- function(path = path, filename = filename) {
+read_site <- function(pathname = pathname, filename = filename) {
 
 
   # Checks.
-  check_read(path, filename)
-  check_ext(filename, "100")
+  check_path_file(pathname, filename)
 
 
   # To check out fields in site file. We calculate how many parameters there should be in each
@@ -24,7 +23,7 @@ read_site <- function(path = path, filename = filename) {
 
   # Read the file as a character vector. We wrap it in 'suppressWarnings'
   # in case it does not end with a new line.
-  x <- suppressWarnings(readLines(file.path(path, filename)))
+  x <- suppressWarnings(readLines(file.path(pathname, filename)))
 
 
   # Find sections in file data. Result is a vector where NA indicates that pattern has not been found.

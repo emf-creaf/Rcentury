@@ -10,15 +10,15 @@
 #' @returns
 #'
 #' @examples
-check_read <- function(path = path, filename = filename) {
+check_read <- function(path = pathname, filename = filename) {
 
   # Are inputs there?
-  if (missing(path) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
+  if (missing(pathname) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
 
 
   # Checks.
-  if (!file.exists(file.path(path))) stop(paste0("Folder", path, "does not exist"))
-  if (!file.exists(file.path(path, filename))) stop(paste0("File", filename, "does not exist"))
+  if (!file.exists(file.path(pathname))) stop(paste0("Folder", pathname, "does not exist"))
+  if (!file.exists(file.path(pathname, filename))) stop(paste0("File", filename, "does not exist"))
   ext <- tools::file_ext(filename)
   if (!(ext %in% c("100", "sch", "wth", "lis", "bin"))) stop(paste("Wrong extension for file", filename))
 

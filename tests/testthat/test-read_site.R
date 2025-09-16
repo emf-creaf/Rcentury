@@ -13,7 +13,10 @@ test_that("Reading site files", {
   # Reading files.
   for (i in path) {
     for (j in filename[[i]]) {
-      expect_no_condition(x <- read_site(i, j))
+      expect_no_condition(read_site(i, j))
+      expect_error(read_site(i, "dumb.asdf"))
+      expect_error(read_site(i, "dumb.100"))
+      expect_error(read_site("nothing", j))
     }
   }
 

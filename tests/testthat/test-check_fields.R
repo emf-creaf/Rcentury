@@ -5,7 +5,7 @@ test_that("Checking fields of '.100' files", {
                   system.file("extdata/3.plant_production",  package = "Rcentury"),
                   system.file("extdata/4.forest",  package = "Rcentury"))
 
-  path_out <-  system.file("extdata/Example",  package = "Rcentury")
+  path_out <- tempdir()
 
   # Names and number of lines for each *.100 file.
   data("files_100")

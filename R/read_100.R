@@ -5,7 +5,7 @@
 #' The only *.100 files that cannot be read with \code{read_100} are site files.
 #'
 #'
-#' @param path \code{character} string with valid path to write the file to.
+#' @param pathname \code{character} string with valid path to write the file to.
 #' @param filename \code{character} string with the actual file name. It must include the extension '.100'.
 #' @param remove_blanks \code{logical}, if set to TRUE any blanks at the end of the file will be removed.
 #'
@@ -16,15 +16,14 @@
 #'
 #' @examples
 #' # Read one of the CENTURY example files included in the package.
-#' path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
-#' x <- read_100(path, "harv.100")
+#' pathname <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+#' x <- read_100(pathname, "harv.100")
 #'
-read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
+read_100 <- function(pathname = pathname, filename = filename, remove_blanks = TRUE) {
 
 
   # Checks.
-  check_read(path, filename)
-  check_ext(filename, "100")
+  check_path_file(pathname, filename)
 
 
   # Check that, if extension is '*.100', it is not a site file (which have a different structure).
@@ -38,7 +37,7 @@ read_100 <- function(path = path, filename = filename, remove_blanks = TRUE) {
 
   # Read the file as a character vector. We wrap it in 'suppressWarnings'
   # in case it does not end with a new line.
-  x <- suppressWarnings(readLines(file.path(path, filename)))
+  x <- suppressWarnings(readLines(file.path(pathname, filename)))
 
 
   # Sometimes the last lines of the file are filled with blanks.
