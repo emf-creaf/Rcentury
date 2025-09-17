@@ -9,7 +9,7 @@ test_that("Read and write schedule files", {
                 c("duke.sch", "harvard.sch"))
   names(files) <- path_in
 
-  path_out <- system.file("extdata/Example",  package = "Rcentury")
+  path_out <- tempdir()
 
 
   # In case files have not been deleted.
@@ -23,7 +23,8 @@ test_that("Read and write schedule files", {
   for (i in path_in) {
     for (j in files[[i]]) {
       x <- read_schedule(i, j)
-      expect_no_error(write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE))
+      # expect_no_error(write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE))
+      write_schedule(x, path_out, paste0("delete_", j), overwrite = FALSE)
     }
   }
 

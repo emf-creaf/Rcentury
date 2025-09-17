@@ -27,10 +27,12 @@ read_site <- function(pathname = pathname, filename = filename) {
 
 
   # Find sections in file data. Result is a vector where NA indicates that pattern has not been found.
-  # Sorting the indices makes sure they are in the same order as they appear in file.
   j <- sapply(tolower(sections), function(z) ifelse(length(grep(z, tolower(x)))==0, NA, grep(z, tolower(x))))
   if (any(is.na(j))) stop("Site file does not contain all necessary sections")
-  if (min(j) != 2) stop(paste0("A title must be on first line of file ", filename))
+  if (min(j) != 2) stop(paste("A title line must be included in", filename))
+
+
+  # Sorting the indices makes sure they are in the same order as they appear in file.
   j <- sort(j)
   j <- c(j, EOF = length(x)+1)
 

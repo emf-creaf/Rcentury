@@ -4,7 +4,7 @@
 #' @description
 #' \code{read_schedule} reads *.sch CENTURY soil model files and saves their content in a list.
 #'
-#' @param path \code{character} string containing a valid path to a *.sch file.
+#' @param pathname \code{character} string containing a valid path to a *.sch file.
 #' @param filename \code{character} string with the name of the schedule file. It must include the extension '.sch'.
 #'
 #' @returns
@@ -16,12 +16,11 @@
 #' @export
 #'
 #' @examples
-read_schedule <- function(path = path, filename = filename) {
+read_schedule <- function(pathname = pathname, filename = filename) {
 
 
   # Checks.
-  check_read(path, filename)
-  check_ext(filename, "sch")
+  check_path_file(pathname, filename)
 
 
   # Labels to be found inside *.sch CENTURY files.
@@ -30,7 +29,7 @@ read_schedule <- function(path = path, filename = filename) {
 
   # Read first 15 lines containing general information.
   header <- list()
-  x <- readLines(file.path(path, filename))
+  x <- readLines(file.path(pathname, filename))
   nr <- length(x)
   for (i in 1:15) {
     j <- regexpr(labels_schedule[i], x[i], ignore.case = TRUE)
@@ -79,7 +78,7 @@ read_schedule <- function(path = path, filename = filename) {
 
 
     # Line 3 specifies the name of the site file, but does it exist?
-    stopifnot("Site file does not exist" = file.exists(file.path(path, filename)))
+    stopifnot("Site file does not exist" = file.exists(file.path(pathname, filename)))
 
 
     # If line 7 has an "F", the name of a weather file will be included in line 8.

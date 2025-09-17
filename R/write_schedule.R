@@ -4,7 +4,7 @@
 #' \code{write_schedule} writes to disk an ASCII *.sch file to be used by the CENTURY soil model.
 #'
 #' @param x \code{list} with content of the schedule file.
-#' @param path valid path to write the file to.
+#' @param pathname valid path to write the file to.
 #' @param filename \code{character} string with the actual file name. It must include the extension '.sch'.
 #' @param overwrite \code{logical}, if set to TRUE and the file already exists, it will overwrite; if set to
 #' FALSE and the file exists, it will stop with an error message.
@@ -14,12 +14,12 @@
 #' @export
 #'
 #' @examples
-write_schedule <- function(x, path = path, filename = filename, overwrite = FALSE) {
+write_schedule <- function(x, pathname = pathname, filename = filename, overwrite = FALSE) {
 
 
   # Checks.
-  check_write(path, filename, overwrite = overwrite)
-  check_ext(filename, "sch")
+  check_path_file(pathname, filename)
+  check_overwrite(pathname, filename, overwrite = overwrite)
 
 
   # Load labels for schedule files.
@@ -39,7 +39,6 @@ write_schedule <- function(x, path = path, filename = filename, overwrite = FALS
   if (tools::file_ext(filename) != "sch") {
     stop("Filename must include extension 'sch'")
   }
-  check_write(path, filename, overwrite = overwrite)
 
 
   # Write header. A blank line is added, then a "Year Month Option" line.
@@ -51,7 +50,7 @@ write_schedule <- function(x, path = path, filename = filename, overwrite = FALS
   }
   h <- c(h, "")
   h <- c(h, "Year Month Option")
-  write(h, file = file.path(path, filename))
+  write(h, file = file.path(pathname, filename))
 
 
   # Next we add the different blocks.
@@ -74,7 +73,7 @@ write_schedule <- function(x, path = path, filename = filename, overwrite = FALS
     h <- c(h, c("-999 -999 X"))
 
 
-    write(h, file = file.path(path, filename), append = TRUE)
+    write(h, file = file.path(pathname, filename), append = TRUE)
   }
 
 }

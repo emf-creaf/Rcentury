@@ -17,7 +17,4 @@ test_that("Reading schedule files", {
     }
   }
 
-
-
-
 })

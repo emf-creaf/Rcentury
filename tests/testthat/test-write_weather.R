@@ -10,7 +10,7 @@ test_that("Read/writing/reading weather files", {
                 c("duke.wth", "harvard.wth"))
   names(files) <- path
 
-  path_out <- system.file("extdata/Example",  package = "Rcentury")
+  path_out <- tempdir()
 
   for (i in path) {
     for (j in files[[i]]) {

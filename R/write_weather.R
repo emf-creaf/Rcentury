@@ -27,12 +27,12 @@
 #'   tmin = rnorm(24, mean = 5),
 #'   tmax = rnorm(24, mean = 15))
 #' century_weather(df, "nothing")
-write_weather <- function(df, path = path, filename = filename, overwrite = FALSE, sep = "      ", ndigits = 6) {
+write_weather <- function(df, pathname = pathname, filename = filename, overwrite = FALSE, sep = "      ", ndigits = 6) {
 
 
   # First checks.
-  check_write(path, filename, overwrite = overwrite)
-  check_ext(filename, "wth")
+  check_path_file(pathname, filename)
+  check_overwrite(pathname, filename, overwrite = overwrite)
 
 
   # Check input data.frame.
@@ -58,6 +58,6 @@ write_weather <- function(df, path = path, filename = filename, overwrite = FALS
 
 
   # Save file on disk.
-  write.table(df_wide, file = file.path(path, filename), sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(df_wide, file = file.path(pathname, filename), sep = sep, quote = FALSE, row.names = FALSE, col.names = FALSE)
 
 }

@@ -4,7 +4,7 @@
 #' \code{read_weather} reads '*.wth' weather CENTURY files and gives a
 #' wide-format data.frame
 #'
-#' @param path \code{character} string containing a valid path to a *.sch file.
+#' @param pathname \code{character} string containing a valid path to a *.sch file.
 #' @param filename \code{character} string with the name of the weather file.
 #' It must include the extension '.wth'.
 #'
@@ -21,15 +21,14 @@
 #' @export
 #'
 #' @examples
-read_weather <- function(path = path, filename = filename) {
+read_weather <- function(pathname = pathname, filename = filename) {
 
 
   # Checks.
-  check_read(path, filename)
-  check_ext(filename, "wth")
+  check_path_file(pathname, filename)
 
 
-  df_wide <- read.table(file.path(path, filename))
+  df_wide <- read.table(file.path(pathname, filename))
   colnames(df_wide)[1:2] <- c("climate", "year")
 
   # From wide to long format.
