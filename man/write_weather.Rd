@@ -6,7 +6,7 @@
 \usage{
 write_weather(
   df,
-  path = path,
+  pathname = pathname,
   filename = filename,
   overwrite = FALSE,
   sep = "      ",

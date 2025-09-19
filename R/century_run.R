@@ -1,46 +1,45 @@
 #' Title
 #'
 #' @param pathname
-#' @param list_files
+#' @param schedule
+#' @param name_bin
+#' @param name_lis
+#' @param name_txt
 #' @param overwrite
+#' @param extended
 #' @param verbose
 #'
 #' @returns
 #' @export
 #'
 #' @examples
-century_run <- function(pathname = pathname, schedule = schedule, name_output = name_output, overwrite = TRUE,
-                        extended = FALSE, verbose = TRUE) {
+century_run <- function(pathname = pathname, schedule = schedule, name_bin = name_bin, name_lis = name_lis,
+                        name_txt = name_txt, overwrite = TRUE, extended = FALSE, verbose = TRUE) {
+
+  # First checks.
+  if (tools::file_ext(schedule) != "sch") stop("Extension of schedule file should be '.sch'")
+  if (tools::file_ext(name_bin) != "bin") stop(paste("Extension of", name_bin, "file should be '.bin'"))
+  if (tools::file_ext(name_lis) != "lis") stop(paste("Extension of", name_lis, "file should be '.lis'"))
+  if (tools::file_ext(name_txt) != "txt") stop(paste("Extension of", name_txt, "file should be '.txt'"))
 
 
-  # Remove extensions and do checks.
-  ext <- tools::file_ext(schedule)
-  if (ext != "") {
-    if (ext != "sch") stop("Name of schedule file should have extension '.ext' or none")
-    check_path_file(pathname, schedule)
-    schedule <- tools::file_path_sans_ext(schedule)
-  } else {
-    check_path_file(pathname, paste0(schedule, ".sch"))
-  }
-
-  ext <- tools::file_ext(name_output)
-  if (ext != "") {
-    if (ext != "bin") stop("Name of output file should have extension '.bin' or none")
-    check_path_file(pathname, name_output)
-    name_output <- tools::file_path_sans_ext(name_output)
-  } else {
-    check_path_file(pathname, paste0(name_output, ".bin"))
-  }
-
-
-  # Check that '*.exe' file can be found in folder.
+  # Are all files there?
+  if (!file.exists(file.path(pathname))) stop("Wrong path")
+  if (!file.exists(file.path(pathname, schedule))) stop(paste("Could not find", schedule, "file"))
   if (!file.exists(file.path(pathname, "century_47.exe"))) stop(paste("Could not find 'century_47.exe' in folder", pathname))
+  if (!file.exists(file.path(pathname, "list100_47.exe"))) stop(paste("Could not find 'list100_47.exe' in folder", pathname))
+
+
+  # Now, remove extensions to file names.
+  schedule <- tools::file_path_sans_ext(schedule)
+  name_bin <- tools::file_path_sans_ext(name_bin)
+  name_lis <- tools::file_path_sans_ext(name_lis)
 
 
   # Move to directory, run century_47.exe and move back.
   wd_old <- getwd()
   setwd(pathname)
-  args <- c(schedule, name_output, ifelse(extended, "Y", "N"), "")
+  args <- c(schedule, name_bin, ifelse(extended, "Y", "N"), "")
   out <- system2("century_47.exe", input = args, wait = TRUE, stderr = TRUE, stdout = FALSE)
   setwd(wd_old)
 
@@ -52,5 +51,15 @@ century_run <- function(pathname = pathname, schedule = schedule, name_output = 
     print(out)
     stop()
   }
+
+
+  # Now read the output ".bin" file and load results into the R session.
+  wd_old <- getwd()
+  setwd(pathname)
+  params <- c(name_bin, name_lis, name_txt)
+  # out <- system2("list100_47.exe", input = params, wait = TRUE, stderr = TRUE, stdout = FALSE) # Couldn't make it work.
+  out <- system(paste("list100_47.exe", name_bin, name_lis, name_txt))
+  setwd(wd_old)
+
 
 }

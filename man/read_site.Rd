@@ -4,7 +4,7 @@
 \alias{read_site}
 \title{Title}
 \usage{
-read_site(path = path, filename = filename)
+read_site(pathname = pathname, filename = filename)
 }
 \arguments{
 \item{filename}{}

@@ -5,11 +5,13 @@
 \title{Title}
 \usage{
 century_run(
+  pathname = pathname,
   schedule = schedule,
-  fileout = fileout,
-  wd = wd,
-  extended = FALSE,
+  name_bin = name_bin,
+  name_lis = name_lis,
+  name_txt = name_txt,
   overwrite = TRUE,
+  extended = FALSE,
   verbose = TRUE
 )
 }

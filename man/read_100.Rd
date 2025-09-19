@@ -4,10 +4,10 @@
 \alias{read_100}
 \title{Read *.100 files.}
 \usage{
-read_100(path = path, filename = filename, remove_blanks = TRUE)
+read_100(pathname = pathname, filename = filename, remove_blanks = TRUE)
 }
 \arguments{
-\item{path}{\code{character} string with valid path to write the file to.}
+\item{pathname}{\code{character} string with valid path to write the file to.}
 
 \item{filename}{\code{character} string with the actual file name. It must include the extension '.100'.}
 
@@ -22,7 +22,7 @@ The only *.100 files that cannot be read with \code{read_100} are site files.
 }
 \examples{
 # Read one of the CENTURY example files included in the package.
-path <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
-x <- read_100(path, "harv.100")
+pathname <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+x <- read_100(pathname, "harv.100")
 
 }

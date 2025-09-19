@@ -4,7 +4,7 @@
 \alias{check_read}
 \title{Check path, file name and extension}
 \usage{
-check_read(path = path, filename = filename)
+check_read(path = pathname, filename = filename)
 }
 \arguments{
 \item{path}{\code{character} string indicating the path to the folder.}

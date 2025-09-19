@@ -6,7 +6,7 @@
 \usage{
 write_100(
   x,
-  path = path,
+  pathname = pathname,
   filename = filename,
   ndigits = 6,
   sep = "    ",
@@ -16,7 +16,9 @@ write_100(
 \arguments{
 \item{x}{\code{list} with as many elements as events as needed. Each event starts with a short label and a long title.}
 
-\item{path}{directory to save '*.100' file.}
+\item{pathname}{directory to save '*.100' file.}
+
+\item{filename}{description}
 
 \item{ndigits}{number of digits for numeric values.}
 }

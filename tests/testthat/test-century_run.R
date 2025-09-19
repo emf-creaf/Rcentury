@@ -19,7 +19,7 @@ test_that("Run Century", {
   data("files_100")
 
   # Schedule files. high_ppt.sch gives error.
-  schedule <- list(c("clay.sch", "low_ppt.sch", "sandy.sch", "XILI.sch"),
+  schedule <- list(c("clay.sch", "low_ppt.sch", "sandy.sch", "XILI.sch", "high_ppt.sch"),
                    c("G1.sch", "G3.sch", "G4.sch", "G5.sch"),
                    c("duke.sch", "harvard.sch"))
   names(schedule) <- path_in
@@ -31,7 +31,7 @@ test_that("Run Century", {
   names(weather) <- path_in
 
   # Site files.
-  sites <- list(c("clay.100", "sandy.100", "low_ppt.100", "high_ppt.100", "XILIN.100"),
+  sites <- list(c("clay.100", "sandy.100", "low_ppt.100", "high_ppt.100", "XILIN.100", "high_ppt.wth"),
                 c("XILIN.100"),
                 c("duke.100", "harvard.100"))
   names(sites) <- path_in
@@ -57,18 +57,30 @@ test_that("Run Century", {
     # Schedule files.
     x <- file.copy(file.path(p, schedule[[p]]), path_out, overwrite = TRUE)
 
+    # Variable files.
+    x <- file.copy(file.path(p, "outvars.txt"), path_out, overwrite = TRUE)
+
     # If error message is el comando ejecutado '"century_47.exe"' tiene el estatus 2
     # we must erase the previous *.bin.
 
     for (s in schedule[[p]]) {
-      century_run(path_out, s, "delete")
+
+      # Delete previous results, if any.
+      suppressWarnings(file.remove(file.path(path_out, c("delete.bin", "delete.lis", "harvest.csv"))))
+
+      suppressPackageStartupMessages(century_run(path_out, s, "delete.bin", "delete.lis", "outvars.txt"))
+
+      browser()
+
       expect_true(file.exists(file.path(path_out, "delete.bin")))
       file.remove(file.path(path_out, "delete.bin"))
       expect_false(file.exists(file.path(path_out, "delete.bin")))
+
+      expect_true(file.exists(file.path(path_out, "delete.lis")))
+      file.remove(file.path(path_out, "delete.lis"))
+      expect_false(file.exists(file.path(path_out, "delete.lis")))
+
     }
-
   }
-
-
 
 })

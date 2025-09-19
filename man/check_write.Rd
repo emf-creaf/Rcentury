@@ -4,14 +4,14 @@
 \alias{check_write}
 \title{Title}
 \usage{
-check_write(path = path, filename = filename, overwrite = FALSE)
+check_write(path = pathname, filename = filename, overwrite = FALSE)
 }
 \arguments{
-\item{path}{\code{character} string with valid path to a folder.}
-
 \item{filename}{\code{character} string with an actual file name.}
 
 \item{overwrite}{\code{logical}, see 'Details'.}
+
+\item{pathname}{\code{character} string with valid path to a folder.}
 }
 \value{
 Nothing.

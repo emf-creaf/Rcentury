@@ -4,10 +4,10 @@
 \alias{read_weather}
 \title{Read '*.wth' CENTURY files}
 \usage{
-read_weather(path = path, filename = filename)
+read_weather(pathname = pathname, filename = filename)
 }
 \arguments{
-\item{path}{\code{character} string containing a valid path to a *.sch file.}
+\item{pathname}{\code{character} string containing a valid path to a *.sch file.}
 
 \item{filename}{\code{character} string with the name of the weather file.
 It must include the extension '.wth'.}

@@ -8,6 +8,8 @@ check_fields(x, filename = filename)
 }
 \arguments{
 \item{x}{\code{list} containing the structure of a CENTURY '.100' file}
+
+\item{filename}{}
 }
 \description{
 Check correctness of field names for a '.100' data set.

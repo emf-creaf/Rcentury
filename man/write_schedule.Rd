@@ -4,12 +4,12 @@
 \alias{write_schedule}
 \title{Save to disk a *.sch CENTURY file}
 \usage{
-write_schedule(x, path = path, filename = filename, overwrite = FALSE)
+write_schedule(x, pathname = pathname, filename = filename, overwrite = FALSE)
 }
 \arguments{
 \item{x}{\code{list} with content of the schedule file.}
 
-\item{path}{valid path to write the file to.}
+\item{pathname}{valid path to write the file to.}
 
 \item{filename}{\code{character} string with the actual file name. It must include the extension '.sch'.}
 
