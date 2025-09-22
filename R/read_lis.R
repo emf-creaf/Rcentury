@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param pathname
+#' @param filename
+#'
+#' @returns
+#' @export
+#'
+#' @examples
 read_lis <- function(pathname = pathname, filename = filename) {
 
   # Checks.

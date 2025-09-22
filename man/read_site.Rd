@@ -2,13 +2,25 @@
 % Please edit documentation in R/read_site.R
 \name{read_site}
 \alias{read_site}
-\title{Title}
+\title{Read site.100 files}
 \usage{
 read_site(pathname = pathname, filename = filename)
 }
 \arguments{
-\item{filename}{}
+\item{pathname}{\code{character} string with valid path to a folder.}
+
+\item{filename}{\code{character} string specifying the name of the file, which must include the extension '.100'.}
+}
+\value{
+A list with the contents of the file.
 }
 \description{
-Title
+\code{read_site} reads CENTURY site files, which have an extension '.100'
+}
+\examples{
+# Try to read one of the site files provided with the package.
+pathname <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+filename <- "clay.100"
+x <- read_site(pathname, filename)
+
 }

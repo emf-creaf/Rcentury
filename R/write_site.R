@@ -1,14 +1,30 @@
-#' Title
+#' Write data to a CENTURY site file.
 #'
-#' @param x
-#' @param pathname
-#' @param filename
-#' @param overwrite
+#' @description
+#' \code{write_site} allows users to create input site files (extension '.100') for the CENTURY soil model.
+#'
+#'
+#' @param x \code{list} with as many elements as events as needed.
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param filename \code{character} string specifying the name of the file, which must include the extension '.100'.
+#' @param overwrite \code{logical}, if set to FALSE (default), the code will stop if file already exists. If set to
+#' TRUE, the previous file will be overwritten.
 #'
 #' @returns
+#' If writing is successful, it returns nothing.
+#'
 #' @export
 #'
 #' @examples
+#' # Reads one of the site files provided with the package.
+#' pathname <- system.file("extdata/4.forest",  package = "Rcentury")
+#' filename <- "duke.100"
+#' x <- read_site(pathname, filename)
+#'
+#' # Create temporary path.
+#' path <- tempdir()
+#' write_site(x, path, "duke.100")
+#'
 write_site <- function(x, pathname = pathname, filename = filename, ndigits = 6, sep = "    ", overwrite = FALSE) {
 
 

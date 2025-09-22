@@ -1,20 +1,33 @@
-#' @title Check path, file name and extension
-#'
+#' @title
+#' Check path, file name and extension
 #'
 #' @description
-#' Check that path exists and that file name, together with extension, has been correctly specified
+#' \code{check_read} verifies that path name exists and that file name, together with extension,
+#' has been correctly specified.
 #'
-#' @param path \code{character} string indicating the path to the folder.
+#' @param pathname \code{character} string with valid path to a folder.
 #' @param filename \code{character} string specifying the name of the file with its extension.
 #'
 #' @returns
+#' If successful, it returns nothing.
 #'
 #' @examples
-check_read <- function(path = pathname, filename = filename) {
+#'
+#' # Create a silly example text file.
+#' sink("example.100")
+#' i <- 1:10
+#' outer(i, i)
+#' sink()
+#'
+#' # Check it exists and it has a valid CENTURY file extension.
+#' check_read(getwd(), "example.100")
+#'
+#' # Remove the silly example text file.
+#' invisible(file.remove("example.100"))
+check_read <- function(pathname = pathname, filename = filename) {
 
   # Are inputs there?
-  if (missing(pathname) | missing(filename)) stop("Missing inputs 'path' or 'filename'")
-
+  if (missing(pathname) | missing(filename)) stop("Missing inputs 'pathname' or 'filename'")
 
   # Checks.
   if (!file.exists(file.path(pathname))) stop(paste0("Folder", pathname, "does not exist"))

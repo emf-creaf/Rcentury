@@ -7,9 +7,9 @@
 check_path_file(pathname = pathname, filename = filename)
 }
 \arguments{
-\item{filename}{\code{character} string with file name.}
+\item{pathname}{\code{character} string with valid path to a folder.}
 
-\item{path}{\code{character} string with path name.}
+\item{filename}{\code{character} string specifying the name of the file with its extension.}
 }
 \value{
 Nothing.
@@ -17,4 +17,17 @@ Nothing.
 \description{
 \code{check_path_file} just checks that path and file names are correct, and that the former
 corresponds to a valid path.
+}
+\examples{
+# Create a silly example text file.
+sink("example.100")
+i <- 1:10
+outer(i, i)
+sink()
+
+check_path_file(getwd(), "example.100")
+
+# Remove the silly example text file.
+invisible(file.remove("example.100"))
+
 }

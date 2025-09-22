@@ -1,18 +1,21 @@
 #' Write *.100 input files for Century
 #'
 #' @description
-#' \code{century_file} allows users to create input files (extension '.100') for the Century soil model.
+#' \code{write_100} allows users to create input files (extension '.100') for the CENTURY soil model.
 #'
 #' @param x \code{list} with as many elements as events as needed. Each event starts with a short label and a long title.
-#' @param pathname directory to save '*.100' file.
-#' @param filename description
-#' @param ndigits number of digits for numeric values.
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param filename \code{character} string specifying the name of the file with its extension.
+#' @param ndigits \code{integer} specifying the number of digits to print for numeric values.
+#' @param sep the field separator string. Values within each row of x are separated by this string.
+#' @param overwrite \code{logical}, if set to FALSE (default), the code will stop if file already exists. If set to
+#' TRUE, the previous file will be overwritten.
 #'
 #' @returns
 #' Nothing. File is created on disk.
 #'
 #' @details
-#' File is overwritten.
+#' At this stage there are almost no checks as to whether fields are correctly specified. That's left as a researcher's task.
 #'
 #' @export
 #'

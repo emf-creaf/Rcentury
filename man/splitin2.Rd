@@ -2,18 +2,37 @@
 % Please edit documentation in R/splitin2.R
 \name{splitin2}
 \alias{splitin2}
-\title{Title}
+\title{Split character string in two parts}
 \usage{
 splitin2(x, input_type = input_type, remove_quotes = TRUE)
 }
 \arguments{
-\item{input_type}{element.}
+\item{x}{single \code{character} string.}
 
-\item{remove_quotes}{}
+\item{input_type}{\code{character} string that can take two values: "data" or "title".}
+
+\item{remove_quotes}{\code{logical}, if set to TRUE any single quotation marks will
+be removed from the second element.}
 }
 \value{
 A \code{data.frame} with one row and two columns.
 }
 \description{
-Title
+\code{splitin2} splints a \code{character} string into a two-element \code{data.frame}
+containing a number and a string, in this order.
+}
+\details{
+Function \code{splitin2} has been written to allow splitting string from CENTURY files into
+two parts. Input 'x' must be a single \code{character} string containing either a number and a
+text (e.g. "45 dd")
+}
+\examples{
+# See the difference when 'input_type' changes value.
+str(splitin2("4.5 'This'", "data"))
+str(splitin2("45 'This'", "title"))
+
+# We set 'remove_quotes' to FALSE.
+str(splitin2("4.5 'This'", "data", FALSE))
+str(splitin2("45 'This'", "title", FALSE))
+
 }

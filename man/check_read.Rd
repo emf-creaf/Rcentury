@@ -4,13 +4,31 @@
 \alias{check_read}
 \title{Check path, file name and extension}
 \usage{
-check_read(path = pathname, filename = filename)
+check_read(pathname = pathname, filename = filename)
 }
 \arguments{
-\item{path}{\code{character} string indicating the path to the folder.}
+\item{pathname}{\code{character} string with valid path to a folder.}
 
 \item{filename}{\code{character} string specifying the name of the file with its extension.}
 }
+\value{
+If successful, it returns nothing.
+}
 \description{
-Check that path exists and that file name, together with extension, has been correctly specified
+\code{check_read} verifies that path name exists and that file name, together with extension,
+has been correctly specified.
+}
+\examples{
+
+# Create a silly example text file.
+sink("example.100")
+i <- 1:10
+outer(i, i)
+sink()
+
+# Check it exists and it has a valid CENTURY file extension.
+check_read(getwd(), "example.100")
+
+# Remove the silly example text file.
+invisible(file.remove("example.100"))
 }

@@ -14,5 +14,8 @@ A \code{character} vector of the same length as 'x' with all leading and end sin
 Input is unchanged if it is numeric.
 }
 \description{
-Removal of leading and end single quotation marks.
+\code{remove_single_quotes} removes leading and trailing quotes in a character string if present.
+}
+\examples{
+remove_single_quotes("'This leading quote will disappear, but not this 'one.")
 }

@@ -7,21 +7,31 @@
 check_overwrite(pathname = pathname, filename = filename, overwrite = FALSE)
 }
 \arguments{
-\item{overwrite}{}
+\item{pathname}{\code{character} string with valid path to a folder.}
+
+\item{filename}{\code{character} string specifying the name of the file with its extension.}
+
+\item{overwrite}{\code{logical}, see 'Details'.}
+}
+\value{
+Nothing.
 }
 \description{
-Title
+\code{check_overwrite}
 }
 \examples{
-write.table("Example", "example.txt")
-check_overwrite("example.txt")
-check_overwrite("example.txt", overwrite = FALSE)
-check_overwrite("e.txt")
-unlink("example.txt")
+# Create a silly example text file.
+sink("example.100")
+i <- 1:10
+outer(i, i)
+sink()
 
-# This will generate an error message
-write.table("Example", "example.txt")
-check_overwrite("example.txt", overwrite = FALSE)
-unlink("example.txt")
+# Checks.
+check_overwrite("", "example.txt")
+check_overwrite("", "example.txt", overwrite = FALSE)
+check_overwrite("", "e.txt")
+
+# Remove the silly example text file.
+invisible(file.remove("example.100"))
 
 }

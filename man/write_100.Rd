@@ -16,20 +16,25 @@ write_100(
 \arguments{
 \item{x}{\code{list} with as many elements as events as needed. Each event starts with a short label and a long title.}
 
-\item{pathname}{directory to save '*.100' file.}
+\item{pathname}{\code{character} string with valid path to a folder.}
 
-\item{filename}{description}
+\item{filename}{\code{character} string specifying the name of the file with its extension.}
 
-\item{ndigits}{number of digits for numeric values.}
+\item{ndigits}{\code{integer} specifying the number of digits to print for numeric values.}
+
+\item{sep}{the field separator string. Values within each row of x are separated by this string.}
+
+\item{overwrite}{\code{logical}, if set to FALSE (default), the code will stop if file already exists. If set to
+TRUE, the previous file will be overwritten.}
 }
 \value{
 Nothing. File is created on disk.
 }
 \description{
-\code{century_file} allows users to create input files (extension '.100') for the Century soil model.
+\code{write_100} allows users to create input files (extension '.100') for the CENTURY soil model.
 }
 \details{
-File is overwritten.
+At this stage there are almost no checks as to whether fields are correctly specified. That's left as a researcher's task.
 }
 \examples{
 # Example list with two elements.

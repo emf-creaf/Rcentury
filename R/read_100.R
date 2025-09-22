@@ -1,12 +1,11 @@
 #' Read *.100 files.
 #'
 #' @description
-#' \code{read_100} reads almost all CENTURY files with extension '*.100'.
-#' The only *.100 files that cannot be read with \code{read_100} are site files.
+#' \code{read_100} reads all CENTURY files with extension '*.100' save for site files, which also have
+#' a '.100' extension but have their own function to read them, called \code{\link{read_site}}.
 #'
-#'
-#' @param pathname \code{character} string with valid path to write the file to.
-#' @param filename \code{character} string with the actual file name. It must include the extension '.100'.
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param filename \code{character} string specifying the name of the file, which must include the extension '.100'.
 #' @param remove_blanks \code{logical}, if set to TRUE any blanks at the end of the file will be removed.
 #'
 #' @returns

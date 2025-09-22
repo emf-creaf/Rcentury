@@ -2,7 +2,7 @@
 % Please edit documentation in R/write_site.R
 \name{write_site}
 \alias{write_site}
-\title{Title}
+\title{Write data to a CENTURY site file.}
 \usage{
 write_site(
   x,
@@ -14,8 +14,29 @@ write_site(
 )
 }
 \arguments{
-\item{overwrite}{}
+\item{x}{\code{list} with as many elements as events as needed.}
+
+\item{pathname}{\code{character} string with valid path to a folder.}
+
+\item{filename}{\code{character} string specifying the name of the file, which must include the extension '.100'.}
+
+\item{overwrite}{\code{logical}, if set to FALSE (default), the code will stop if file already exists. If set to
+TRUE, the previous file will be overwritten.}
+}
+\value{
+If writing is successful, it returns nothing.
 }
 \description{
-Title
+\code{write_site} allows users to create input site files (extension '.100') for the CENTURY soil model.
+}
+\examples{
+# Reads one of the site files provided with the package.
+pathname <- system.file("extdata/4.forest",  package = "Rcentury")
+filename <- "duke.100"
+x <- read_site(pathname, filename)
+
+# Create temporary path.
+path <- tempdir()
+write_site(x, path, "duke.100")
+
 }

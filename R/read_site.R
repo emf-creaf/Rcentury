@@ -1,12 +1,22 @@
-#' Title
+#' Read site.100 files
 #'
-#' @param pathname
-#' @param filename
+#' @description
+#' \code{read_site} reads CENTURY site files, which have an extension '.100'
+#'
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param filename \code{character} string specifying the name of the file, which must include the extension '.100'.
 #'
 #' @returns
+#' A list with the contents of the file.
+#'
 #' @export
 #'
 #' @examples
+#' # Try to read one of the site files provided with the package.
+#' pathname <- system.file("extdata/1.soil_texture_ppt",  package = "Rcentury")
+#' filename <- "clay.100"
+#' x <- read_site(pathname, filename)
+#'
 read_site <- function(pathname = pathname, filename = filename) {
 
 

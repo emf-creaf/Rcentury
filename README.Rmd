@@ -18,9 +18,30 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of Rcentury is to run CENTURY 4.7 (version Fortran) from within R. That includes preparing treatments, schedule, weather and site characteristic files with **.100** extension, and then loading the resulting **bin** file into your R session as a **data.frame**.
+The goal of Rcentury is to run CENTURY 4.7 (version Fortran) from within R. That includes preparing treatments, schedule, weather and site characteristic files with **.100** extension, and then reading and loading the resulting **lis** file into your R session as a **data.frame**.
 
 ## Installation
+
+The package is available at github for download.
+
+```{r install}
+devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
+```
+
+
+```{r load}
+library(Rcentury)
+## basic example code
+```
+
+## Example files
+
+## How to prepare a simulation
+
+There are two main ways to prepare the files that are required to run a simulation successfully:
+
+1. From scratch:
+2. Using example files:
 
 
 
@@ -28,7 +49,4 @@ The goal of Rcentury is to run CENTURY 4.7 (version Fortran) from within R. That
 
 Once installed, you can load it as:
 
-```{r example}
-library(Rcentury)
-## basic example code
-```
+

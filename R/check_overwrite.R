@@ -1,23 +1,31 @@
 #' Title
 #'
-#' @param pathname
-#' @param fileout
-#' @param overwrite
+#' @description
+#' \code{check_overwrite}
+#'
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param filename \code{character} string specifying the name of the file with its extension.
+#' @param overwrite \code{logical}, see 'Details'.
 #'
 #' @returns
+#' Nothing.
+#'
 #' @export
 #'
 #' @examples
-#' write.table("Example", "example.txt")
-#' check_overwrite("example.txt")
-#' check_overwrite("example.txt", overwrite = FALSE)
-#' check_overwrite("e.txt")
-#' unlink("example.txt")
+#' # Create a silly example text file.
+#' sink("example.100")
+#' i <- 1:10
+#' outer(i, i)
+#' sink()
 #'
-#' # This will generate an error message
-#' write.table("Example", "example.txt")
-#' check_overwrite("example.txt", overwrite = FALSE)
-#' unlink("example.txt")
+#' # Checks.
+#' check_overwrite("", "example.txt")
+#' check_overwrite("", "example.txt", overwrite = FALSE)
+#' check_overwrite("", "e.txt")
+#'
+#' # Remove the silly example text file.
+#' invisible(file.remove("example.100"))
 #'
 check_overwrite <- function(pathname = pathname, filename = filename, overwrite = FALSE) {
 

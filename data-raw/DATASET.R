@@ -23,12 +23,20 @@ data_100 <- sapply(input_file, function(x) {
   x
 })
 data_100$`<site>.100`[225, ]$`Parameter type` <- "Mineral initial parameters"
+
+
+# 05-09-2025: Shorten names of sections.
+data_100$`<site>.100`$`Parameter type` <- c(rep("Climate", 60), rep("Site and control", 40),
+                                            rep("External nutrient", 7), rep("Organic matter", 50),
+                                            rep("Forest organic matter", 31), rep("Mineral", 37),
+                                            rep("Water", 12))
+
 usethis::use_data(data_100, overwrite = TRUE)
 
 
 # Content of output file.
-description_output <- data.frame(suppressMessages(readxl::read_xlsx(path, sheet = "output", progress = FALSE)))
-usethis::use_data(description_output, overwrite = TRUE)
+# description_output <- data.frame(suppressMessages(readxl::read_xlsx(path, sheet = "output", progress = FALSE)))
+# usethis::use_data(description_output, overwrite = TRUE)
 
 
 #
@@ -40,7 +48,7 @@ usethis::use_data(description_output, overwrite = TRUE)
 # Parameter SORPMX, among some others, in <site> file may have wrong range.
 
 # Save as internal dataset.
-usethis::use_data(data100, databin, dataharvest, overwrite = TRUE)
+# usethis::use_data(data100, databin, dataharvest, overwrite = TRUE)
 
 
 
