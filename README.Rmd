@@ -31,15 +31,16 @@ The CENTURY soil model is available for download at https://www.soilcarbonsoluti
 
 Editing each of these input files individually is an extremely tedious and challenging task, particularly when our goal is to apply the CENTURY model to a large number of different sites, and/or under a variety of different climatic and land management scenarios. This manual process is also highly susceptible to errors, given the vast number of parameters that must be carefully adjusted.
 
-Therefore, it would be a significant improvement in workflow to perform all these file operations from within a comprehensive software environment like R. R is not only an open-source platform that has emerged as a near-standard in data analysis, but it also provides researchers with access to an extensive and robust toolbox of powerful statistical packages, which are essential for processing and interpreting the model's output.
+Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. R is not only an open-source platform that has emerged as a near-standard in data analysis, but it also provides researchers with access to an extensive and robust toolbox of powerful statistical packages, which are essential for processing and interpreting the model's output.
 
-The goal of package Rcentury is to run CENTURY 4.7 (version Fortran) from within R. That includes preparing all files (treatments, schedule, weather and site characteristic), and then reading and loading the resulting **lis** file into your R session as a **data.frame**. Notice that Rcentury is NOT an implementation of the CENTURY equations. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.
+The goal of package Rcentury is to run CENTURY 4.7 (version Fortran) from R on a command window. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into your R session as a **data.frame**. Notice that Rcentury is NOT an implementation of the CENTURY equations in R code. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.
+
+
 
 
 ## How to download and use CENTURY 4.7 as stand-alone software
 
-The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com/people. 
-
+The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com/peopl, after filling out a form. Two zip-files are automatically downloaded, which then must be unzipped in the folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
 
 All files must be kept in the folder for CENTURY to run. That includes schedule, weather, site and soil characteristic files, as well as the executables *.exe.
 
@@ -47,14 +48,13 @@ All files must be kept in the folder for CENTURY to run. That includes schedule,
 
 ### How to use Rcentury
 
-
-
-The package is available at github for download.
+First, this package must be install and loaded into your R session. The package is publicly available at github and can be fetched as follows:
 
 ```{r install}
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 ```
 
+Then, we load it as is usual in R:
 
 ```{r load}
 library(Rcentury)
