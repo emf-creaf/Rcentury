@@ -7,13 +7,67 @@
 
 <!-- badges: end -->
 
-The goal of Rcentury is to run CENTURY 4.7 (version Fortran) from within
-R. That includes preparing treatments, schedule, weather and site
-characteristic files with **.100** extension, and then reading and
-loading the resulting **lis** file into your R session as a
-**data.frame**.
+## Introduction
 
-## Installation
+The CENTURY soil model is a bio-chemistry ecosystem model that simulates
+the long-term dynamics of carbon, nitrogen, phosphorus, and sulfur in
+various terrestrial ecosystems. It can be used to predict how climate
+and land management practices impact and change soil health and carbon
+sequestration. The model works by splitting soil organic matter into
+three different carbon pools based on their decomposition rates. The
+rates are influenced differently by soil temperature, moisture, texture,
+and cultivation practices.
+
+The CENTURY soil model is available for download at
+<https://www.soilcarbonsolutionscenter.com/people> in its Fortran 4.7
+version. It can be used as a stand-alone software to be run on a Windows
+command-prompt console. To be able to execute the CENTURY software a
+series of ASCII files must also be prepared in advance, which will be
+read when CENTURY is run. Those files include:
+
+1.  A set of up to 11 option files with extension ‘.100’, containing a
+    large set of parameters. The name of these files is fixed.
+2.  Single site file, also with extension ‘.100’, containing
+    site-specific parameters.
+3.  Weather file, with extension ‘.wth’, that includes monthly data for
+    precipitation, minimum and maximum temperature for the site.
+4.  Schedule file, with extension ‘.sch’, which details the timing and
+    sequence of all events in the simulation.
+
+Editing each of these input files individually is an extremely tedious
+and challenging task, particularly when our goal is to apply the CENTURY
+model to a large number of different sites, and/or under a variety of
+different climatic and land management scenarios. This manual process is
+also highly susceptible to errors, given the vast number of parameters
+that must be carefully adjusted.
+
+Therefore, it would be a significant improvement in workflow to perform
+all these file operations from within a comprehensive software
+environment like R. R is not only an open-source platform that has
+emerged as a near-standard in data analysis, but it also provides
+researchers with access to an extensive and robust toolbox of powerful
+statistical packages, which are essential for processing and
+interpreting the model’s output.
+
+The goal of package Rcentury is to run CENTURY 4.7 (version Fortran)
+from within R. That includes preparing all files (treatments, schedule,
+weather and site characteristic), and then reading and loading the
+resulting **lis** file into your R session as a **data.frame**. Notice
+that Rcentury is NOT an implementation of the CENTURY equations. Rather,
+it is an interface between the original CENTURY Fortran code and R,
+which guarantees that calculations are done via the actual CENTURY code.
+
+## How to download and use CENTURY 4.7 as stand-alone software
+
+The Fortran version of the CENTURY 4.7 software can be downloaded
+directly from the web site
+<https://www.soilcarbonsolutionscenter.com/people>.
+
+All files must be kept in the folder for CENTURY to run. That includes
+schedule, weather, site and soil characteristic files, as well as the
+executables \*.exe.
+
+### How to use Rcentury
 
 The package is available at github for download.
 
@@ -29,9 +83,9 @@ library(Rcentury)
 ## basic example code
 ```
 
-## Example files
+### Example files
 
-## How to prepare a simulation
+### How to prepare a simulation
 
 There are two main ways to prepare the files that are required to run a
 simulation successfully:
@@ -39,6 +93,6 @@ simulation successfully:
 1.  From scratch:
 2.  Using example files:
 
-## Example
+### Example
 
 Once installed, you can load it as:
