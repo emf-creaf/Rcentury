@@ -2,7 +2,7 @@
 % Please edit documentation in R/century_run.R
 \name{century_run}
 \alias{century_run}
-\title{Title}
+\title{Run CENTURY simulations and load results into the R session}
 \usage{
 century_run(
   pathname = pathname,
@@ -17,8 +17,28 @@ century_run(
 )
 }
 \arguments{
-\item{verbose}{}
+\item{pathname}{\code{character} string with valid path to a folder.}
+
+\item{schedule}{\code{character} string with name of a valid schedule file (with extension '.sch')}
+
+\item{name_bin}{\code{character} string with name to give to output '.bin' file.}
+
+\item{name_lis}{\code{character} string with name to give to output '.lis' ASCII file.}
+
+\item{name_txt}{\code{character} string specifying the name of the ASCII text (with extension '.txt')
+file that contains, in a single column, the name of the fields to extract from the results.}
+
+\item{overwrite}{\code{logical}, if set to TRUE and the file already exists, it will overwrite; if set to
+FALSE and the file exists, it will stop with an error message.}
+
+\item{erase_bin}{\code{logical}, if set to TRUE (default) the '.bin' file that results from the CENTURY
+simulation will be erased after the calculations are done.}
+
+\item{verbose}{\code{logical}, if set to TRUE (default) information about the execution is printed on screen.}
+}
+\value{
+Nothing.
 }
 \description{
-Title
+\code{century_run}
 }

@@ -39,7 +39,7 @@ test_that("Run Century", {
   # Copy files.
   for (p in path_in) {
 
-    # Files with extension '.100'.
+    # Copy files with extension '.100'.
     for (f in names(files_100)) {
       if (!any(f %in% c("fert.100", "harv.100", "irri.100", "omad.100"))) {
         file.copy(file.path(p, f), path_out, overwrite = TRUE)
@@ -66,11 +66,7 @@ test_that("Run Century", {
     for (s in schedule[[p]]) {
 
       # Delete previous results, if any.
-
-browser()
-
       suppressWarnings(file.remove(file.path(path_out, c("delete.bin", "delete.lis", "harvest.csv"))))
-
       suppressPackageStartupMessages(century_run(path_out, s, "delete.bin", "delete.lis", "outvars.txt"))
 
       expect_true(file.exists(file.path(path_out, "delete.bin")))

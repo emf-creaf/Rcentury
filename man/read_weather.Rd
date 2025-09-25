@@ -26,3 +26,6 @@ order by year and month.
 
 NA values in CENTURY weather files are identified by -99.99 by default.
 }
+\examples{
+# See example in \code{\link{century_run}}.
+}

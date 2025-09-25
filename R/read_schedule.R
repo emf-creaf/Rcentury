@@ -16,6 +16,7 @@
 #' @export
 #'
 #' @examples
+#' # See example in \code{\link{century_run}}.
 read_schedule <- function(pathname = pathname, filename = filename) {
 
 

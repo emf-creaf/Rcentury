@@ -11,9 +11,12 @@
 #' @param verbose \code{logical},
 #'
 #' @returns
+#' Nothing.
+#'
 #' @export
 #'
 #' @examples
+#' # See example in \code{\link{century_run}}.
 write_schedule <- function(x, pathname = pathname, filename = filename, overwrite = FALSE) {
 
 

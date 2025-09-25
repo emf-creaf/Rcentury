@@ -18,6 +18,12 @@ FALSE and the file exists, it will stop with an error message.}
 
 \item{verbose}{\code{logical},}
 }
+\value{
+Nothing.
+}
 \description{
 \code{write_schedule} writes to disk an ASCII *.sch file to be used by the CENTURY soil model.
+}
+\examples{
+# See example in \code{\link{century_run}}.
 }

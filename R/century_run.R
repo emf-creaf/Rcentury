@@ -1,16 +1,25 @@
-#' Title
+#' Run CENTURY simulations and load results into the R session
 #'
-#' @param pathname
-#' @param schedule
-#' @param name_bin
-#' @param name_lis
-#' @param name_txt
-#' @param overwrite
+#' @description
+#' \code{century_run}
+#'
+#'
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param schedule \code{character} string with name of a valid schedule file (with extension '.sch')
+#' @param name_bin \code{character} string with name to give to output '.bin' file.
+#' @param name_lis \code{character} string with name to give to output '.lis' ASCII file.
+#' @param name_txt \code{character} string specifying the name of the ASCII text (with extension '.txt')
+#' file that contains, in a single column, the name of the fields to extract from the results.
+#' @param overwrite \code{logical}, if set to TRUE and the file already exists, it will overwrite; if set to
+#' FALSE and the file exists, it will stop with an error message.
 #' @param extended
-#' @param erase_bin
-#' @param verbose
+#' @param erase_bin \code{logical}, if set to TRUE (default) the '.bin' file that results from the CENTURY
+#' simulation will be erased after the calculations are done.
+#' @param verbose \code{logical}, if set to TRUE (default) information about the execution is printed on screen.
 #'
 #' @returns
+#' Nothing.
+#'
 #' @export
 #'
 #' @examples
@@ -41,6 +50,7 @@ century_run <- function(pathname = pathname, schedule = schedule, name_bin = nam
   wd_old <- getwd()
   setwd(pathname)
   args <- c(schedule, name_bin, ifelse(extended, "Y", "N"), "")
+  if (verbose) message(paste("Executing", pathname, "century_47.exe..."))
   out <- system2("century_47.exe", input = args, wait = TRUE, stderr = TRUE, stdout = FALSE)
   setwd(wd_old)
 

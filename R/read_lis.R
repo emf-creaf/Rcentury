@@ -1,12 +1,19 @@
-#' Title
+#' Read CENTURY '.lis' files
 #'
-#' @param pathname
-#' @param filename
+#' @description
+#' \code{read_lis} reads '.lis' files with results from CENTURY simulations
+#'
+#' @param pathname \code{character} string with valid path to a folder.
+#' @param filename \code{character} string specifying the name of the file, which must include the extension '.100'.
 #'
 #' @returns
+#' A \code{data.frame} with simulation results.
+#'
 #' @export
 #'
 #' @examples
+#' # See example in \code{\link{century_run}}.
+#'
 read_lis <- function(pathname = pathname, filename = filename) {
 
   # Checks.

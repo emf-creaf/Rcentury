@@ -72,10 +72,10 @@ There are three example simulations that accompany the CENTURY '.zip' files.
 
 The ASCII files that are required by the CENTURY software can be read and write with functions that are provided with the Rcentury package:
 
-* read_100/write_100:
-* read_site/write_site:
+* read_100/write_100: to read/write all CENTURY files with extension '*.100' save for site files.
+* read_site/write_site: to read/write ers to create input site files (extension '.100') for the CENTURY soil model.
 * read_weather/write_weather:
-* read_schedule/write_schedule:
+* read_schedule/write_schedule: read/write *.sch CENTURY files.
 * read_lis:
 
 These functions allow us to first read the example files provided with the CENTURY software, change the parameters at will and then write the modified dataset on disk.

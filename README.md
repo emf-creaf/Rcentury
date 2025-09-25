@@ -78,8 +78,18 @@ fetched:
 ``` r
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 #> Using GitHub PAT from the git credential store.
-#> Skipping install of 'Rcentury' from a github remote, the SHA1 (fce39b86) has not changed since last install.
-#>   Use `force = TRUE` to force installation
+#> Downloading GitHub repo emf-creaf/Rcentury@HEAD
+#> ── R CMD build ─────────────────────────────────────────────────────────────────
+#>       ✔  checking for file 'C:\Users\Roberto\AppData\Local\Temp\RtmpWkhmIb\remotes2f18178f69c4\emf-creaf-Rcentury-eeedc86/DESCRIPTION'
+#>       ─  preparing 'Rcentury': (4s)
+#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+#>       ─  checking for LF line-endings in source and make files and shell scripts (388ms)
+#>   ─  checking for empty or unneeded directories
+#>   ─  building 'Rcentury_0.0.0.9000.tar.gz'
+#>      
+#> 
+#> Installing package into 'C:/Users/Roberto/AppData/Local/R/win-library/4.4'
+#> (as 'lib' is unspecified)
 ```
 
 Then, we load it as is usual in R:
@@ -106,10 +116,12 @@ files.
 The ASCII files that are required by the CENTURY software can be read
 and write with functions that are provided with the Rcentury package:
 
-- read_100/write_100:
-- read_site/write_site:
+- read_100/write_100: to read/write all CENTURY files with extension
+  ’\*.100’ save for site files.
+- read_site/write_site: to read/write ers to create input site files
+  (extension ‘.100’) for the CENTURY soil model.
 - read_weather/write_weather:
-- read_schedule/write_schedule:
+- read_schedule/write_schedule: read/write \*.sch CENTURY files.
 - read_lis:
 
 These functions allow us to first read the example files provided with

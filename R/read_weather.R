@@ -21,6 +21,7 @@
 #' @export
 #'
 #' @examples
+#' # See example in \code{\link{century_run}}.
 read_weather <- function(pathname = pathname, filename = filename) {
 
 

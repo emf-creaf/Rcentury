@@ -22,3 +22,6 @@ of treatment. Columns are labelled 'year', 'month' and 'option'.
 \description{
 \code{read_schedule} reads *.sch CENTURY soil model files and saves their content in a list.
 }
+\examples{
+# See example in \code{\link{century_run}}.
+}

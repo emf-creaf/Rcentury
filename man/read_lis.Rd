@@ -2,13 +2,22 @@
 % Please edit documentation in R/read_lis.R
 \name{read_lis}
 \alias{read_lis}
-\title{Title}
+\title{Read CENTURY '.lis' files}
 \usage{
 read_lis(pathname = pathname, filename = filename)
 }
 \arguments{
-\item{filename}{}
+\item{pathname}{\code{character} string with valid path to a folder.}
+
+\item{filename}{\code{character} string specifying the name of the file, which must include the extension '.100'.}
+}
+\value{
+A \code{data.frame} with simulation results.
 }
 \description{
-Title
+\code{read_lis} reads '.lis' files with results from CENTURY simulations
+}
+\examples{
+# See example in \code{\link{century_run}}.
+
 }
