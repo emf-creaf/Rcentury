@@ -12,6 +12,7 @@ century_run(
   name_txt = name_txt,
   overwrite = TRUE,
   extended = FALSE,
+  erase_bin = FALSE,
   verbose = TRUE
 )
 }

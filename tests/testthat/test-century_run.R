@@ -66,11 +66,12 @@ test_that("Run Century", {
     for (s in schedule[[p]]) {
 
       # Delete previous results, if any.
+
+browser()
+
       suppressWarnings(file.remove(file.path(path_out, c("delete.bin", "delete.lis", "harvest.csv"))))
 
       suppressPackageStartupMessages(century_run(path_out, s, "delete.bin", "delete.lis", "outvars.txt"))
-
-      browser()
 
       expect_true(file.exists(file.path(path_out, "delete.bin")))
       file.remove(file.path(path_out, "delete.bin"))

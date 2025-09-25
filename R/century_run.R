@@ -7,6 +7,7 @@
 #' @param name_txt
 #' @param overwrite
 #' @param extended
+#' @param erase_bin
 #' @param verbose
 #'
 #' @returns
@@ -14,7 +15,7 @@
 #'
 #' @examples
 century_run <- function(pathname = pathname, schedule = schedule, name_bin = name_bin, name_lis = name_lis,
-                        name_txt = name_txt, overwrite = TRUE, extended = FALSE, verbose = TRUE) {
+                        name_txt = name_txt, overwrite = TRUE, extended = FALSE, erase_bin = FALSE, verbose = TRUE) {
 
   # First checks.
   if (tools::file_ext(schedule) != "sch") stop("Extension of schedule file should be '.sch'")

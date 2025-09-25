@@ -22,33 +22,28 @@ knitr::opts_chunk$set(
 
 The CENTURY soil model is a bio-chemistry ecosystem model that simulates the long-term dynamics of carbon, nitrogen, phosphorus, and sulfur in various terrestrial ecosystems. It can be used to predict how climate and land management practices impact and change soil health and carbon sequestration. The model works by splitting soil organic matter into three different carbon pools based on their decomposition rates. The rates are influenced differently by soil temperature, moisture, texture, and cultivation practices.
 
-The CENTURY soil model is available for download at https://www.soilcarbonsolutionscenter.com/people in its Fortran 4.7 version. It can be used as a stand-alone software to be run on a Windows command-prompt console. To be able to execute the CENTURY software a series of ASCII files must also be prepared in advance, which will be read when CENTURY is run. Those files include:
+The CENTURY soil model is available for download at https://www.soilcarbonsolutionscenter.com/people in its Fortran 4.7 version. It can be used as a stand-alone software to be run on a Windows command-prompt console. To be able to execute the CENTURY software a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is run. Those files include:
 
 1. A set of up to 11 option files with extension '.100', containing a large set of parameters. The name of these files is fixed.
-2. Single site file, also with extension '.100', containing site-specific parameters. 
+2. Single site file, also with extension '.100', containing site-specific parameters. The name of this file can be chosen at will.
 3. Weather file, with extension '.wth', that includes monthly data for precipitation, minimum and maximum temperature for the site.
 4. Schedule file, with extension '.sch', which details the timing and sequence of all events in the simulation.
 
 Editing each of these input files individually is an extremely tedious and challenging task, particularly when our goal is to apply the CENTURY model to a large number of different sites, and/or under a variety of different climatic and land management scenarios. This manual process is also highly susceptible to errors, given the vast number of parameters that must be carefully adjusted.
 
-Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. R is not only an open-source platform that has emerged as a near-standard in data analysis, but it also provides researchers with access to an extensive and robust toolbox of powerful statistical packages, which are essential for processing and interpreting the model's output.
-
-The goal of package Rcentury is to run CENTURY 4.7 (version Fortran) from R on a command window. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into your R session as a **data.frame**. Notice that Rcentury is NOT an implementation of the CENTURY equations in R code. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.
-
-
+Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. The goal of package Rcentury is thus to run CENTURY 4.7 (version Fortran) from R on a command window. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into your R session as a **data.frame**. Notice that Rcentury is NOT an implementation of the CENTURY equations in R code. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.
 
 
 ## How to download and use CENTURY 4.7 as stand-alone software
 
-The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com/peopl, after filling out a form. Two zip-files are automatically downloaded, which then must be unzipped in the folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
+The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com, after filling out a form. Two zip-files are automatically downloaded, which must then be unzipped in the folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
 
-All files must be kept in the folder for CENTURY to run. That includes schedule, weather, site and soil characteristic files, as well as the executables *.exe.
-
+All files must be kept in the folder for CENTURY to run. That includes schedule, weather, site and soil characteristic files, as well as two compiled '.exe' programs ('century_47.exe' and 'list100_47.exe'). To run the CENTURY model you must follow the examples and the enclosed documentation.
 
 
 ### How to use Rcentury
 
-First, this package must be install and loaded into your R session. The package is publicly available at github and can be fetched as follows:
+If you decide to run CENTURY from a R session, you may proceed as follows. First, package Rcentury must be install and loaded into your R session. The package is publicly available at github and can be easily fetched:
 
 ```{r install}
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
@@ -61,17 +56,33 @@ library(Rcentury)
 ## basic example code
 ```
 
+This ensures that all package functions are available at the R session.
+
 
 
 
 ### Example files
 
-### How to prepare a simulation
+There are two main ways to prepare the ASCII files that are required to run a simulation successfully, namely from scratch and using the example files available with the compressed '.zip'. Hereby we will be concerned with the latter case.
 
-There are two main ways to prepare the files that are required to run a simulation successfully:
 
-1. From scratch:
-2. Using example files:
+### How to prepare a CENTURY simulation with the Rcentury package
+
+There are three example simulations that accompany the CENTURY '.zip' files. 
+
+The ASCII files that are required by the CENTURY software can be read and write with functions that are provided with the Rcentury package:
+
+* read_100/write_100:
+* read_site/write_site:
+* read_weather/write_weather:
+* read_schedule/write_schedule:
+* read_lis:
+
+These functions allow us to first read the example files provided with the CENTURY software, change the parameters at will and then write the modified dataset on disk.
+
+Once those files are available in the same directory where they two '.exe' files are located, we can run CENTURY with the 'century_run.R' function. Internally, 'century_run.R' runs sequentially 'century_47.exe' and 'list100_47.exe', creating first a '.bin' file and then an ASCII '.lis', which finally be read with the 'read_lis.R' function.  The output of the latter is, finally, a **data.frame** that can be manipulated and analysed within R.
+
+
 
 
 
