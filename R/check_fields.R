@@ -4,7 +4,6 @@
 #' @param filename
 #'
 #' @returns
-#' @export
 #'
 #' @examples
 check_fields <- function(x, filename = filename) {

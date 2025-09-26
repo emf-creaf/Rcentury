@@ -48,4 +48,7 @@ test_that("Creating Century files", {
   # Remove.
   file.remove(file.path(path_out, "cult.100"))
 
+  # Schedule path_out for deletion using `withr::defer()`
+  withr::defer(unlink(file.path(path_out)), testthat::teardown_env())
+
 })

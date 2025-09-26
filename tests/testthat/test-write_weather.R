@@ -34,7 +34,7 @@ test_that("Read/writing/reading weather files", {
     }
   }
 
-
-
+  # Schedule path_out for deletion using `withr::defer()`
+  withr::defer(unlink(file.path(path_out)), testthat::teardown_env())
 
 })

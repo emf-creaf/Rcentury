@@ -48,4 +48,7 @@ test_that("Read and write schedule files", {
     }
   }
 
+  # Schedule path_out for deletion using `withr::defer()`
+  withr::defer(unlink(file.path(path_out)), testthat::teardown_env())
+
 })

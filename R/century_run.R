@@ -3,7 +3,6 @@
 #' @description
 #' \code{century_run}
 #'
-#'
 #' @param pathname \code{character} string with valid path to a folder.
 #' @param schedule \code{character} string with name of a valid schedule file (with extension '.sch')
 #' @param name_bin \code{character} string with name to give to output '.bin' file.
@@ -12,7 +11,8 @@
 #' file that contains, in a single column, the name of the fields to extract from the results.
 #' @param overwrite \code{logical}, if set to TRUE and the file already exists, it will overwrite; if set to
 #' FALSE and the file exists, it will stop with an error message.
-#' @param extended
+#' @param extended \code{character} flag "Y" or "N" to decide whether the computation corresponds to an extended
+#' one (see CENTURY manual, section 6-1, for details).
 #' @param erase_bin \code{logical}, if set to TRUE (default) the '.bin' file that results from the CENTURY
 #' simulation will be erased after the calculations are done.
 #' @param verbose \code{logical}, if set to TRUE (default) information about the execution is printed on screen.
@@ -23,6 +23,7 @@
 #' @export
 #'
 #' @examples
+#' # See vignette for details.
 century_run <- function(pathname = pathname, schedule = schedule, name_bin = name_bin, name_lis = name_lis,
                         name_txt = name_txt, overwrite = TRUE, extended = FALSE, erase_bin = FALSE, verbose = TRUE) {
 
@@ -47,12 +48,9 @@ century_run <- function(pathname = pathname, schedule = schedule, name_bin = nam
 
 
   # Move to directory, run century_47.exe and move back.
-  wd_old <- getwd()
-  setwd(pathname)
+  if (verbose) message(paste("Running", file.path(pathname, "century_47.exe")))
   args <- c(schedule, name_bin, ifelse(extended, "Y", "N"), "")
-  if (verbose) message(paste("Executing", pathname, "century_47.exe..."))
-  out <- system2("century_47.exe", input = args, wait = TRUE, stderr = TRUE, stdout = FALSE)
-  setwd(wd_old)
+  out <- run_cent(pathname, args)
 
 
   # There may not be any error message if the program does not find the weather or site files.
@@ -64,13 +62,17 @@ century_run <- function(pathname = pathname, schedule = schedule, name_bin = nam
   }
 
 
-  # Now read the output ".bin" file and load results into the R session.
-  wd_old <- getwd()
-  setwd(pathname)
-  params <- c(name_bin, name_lis, name_txt)
-  # out <- system2("list100_47.exe", input = params, wait = TRUE, stderr = TRUE, stdout = FALSE) # Couldn't make it work.
-  out <- system(paste("list100_47.exe", name_bin, name_lis, name_txt))
-  setwd(wd_old)
+  # Now read the output ".bin" file and create an ASCII ".lis" file with results.
+  if (verbose) message(paste("Running", file.path(pathname, "list100_47.exe")))
+  out <- run_list(pathname, name_bin, name_lis, name_txt)
 
+
+  # Read ".lis" file and load results into the R session.
+  name_lis <- paste0(name_lis, ".lis")
+  if (verbose) message(paste("Reading", file.path(pathname, name_lis)))
+  df <- read_lis(pathname, name_lis)
+
+
+  return(df)
 
 }

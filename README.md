@@ -62,11 +62,11 @@ which must then be unzipped in the folder of our choice. The
 uncompressed folders contain all the necessary files, plus several user
 manuals and examples.
 
-All files must be kept in the folder for CENTURY to run. That includes
-schedule, weather, site and soil characteristic files, as well as two
-compiled ‘.exe’ programs (‘century_47.exe’ and ‘list100_47.exe’). To run
-the CENTURY model you must follow the examples and the enclosed
-documentation.
+All required files must be kept in the same folder for CENTURY to run.
+That includes schedule, weather, site and soil characteristic files (see
+numbered list above), as well as two compiled ‘.exe’ programs
+(‘century_47.exe’ and ‘list100_47.exe’). To run the CENTURY model you
+must follow the examples and the enclosed documentation.
 
 ### How to use Rcentury
 
@@ -78,18 +78,8 @@ fetched:
 ``` r
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 #> Using GitHub PAT from the git credential store.
-#> Downloading GitHub repo emf-creaf/Rcentury@HEAD
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#>       ✔  checking for file 'C:\Users\Roberto\AppData\Local\Temp\RtmpWkhmIb\remotes2f18178f69c4\emf-creaf-Rcentury-eeedc86/DESCRIPTION'
-#>       ─  preparing 'Rcentury': (4s)
-#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-#>       ─  checking for LF line-endings in source and make files and shell scripts (388ms)
-#>   ─  checking for empty or unneeded directories
-#>   ─  building 'Rcentury_0.0.0.9000.tar.gz'
-#>      
-#> 
-#> Installing package into 'C:/Users/Roberto/AppData/Local/R/win-library/4.4'
-#> (as 'lib' is unspecified)
+#> Skipping install of 'Rcentury' from a github remote, the SHA1 (d6491322) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 Then, we load it as is usual in R:

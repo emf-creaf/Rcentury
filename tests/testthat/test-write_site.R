@@ -21,5 +21,7 @@ test_that("Write site files", {
     }
   }
 
+  # Schedule path_out for deletion using `withr::defer()`
+  withr::defer(unlink(file.path(path_out)), testthat::teardown_env())
 
 })

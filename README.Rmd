@@ -38,7 +38,7 @@ Therefore, it is a significant improvement in workflow to be able to perform all
 
 The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com, after filling out a form. Two zip-files are automatically downloaded, which must then be unzipped in the folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
 
-All files must be kept in the folder for CENTURY to run. That includes schedule, weather, site and soil characteristic files, as well as two compiled '.exe' programs ('century_47.exe' and 'list100_47.exe'). To run the CENTURY model you must follow the examples and the enclosed documentation.
+All required files must be kept in the same folder for CENTURY to run. That includes schedule, weather, site and soil characteristic files (see numbered list above), as well as two compiled '.exe' programs ('century_47.exe' and 'list100_47.exe'). To run the CENTURY model you must follow the examples and the enclosed documentation.
 
 
 ### How to use Rcentury
@@ -57,6 +57,27 @@ library(Rcentury)
 ```
 
 This ensures that all package functions are available at the R session.
+
+Rcentury comes packed with the original CENTURY 4.7 example files, which can be used to prepare your own parameter files. Those files are located in three sub-folders:
+
+1. Grassland with grazing simulation ran for a site in Xilingol,
+Mongolia (sub-folder "1.soil_texture_ppt").
+2. Plant production for different grass types with different relative temperature growth curves (sub-folder "3.plant_production").
+3. DUke and Harvard forests (sub-folder "4.forest").
+
+We can access those folders by using the R function "system.file":
+
+
+```{r subfolders}
+# Get paths.
+path_in <- c(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
+             system.file("extdata/3.plant_production",  package = "Rcentury"),
+             system.file("extdata/4.forest",  package = "Rcentury"))
+# Check folder content.
+# sapply(path_in, dir)
+```
+
+
 
 
 
@@ -90,4 +111,12 @@ Once those files are available in the same directory where they two '.exe' files
 
 Once installed, you can load it as:
 
+
+#### Uncertainty propagation in texture proportions
+
+```{r load}
+
+
+
+```
 
