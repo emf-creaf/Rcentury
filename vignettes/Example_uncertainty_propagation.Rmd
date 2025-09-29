@@ -1,0 +1,40 @@
+---
+title: "Example uncertainty propagation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example uncertainty propagation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup_Rcentury}
+library(Rcentury)
+```
+
+
+
+###
+
+We can use the Rcentury package to determine how uncertainty propagates through the model when some parameters are modified randomly. For this example we will study uncertainty propagation in soil texture parameters, i.e. clay, sand and silt.
+
+Uncertainty propagation determines how uncertainties in initial parameters change the output of the model. Mathematically
+
+However, this method is impractical for very complex models like CENTURY, so we turn to a numerical approach. A straightforward numerical algorithm for uncertainty propagation calculation consists of feeding the model with input parameters of interests which vary stochastically at each model run following a given distribution of known mean and variance.
+
+Texture is given as a set of 3 proportions which add up to 1 always, we need to specify a random distribution that accounts for 
+
+
+```{r install_distrib}
+# install.packages("extraDistr")
+library(extraDistr)
+```
+
+
+
