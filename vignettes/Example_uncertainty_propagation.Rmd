@@ -20,21 +20,55 @@ library(Rcentury)
 
 
 
-###
+### Introduction
 
-We can use the Rcentury package to determine how uncertainty propagates through the model when some parameters are modified randomly. For this example we will study uncertainty propagation in soil texture parameters, i.e. clay, sand and silt.
+We can use the Rcentury package to assess how uncertainties (aka errors) in a model's parameters contribute to the overall uncertainty of its output. Mathematically, it should be possible to derive approximate analytical expressions for n-error error propagation by using Taylor expansions, which involves calculating analytical n-order derivatives. However, this approach quickly becomes cumbersome and impractical when the number of parameters grows high and, especially, when the function to evaluate is very complex and non-linear like CENTURY. Therefore, to determine error propagation for the CENTURY model we turn to a much simpler Monte Carlo numerical approach, which consists of feeding the model with input parameters of interests which vary randomly at each model run following a given distribution of known mean and variance.
 
-Uncertainty propagation determines how uncertainties in initial parameters change the output of the model. Mathematically
+For the sake of simplicity we will demonstrate how to perform an uncertainty propagation analysis of uncertainty in soil texture (i.e. clay, silt and sand) only, keeping all the other parameters of the model fixed. In this case, at each model run we will draw random proportion values for each of the three parameters, calculate the CENTURY model with those values and then save the output. This will be done many times to derive reliable confidence intervals for the outputs.
 
-However, this method is impractical for very complex models like CENTURY, so we turn to a numerical approach. A straightforward numerical algorithm for uncertainty propagation calculation consists of feeding the model with input parameters of interests which vary stochastically at each model run following a given distribution of known mean and variance.
 
-Texture is given as a set of 3 proportions which add up to 1 always, we need to specify a random distribution that accounts for 
+### How to draw multivariate proportions
 
+Texture is always given as a set of 3 proportions which add up to 1 always, we need to specify a random distribution that accounts for that property. Consequently, we turn to Dirichlet distributions, which 
+
+
+
+
+The means of the proportions will be fixed in our simulations.
+
+$$f(x_1, \dots, x_K; \alpha_1, \dots, \alpha_K) = \frac{1}{B(\boldsymbol{\alpha})} \prod_{i=1}^K x_i^{\alpha_i - 1}$$
+
+where:
+
+$$B(\boldsymbol{\alpha}) = \frac{\prod_{i=1}^K \Gamma(\alpha_i)}{\Gamma(\sum_{i=1}^K \alpha_i)}$$
+
+and:
+
+$$x_i \in [0, 1], \quad \text{for all } i \in \{1, \dots, K\}$$
+
+as well as:
+
+$$\sum_{i=1}^K x_i = 1$$
+
+The mean of the $x_i$ is, then:
+
+$$E[x_i] = \frac{\alpha_i}{\sum_{j=1}^K \alpha_j}$$
+and the expression for the variance is:
+
+$$E[V_i] = \frac{\tilde{\alpha_i}\cdot(1-\tilde{\alpha_i})}{\alpha_0-1}$$
+
+where:
+
+$$\tilde{\alpha_i}=\frac{\alpha_i}{\alpha_0}$$
+We can use those two expressions to calculate the $\alpha_j$ values when we are given the $E[x_i]$ values and one variance value.
+
+
+The Dirichlet distribution is implemented in package extraDistr, which we can install from CRAN:
 
 ```{r install_distrib}
 # install.packages("extraDistr")
 library(extraDistr)
 ```
 
-
+For example, for $K=3$ and $E[x_1]=.35$, $E[x_2]=.12$ and $E[x_3]=.53$, we can easily generate 1000 sequences of Dirichlet-distributed triplets. First, we calculate that 
 
