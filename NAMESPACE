@@ -3,6 +3,7 @@
 export(century_run)
 export(check_overwrite)
 export(check_path_file)
+export(dirichlet_params)
 export(read_100)
 export(read_lis)
 export(read_schedule)
