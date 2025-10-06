@@ -29,6 +29,8 @@ The CENTURY soil model is available for download at https://www.soilcarbonsoluti
 3. Weather file, with extension '.wth', that includes monthly data for precipitation, minimum and maximum temperature for the site.
 4. Schedule file, with extension '.sch', which details the timing and sequence of all events in the simulation.
 
+All these files must exist in the same folder.
+
 Editing each of these input files individually is an extremely tedious and challenging task, particularly when our goal is to apply the CENTURY model to a large number of different sites, and/or under a variety of different climatic and land management scenarios. This manual process is also highly susceptible to errors, given the vast number of parameters that must be carefully adjusted.
 
 Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. The goal of package Rcentury is thus to run CENTURY 4.7 (version Fortran) from R on a command window. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into your R session as a **data.frame**. Notice that Rcentury is NOT an implementation of the CENTURY equations in R code. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.
@@ -110,13 +112,4 @@ Once those files are available in the same directory where they two '.exe' files
 ### Example
 
 Once installed, you can load it as:
-
-
-#### Uncertainty propagation in texture proportions
-
-```{r load}
-
-
-
-```
 

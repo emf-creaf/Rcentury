@@ -1,6 +1,7 @@
 ---
-title: "Example model uncertainty and sensitivity"
+title: "Example uncertainty and sensitivity"
 output: rmarkdown::html_vignette
+bibliography: references.bib # Point to your .bib file
 vignette: >
   %\VignetteIndexEntry{Example uncertainty propagation}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,6 +19,15 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
+
+This document will describe the steps one can take to determine how uncertainty in input parameters propagates through the CENTURY model. It will also specify the procedures used to quantify sensitivity to those parameters.
+
+We will start off by giving some necessary definitions. As stated in [@taylor2022introduction], 'Error analysis is the study and evaluation of uncertainty in measurement'. On the other hand, we can define sensitivity analysis as 'The study of how the uncertainty in the
+output of a model (numerical or otherwise) can be apportioned to
+different sources of uncertainty in the model input' [@saltelli2004sensitivity].
+
+As can be seen, both topics may sound somehow related and even seemingly partially overlap. 
+
 We can use the Rcentury package to assess how uncertainties (aka errors) in a model's parameters contribute to the overall uncertainty of its output. In general, for many models it is possible to derive approximate analytical expressions for n-error error propagation by using Taylor expansions, which involves calculating analytical n-order derivatives. However, this approach quickly becomes cumbersome and impractical when the number of parameters grows high and, especially, when the function to evaluate is very complex and non-linear like CENTURY. Therefore, to determine error propagation for the CENTURY model we turn to a much simpler Monte Carlo numerical approach, which consists of feeding the model with input parameters of interests which vary randomly at each model run following a given distribution of known mean and variance.
 
 For the sake of simplicity we will demonstrate how to perform an uncertainty propagation analysis for soil texture (i.e. clay, silt and sand) only, keeping all the other parameters of the model fixed. In this case, at each model run we will draw random proportion values for each of the three parameters, calculate the CENTURY model with those values and then save the output. This will be done many times to derive reliable confidence intervals for the output.
@@ -27,9 +37,9 @@ Soil texture is given as a set of 3 proportions which add up to 1 always, and th
 <br>
 
 
-## Rcentury simulations
+## Rcentury numerical simulations
 
-For this example we will use the forest data from CENTURY example files. We will create a temporary directory and move there all necessary files (ASCII data files and executables). The simulation below will be carried out with the so-called $\texttt{duke.100}$ example, though any other site would do.
+For this example we will use the forest data from CENTURY example files. We will create a temporary directory and move there all necessary files (ASCII data files and executables). The simulation below will be carried out with the so-called $\texttt{duke.100}$ file example, though any other site would do.
 
 ```{r copy_files}
 # Copy all files to temporary folder.
@@ -56,9 +66,9 @@ library(Rcentury)
 
 <br>
 
-We intend to model the propagation of uncertainty for, and sensibility to, texture parameters. Those parameters are included in the $\texttt{duke.100}$ site file, which is then read by $\texttt{century_47.exe}$ during execution. Consequently, we use package functions $\texttt{read_site.R}$ and $\texttt{write_site.R}$ to read site data and write it back onto disk at each simulation step.
+We intend to model the propagation of uncertainty for, and sensitivity to, texture parameters. Those parameters are included in the $\texttt{duke.100}$ site file, which is then read by $\texttt{century_47.exe}$ during execution. Consequently, we use package functions $\texttt{read_site.R}$ and $\texttt{write_site.R}$ to read site data and write it back onto disk at each simulation step.
 
-The output of the CENTURY model may include up to variables, in this example we will focus on total system carbon (variable $totsysc$).
+The output of the CENTURY model may include up to approximately 600 variables, in this example we will focus on total system carbon (variable $totsysc$).
 
 
 ```{r simu}
@@ -74,18 +84,20 @@ alpha <- dirichlet_params(c(sand, silt, clay), c(NA, .01, NA))
 cat("totsysc", file = file.path(to_dir, "totsysc.txt"))
 
 # Finally, the simulations.
-nsimu <- 10
+nsimu <- 100
+texture <- matrix(0, 3, nsimu)
 df <- list()
 for (i in 1:nsimu) {
   
   # Random Dirichlet triplet.
   texture_random <- rdirichlet(1, alpha)
+  texture[, i] <- texture_random
   
   # Save <site>.100 file.
   x <- site2$`site and control`$df
   x$value[x$field == "SAND"] <- texture_random[1]
-  x$value[x$field == "SILT"] <- texture_random[1]
-  x$value[x$field == "CLAY"] <- texture_random[1]
+  x$value[x$field == "SILT"] <- texture_random[2]
+  x$value[x$field == "CLAY"] <- texture_random[3]
   site2$`site and control`$df <- x
   write_site(site2, to_dir, "duke.100", overwrite = TRUE)
   
@@ -96,15 +108,48 @@ for (i in 1:nsimu) {
 
 <br>
 
-Once we have performed all the simulations, we can proceed to determine how the uncertainty propagates in the model and what is its sensitivity to each of the three soil components. 
+Once we have performed all the simulations, we can proceed to determine how the uncertainty propagates through the model and what is its sensitivity to each of the three soil components. 
 
 ### Model uncertainty
 
-```{r extract_uncert}
-x <- sapply(1:nsimu, function(i) df[[i]]$totsysc[100])
+```{r calc_ci, fig.width = 6, fig.height = 5, fig.align = 'center'}
+x <- df[[1]]$time
+z <- sapply(df, function(x) x$totsysc)
+y <- apply(z, 1, mean)
+ci_lo <- apply(z, 1, quantile, prob = 0.025)
+ci_up <- apply(z, 1, quantile, prob = 0.975)
+plot(x, y, type = "l", ylim = c(0, max(z)), xlab = "Time (years)", ylab = "Total system C")
+polygon(c(x, rev(x)), c(ci_lo, rev(ci_up)), col = "skyblue", border = NA)
+points(x, y, type = "l")
 ```
 
 <br>
+
+
+
+### Model sensitivity
+
+To determine model sensitivity to the three texture parameters we apply a 
+
+```{r calc_sens, fig.height = 10, fig.width = 6, fig.align = 'center', fig.show = 'hold'}
+par(mfcol = c(2, 1))
+nx <- length(x)
+cc <- sapply(2:nx, function(i) sapply(1:3, function(j) cor(texture[j,], z[i,])^2))
+plot(2:nx, cc[1, ], ylim = c(0, 1), xlab = "Time (years)", ylab = "R-squared",
+     col = "red", type = "l", lwd = 2)
+points(2:nx, cc[2, ], col = "blue", type = "l", lwd = 2)
+points(2:nx, cc[3, ], col = "green", type = "l", lwd = 2)
+legend("right", col = c("red", "blue", "green"), lwd = 2, legend = c("Sand", "Silt", "Clay"))
+
+cn <- sweep(cc, 2, apply(cc, 2, sum), FUN = "/")
+plot(2:nx, cn[1, ], ylim = c(0, 1), xlab = "Time (years)", ylab = "Normalized R-squared",
+     col = "red", type = "l", lwd = 2)
+points(2:nx, cn[2, ], col = "blue", type = "l", lwd = 2)
+points(2:nx, cn[3, ], col = "green", type = "l", lwd = 2)
+legend("topright", col = c("red", "blue", "green"), lwd = 2, legend = c("Sand", "Silt", "Clay"))
+par(mfrow = c(1, 1))
+```
+
 
 ## Annex: How to draw multivariate proportions
 

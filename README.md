@@ -35,6 +35,8 @@ be read when CENTURY is run. Those files include:
 4.  Schedule file, with extension ‘.sch’, which details the timing and
     sequence of all events in the simulation.
 
+All these files must exist in the same folder.
+
 Editing each of these input files individually is an extremely tedious
 and challenging task, particularly when our goal is to apply the CENTURY
 model to a large number of different sites, and/or under a variety of
@@ -78,7 +80,7 @@ fetched:
 ``` r
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 #> Using GitHub PAT from the git credential store.
-#> Skipping install of 'Rcentury' from a github remote, the SHA1 (d6491322) has not changed since last install.
+#> Skipping install of 'Rcentury' from a github remote, the SHA1 (d4bac70f) has not changed since last install.
 #>   Use `force = TRUE` to force installation
 ```
 
@@ -90,6 +92,27 @@ library(Rcentury)
 ```
 
 This ensures that all package functions are available at the R session.
+
+Rcentury comes packed with the original CENTURY 4.7 example files, which
+can be used to prepare your own parameter files. Those files are located
+in three sub-folders:
+
+1.  Grassland with grazing simulation ran for a site in Xilingol,
+    Mongolia (sub-folder “1.soil_texture_ppt”).
+2.  Plant production for different grass types with different relative
+    temperature growth curves (sub-folder “3.plant_production”).
+3.  DUke and Harvard forests (sub-folder “4.forest”).
+
+We can access those folders by using the R function “system.file”:
+
+``` r
+# Get paths.
+path_in <- c(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
+             system.file("extdata/3.plant_production",  package = "Rcentury"),
+             system.file("extdata/4.forest",  package = "Rcentury"))
+# Check folder content.
+# sapply(path_in, dir)
+```
 
 ### Example files
 
