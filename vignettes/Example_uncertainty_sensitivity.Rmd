@@ -1,7 +1,7 @@
 ---
 title: "Example uncertainty and sensitivity"
 output: rmarkdown::html_vignette
-bibliography: references.bib # Point to your .bib file
+bibliography: references.bib # Point to my .bib file
 vignette: >
   %\VignetteIndexEntry{Example uncertainty propagation}
   %\VignetteEngine{knitr::rmarkdown}
@@ -15,18 +15,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-
 ## Introduction
-
 
 This document will describe the steps one can take to determine how uncertainty in input parameters propagates through the CENTURY model. It will also specify the procedures used to quantify sensitivity to those parameters.
 
-We will start off by giving some necessary definitions. As stated in [@taylor2022introduction], 'Error analysis is the study and evaluation of uncertainty in measurement'. On the other hand, we can define sensitivity analysis as 'The study of how the uncertainty in the
-output of a model (numerical or otherwise) can be apportioned to
-different sources of uncertainty in the model input' [@saltelli2004sensitivity].
+We will start off by giving some necessary definitions. As stated in [@taylor2022introduction], 'Error analysis is the study and evaluation of uncertainty in measurement'. On the other hand, we can define sensitivity analysis as 'The study of how the uncertainty in the output of a model (numerical or otherwise) can be apportioned to different sources of uncertainty in the model input' [@saltelli2004sensitivity].
 
-As can be seen, both topics may sound somehow related and even seemingly partially overlap. 
+As can be seen, both topics may sound somehow related and even seemingly partially overlap.
 
 We can use the Rcentury package to assess how uncertainties (aka errors) in a model's parameters contribute to the overall uncertainty of its output. In general, for many models it is possible to derive approximate analytical expressions for n-error error propagation by using Taylor expansions, which involves calculating analytical n-order derivatives. However, this approach quickly becomes cumbersome and impractical when the number of parameters grows high and, especially, when the function to evaluate is very complex and non-linear like CENTURY. Therefore, to determine error propagation for the CENTURY model we turn to a much simpler Monte Carlo numerical approach, which consists of feeding the model with input parameters of interests which vary randomly at each model run following a given distribution of known mean and variance.
 
@@ -35,7 +30,6 @@ For the sake of simplicity we will demonstrate how to perform an uncertainty pro
 Soil texture is given as a set of 3 proportions which add up to 1 always, and thus we need to specify a random distribution that accounts for that property. Consequently, we turn to Dirichlet distributions, which allow us to model probability distributions of outcomes for categorical events, such that the total probability adds up to one. For details, see Annex below.
 
 <br>
-
 
 ## Rcentury numerical simulations
 
@@ -69,7 +63,6 @@ library(Rcentury)
 We intend to model the propagation of uncertainty for, and sensitivity to, texture parameters. Those parameters are included in the $\texttt{duke.100}$ site file, which is then read by $\texttt{century_47.exe}$ during execution. Consequently, we use package functions $\texttt{read_site.R}$ and $\texttt{write_site.R}$ to read site data and write it back onto disk at each simulation step.
 
 The output of the CENTURY model may include up to approximately 600 variables, in this example we will focus on total system carbon (variable $totsysc$).
-
 
 ```{r simu}
 # Read site characteristics and extract sand, slit and clay values.
@@ -108,7 +101,7 @@ for (i in 1:nsimu) {
 
 <br>
 
-Once we have performed all the simulations, we can proceed to determine how the uncertainty propagates through the model and what is its sensitivity to each of the three soil components. 
+Once we have performed all the simulations, we can proceed to determine how the uncertainty propagates through the model and what is its sensitivity to each of the three soil components.
 
 ### Model uncertainty
 
@@ -125,11 +118,9 @@ points(x, y, type = "l")
 
 <br>
 
-
-
 ### Model sensitivity
 
-To determine model sensitivity to the three texture parameters we apply a 
+To determine model sensitivity to the three texture parameters we apply a
 
 ```{r calc_sens, fig.height = 10, fig.width = 6, fig.align = 'center', fig.show = 'hold'}
 par(mfcol = c(2, 1))
@@ -149,7 +140,6 @@ points(2:nx, cn[3, ], col = "green", type = "l", lwd = 2)
 legend("topright", col = c("red", "blue", "green"), lwd = 2, legend = c("Sand", "Silt", "Clay"))
 par(mfrow = c(1, 1))
 ```
-
 
 ## Annex: How to draw multivariate proportions
 
@@ -171,16 +161,13 @@ $$\sum_{i=1}^K x_i = 1$$
 
 The mean of the $x_i$ is, then:
 
-$$E[x_i] = \frac{\alpha_i}{\sum_{j=1}^K \alpha_j}$$
-and the expression for the variance is:
+$$E[x_i] = \frac{\alpha_i}{\sum_{j=1}^K \alpha_j}$$ and the expression for the variance is:
 
 $$Var[x_i] = \frac{\tilde{\alpha_i}\cdot(1-\tilde{\alpha_i})}{\alpha_0-1}$$
 
 where:
 
-$$\tilde{\alpha_i}=\frac{\alpha_i}{\alpha_0}$$
-We can use those two expressions to calculate the $\alpha_j$ values when we are given four parameters for the $E[x_i]$ or $E[V_i]$. The Rcentury package provides with a function, called $\texttt{dirichlet_params.R}$, that can calculate the $\alpha_j$ values when all the means $E[x_i]\text{ for all } i \in \{1, \dots, K\}$ and one single variance value $Var[x_j]$ are known.
-
+$$\tilde{\alpha_i}=\frac{\alpha_i}{\alpha_0}$$ We can use those two expressions to calculate the $\alpha_j$ values when we are given four parameters for the $E[x_i]$ or $E[V_i]$. The Rcentury package provides with a function, called $\texttt{dirichlet_params.R}$, that can calculate the $\alpha_j$ values when all the means $E[x_i]\text{ for all } i \in \{1, \dots, K\}$ and one single variance value $Var[x_j]$ are known.
 
 For example, for $K=3$ and $E[x_1]=.35$, $E[x_2]=.12$, $E[x_3]=.53$ and $Var[x_2]=.17$, we can easily generate sequences of Dirichlet-distributed triplets.
 
@@ -193,4 +180,3 @@ hist(x[, 2], xlab = "", main = "Silt", breaks = seq(0, 1, length = 50))
 hist(x[, 3], xlab = "", main = "Clay", breaks = seq(0, 1, length = 50))
 par(mfrow = c(1,1))
 ```
-
