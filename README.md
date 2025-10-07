@@ -10,7 +10,7 @@
 ## Introduction
 
 The CENTURY soil model is a bio-chemistry ecosystem model that simulates
-the long-term dynamics of carbon, nitrogen, phosphorus, and sulfur in
+the long-term dynamics of Carbon, Nitrogen, Phosphorus, and Sulfur in
 various terrestrial ecosystems. It can be used to predict how climate
 and land management practices impact and change soil health and carbon
 sequestration. The model works by splitting soil organic matter into
@@ -31,18 +31,19 @@ be read when CENTURY is run. Those files include:
     site-specific parameters. The name of this file can be chosen at
     will.
 3.  Weather file, with extension ‘.wth’, that includes monthly data for
-    precipitation, minimum and maximum temperature for the site.
+    precipitation and minimum and maximum temperature for the site.
 4.  Schedule file, with extension ‘.sch’, which details the timing and
     sequence of all events in the simulation.
 
-All these files must exist in the same folder.
+All these ASCII files, together with the executable ‘.exe’ programs,
+must exist in the same folder.
 
 Editing each of these input files individually is an extremely tedious
 and challenging task, particularly when our goal is to apply the CENTURY
 model to a large number of different sites, and/or under a variety of
 different climatic and land management scenarios. This manual process is
 also highly susceptible to errors, given the vast number of parameters
-that must be carefully adjusted.
+that must be carefully tuned-up and adjusted.
 
 Therefore, it is a significant improvement in workflow to be able to
 perform all these file operations from within a comprehensive software
@@ -55,55 +56,72 @@ implementation of the CENTURY equations in R code. Rather, it is an
 interface between the original CENTURY Fortran code and R, which
 guarantees that calculations are done via the actual CENTURY code.
 
-## How to download and use CENTURY 4.7 as stand-alone software
+## How to download CENTURY 4.7
 
 The Fortran version of the CENTURY 4.7 software can be downloaded
 directly from the web site <https://www.soilcarbonsolutionscenter.com>,
 after filling out a form. Two zip-files are automatically downloaded,
-which must then be unzipped in the folder of our choice. The
+which must then be unzipped into a local folder of our choice. The
 uncompressed folders contain all the necessary files, plus several user
 manuals and examples.
 
 All required files must be kept in the same folder for CENTURY to run.
 That includes schedule, weather, site and soil characteristic files (see
 numbered list above), as well as two compiled ‘.exe’ programs
-(‘century_47.exe’ and ‘list100_47.exe’). To run the CENTURY model you
-must follow the examples and the enclosed documentation.
+(‘century_47.exe’ and ‘list100_47.exe’). To run the CENTURY model on a
+command window (not covered here) without the use of this package it is
+recommended that you follow the examples and the enclosed documentation.
 
-### How to use Rcentury
+## How to use Rcentury
 
-If you decide to run CENTURY from a R session, you may proceed as
-follows. First, package Rcentury must be install and loaded into your R
-session. The package is publicly available at github and can be easily
+### Where are all those files?
+
+To run CENTURY from a R session with the Rcentury package we may proceed
+as follows. First, package Rcentury must be install on our local
+computer. The package is publicly available at github and can be easily
 fetched:
 
 ``` r
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 #> Using GitHub PAT from the git credential store.
-#> Skipping install of 'Rcentury' from a github remote, the SHA1 (d4bac70f) has not changed since last install.
-#>   Use `force = TRUE` to force installation
+#> Downloading GitHub repo emf-creaf/Rcentury@HEAD
+#> ── R CMD build ─────────────────────────────────────────────────────────────────
+#>       ✔  checking for file 'C:\Users\Roberto\AppData\Local\Temp\RtmpqKeUlI\remotes2fd8330a5ace\emf-creaf-Rcentury-212682b/DESCRIPTION'
+#>       ─  preparing 'Rcentury': (4.2s)
+#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+#>       ─  checking for LF line-endings in source and make files and shell scripts
+#>   ─  checking for empty or unneeded directories
+#>       ─  building 'Rcentury_0.0.0.9000.tar.gz'
+#>      
+#> 
+#> Installing package into 'C:/Users/Roberto/AppData/Local/R/win-library/4.4'
+#> (as 'lib' is unspecified)
 ```
 
-Then, we load it as is usual in R:
+Then, we load it into our R session:
 
 ``` r
 library(Rcentury)
-## basic example code
 ```
 
 This ensures that all package functions are available at the R session.
 
 Rcentury comes packed with the original CENTURY 4.7 example files, which
-can be used to prepare your own parameter files. Those files are located
-in three sub-folders:
+can be used as starting templates to prepare our own parameter files.
+Those files are located in three sub-folders that are created when
+unzipping the CENTURY downloaded files:
 
 1.  Grassland with grazing simulation ran for a site in Xilingol,
-    Mongolia (sub-folder “1.soil_texture_ppt”).
+    Mongolia (sub-folder “/Century+Examples/Century
+    Examples/1.soil_texture_ppt”).
 2.  Plant production for different grass types with different relative
-    temperature growth curves (sub-folder “3.plant_production”).
-3.  DUke and Harvard forests (sub-folder “4.forest”).
+    temperature growth curves (sub-folder “/Century+Examples/Century
+    Examples/3.plant_production”).
+3.  DUke and Harvard forests (sub-folder “/Century+Examples/Century
+    Examples/4.forest”).
 
-We can access those folders by using the R function “system.file”:
+Access to those folders is granted by using the R function
+“system.file”:
 
 ``` r
 # Get paths.
@@ -117,11 +135,29 @@ path_in <- c(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
 ### Example files
 
 There are two main ways to prepare the ASCII files that are required to
-run a simulation successfully, namely from scratch and using the example
-files available with the compressed ‘.zip’. Hereby we will be concerned
-with the latter case.
+run a simulation successfully, namely doing it from scratch or using the
+example files available with the compressed ‘.zip’. Hereby we will be
+concerned with the latter case.
 
-### How to prepare a CENTURY simulation with the Rcentury package
+As mentioned above, the Rcentury package includes the example files that
+accompany the ‘.zip’ file that we may download from the
+
+### Prepare a CENTURY simulation
+
+The steps to follow to prepare a CENTURY simulation with the Rcentury
+package are as follows:
+
+1.  Download the CENTURY 4.7 files as two compressed zip files (as of
+    October 2025) from the web site.
+
+2.  Unfold the zip files into a local folder. You will end up with a
+    series of subfolders which enclose manuals and example files.
+
+3.  Next, create a directory where you will hold all required CENTURY
+    files and the results of your own simulations. Those files include
+    the 4 types of files described above.
+
+4.  Open RStudio
 
 There are three example simulations that accompany the CENTURY ‘.zip’
 files.
