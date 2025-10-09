@@ -13,34 +13,42 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Rcentury
+# Rcentury: soil dynamics simulation with CENTURY 4.7 and R
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-## Introduction
+## The CENTURY model for soil organic matter dynamics
 
-The CENTURY soil model is a bio-chemistry ecosystem model that simulates the long-term dynamics of Carbon, Nitrogen, Phosphorus, and Sulfur in various terrestrial ecosystems. It can be used to predict how climate and land management practices impact and change soil health and carbon sequestration. The model works by splitting soil organic matter into three different carbon pools based on their decomposition rates. The rates are influenced differently by soil temperature, moisture, texture, and cultivation practices.
+The CENTURY soil model is a bio-chemistry ecosystem model that simulates the long-term dynamics of Carbon, Nitrogen, Phosphorus, and Sulphur in various terrestrial ecosystems. It can be used to predict how climate and land management practices impact and change soil health and carbon sequestration. The model works by splitting soil organic matter into three different carbon pools based on their decomposition rates. The rates are influenced differently by soil temperature, moisture, texture, and cultivation practices.
 
-The CENTURY soil model is available for download at https://www.soilcarbonsolutionscenter.com/people in its Fortran 4.7 version. It can be used as a stand-alone software to be run on a Windows command-prompt console. To be able to execute the CENTURY software a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is run. Those files include:
+The Fortran version of the CENTURY 4.7 software is available and can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com in its Fortran 4.7 version after filling out a form. Two zip-files are automatically downloaded, which must then be unzipped into a local folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
 
-1. A set of up to 11 option files with extension '.100', containing a large set of parameters. The name of these files is fixed.
-2. Single site file, also with extension '.100', containing site-specific parameters. The name of this file can be chosen at will.
-3. Weather file, with extension '.wth', that includes monthly data for precipitation and minimum and maximum temperature for the site.
-4. Schedule file, with extension '.sch', which details the timing and sequence of all events in the simulation.
+The CENTURY Fortran executable can be used as a stand-alone software to be run on a Windows command-prompt console. To do so, just follow the instructions in the accompanying documents. To be able to execute the CENTURY software a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is run. Those files include:
+
++ A set of up to 11 option files with extension '.100', containing a large set of parameters. The name of these files is fixed.
++ Single site file, also with extension '.100', containing site-specific parameters. The name of this file can be chosen at will.
++ Weather file, with extension '.wth', that includes monthly data for precipitation and minimum and maximum temperature for the site.
++ Schedule file, with extension '.sch', which details the timing and sequence of all events in the simulation.
 
 All these ASCII files, together with the executable '.exe' programs, must exist in the same folder.
+
+Any question related to CENTURY must be addressed directly to the creators of that software. See contact information on the https://www.soilcarbonsolutionscenter.com web page.
+
+## How to download CENTURY 4.7
+
+The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com, after filling out a form. Two zip-files are automatically downloaded, which must then be unzipped into a local folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
+
+<br>
+
+## 
 
 Editing each of these input files individually is an extremely tedious and challenging task, particularly when our goal is to apply the CENTURY model to a large number of different sites, and/or under a variety of different climatic and land management scenarios. This manual process is also highly susceptible to errors, given the vast number of parameters that must be carefully tuned-up and adjusted.
 
 Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. The goal of package Rcentury is thus to run CENTURY 4.7 (version Fortran) from R on a command window. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into your R session as a **data.frame**. Notice that Rcentury is NOT an implementation of the CENTURY equations in R code. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.
 
 
-## How to download CENTURY 4.7
 
-The Fortran version of the CENTURY 4.7 software can be downloaded directly from the web site https://www.soilcarbonsolutionscenter.com, after filling out a form. Two zip-files are automatically downloaded, which must then be unzipped into a local folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples.
-
-All required files must be kept in the same folder for CENTURY to run. That includes schedule, weather, site and soil characteristic files (see numbered list above), as well as two compiled '.exe' programs ('century_47.exe' and 'list100_47.exe'). To run the CENTURY model on a command window (not covered here) without the use of this package it is recommended that you follow the examples and the enclosed documentation.
 
 
 ## How to use Rcentury

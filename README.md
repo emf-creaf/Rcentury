@@ -1,16 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Rcentury
+# Rcentury: soil dynamics simulation with CENTURY 4.7 and R
 
 <!-- badges: start -->
 
 <!-- badges: end -->
 
-## Introduction
+## The CENTURY model for soil organic matter dynamics
 
 The CENTURY soil model is a bio-chemistry ecosystem model that simulates
-the long-term dynamics of Carbon, Nitrogen, Phosphorus, and Sulfur in
+the long-term dynamics of Carbon, Nitrogen, Phosphorus, and Sulphur in
 various terrestrial ecosystems. It can be used to predict how climate
 and land management practices impact and change soil health and carbon
 sequestration. The model works by splitting soil organic matter into
@@ -18,25 +18,49 @@ three different carbon pools based on their decomposition rates. The
 rates are influenced differently by soil temperature, moisture, texture,
 and cultivation practices.
 
-The CENTURY soil model is available for download at
-<https://www.soilcarbonsolutionscenter.com/people> in its Fortran 4.7
-version. It can be used as a stand-alone software to be run on a Windows
-command-prompt console. To be able to execute the CENTURY software a
-series of ASCII files must also be prepared in advance, which will then
-be read when CENTURY is run. Those files include:
+The Fortran version of the CENTURY 4.7 software is available and can be
+downloaded directly from the web site
+<https://www.soilcarbonsolutionscenter.com> in its Fortran 4.7 version
+after filling out a form. Two zip-files are automatically downloaded,
+which must then be unzipped into a local folder of our choice. The
+uncompressed folders contain all the necessary files, plus several user
+manuals and examples.
 
-1.  A set of up to 11 option files with extension ‘.100’, containing a
-    large set of parameters. The name of these files is fixed.
-2.  Single site file, also with extension ‘.100’, containing
-    site-specific parameters. The name of this file can be chosen at
-    will.
-3.  Weather file, with extension ‘.wth’, that includes monthly data for
-    precipitation and minimum and maximum temperature for the site.
-4.  Schedule file, with extension ‘.sch’, which details the timing and
-    sequence of all events in the simulation.
+The CENTURY Fortran executable can be used as a stand-alone software to
+be run on a Windows command-prompt console. To do so, just follow the
+instructions in the accompanying documents. To be able to execute the
+CENTURY software a series of ASCII files must also be prepared in
+advance, which will then be read when CENTURY is run. Those files
+include:
+
+- A set of up to 11 option files with extension ‘.100’, containing a
+  large set of parameters. The name of these files is fixed.
+- Single site file, also with extension ‘.100’, containing site-specific
+  parameters. The name of this file can be chosen at will.
+- Weather file, with extension ‘.wth’, that includes monthly data for
+  precipitation and minimum and maximum temperature for the site.
+- Schedule file, with extension ‘.sch’, which details the timing and
+  sequence of all events in the simulation.
 
 All these ASCII files, together with the executable ‘.exe’ programs,
 must exist in the same folder.
+
+Any question related to CENTURY must be addressed directly to the
+creators of that software. See contact information on the
+<https://www.soilcarbonsolutionscenter.com> web page.
+
+## How to download CENTURY 4.7
+
+The Fortran version of the CENTURY 4.7 software can be downloaded
+directly from the web site <https://www.soilcarbonsolutionscenter.com>,
+after filling out a form. Two zip-files are automatically downloaded,
+which must then be unzipped into a local folder of our choice. The
+uncompressed folders contain all the necessary files, plus several user
+manuals and examples.
+
+<br>
+
+## 
 
 Editing each of these input files individually is an extremely tedious
 and challenging task, particularly when our goal is to apply the CENTURY
@@ -56,22 +80,6 @@ implementation of the CENTURY equations in R code. Rather, it is an
 interface between the original CENTURY Fortran code and R, which
 guarantees that calculations are done via the actual CENTURY code.
 
-## How to download CENTURY 4.7
-
-The Fortran version of the CENTURY 4.7 software can be downloaded
-directly from the web site <https://www.soilcarbonsolutionscenter.com>,
-after filling out a form. Two zip-files are automatically downloaded,
-which must then be unzipped into a local folder of our choice. The
-uncompressed folders contain all the necessary files, plus several user
-manuals and examples.
-
-All required files must be kept in the same folder for CENTURY to run.
-That includes schedule, weather, site and soil characteristic files (see
-numbered list above), as well as two compiled ‘.exe’ programs
-(‘century_47.exe’ and ‘list100_47.exe’). To run the CENTURY model on a
-command window (not covered here) without the use of this package it is
-recommended that you follow the examples and the enclosed documentation.
-
 ## How to use Rcentury
 
 ### Where are all those files?
@@ -84,18 +92,8 @@ fetched:
 ``` r
 devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 #> Using GitHub PAT from the git credential store.
-#> Downloading GitHub repo emf-creaf/Rcentury@HEAD
-#> ── R CMD build ─────────────────────────────────────────────────────────────────
-#>       ✔  checking for file 'C:\Users\Roberto\AppData\Local\Temp\RtmpqKeUlI\remotes2fd8330a5ace\emf-creaf-Rcentury-212682b/DESCRIPTION'
-#>       ─  preparing 'Rcentury': (4.2s)
-#>    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
-#>       ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#>       ─  building 'Rcentury_0.0.0.9000.tar.gz'
-#>      
-#> 
-#> Installing package into 'C:/Users/Roberto/AppData/Local/R/win-library/4.4'
-#> (as 'lib' is unspecified)
+#> Skipping install of 'Rcentury' from a github remote, the SHA1 (212682bb) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 Then, we load it into our R session:
