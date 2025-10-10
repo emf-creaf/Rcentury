@@ -3,7 +3,7 @@ title: "Example uncertainty and sensitivity"
 output: rmarkdown::html_vignette
 bibliography: references.bib # Point to my .bib file
 vignette: >
-  %\VignetteIndexEntry{Example uncertainty propagation}
+  %\VignetteIndexEntry{Example uncertainty and sensitivity}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
