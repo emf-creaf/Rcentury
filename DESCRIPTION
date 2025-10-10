@@ -19,3 +19,5 @@ Depends:
 LazyData: true
 VignetteBuilder: knitr
 URL: https://emf-creaf.github.io/Rcentury/
+Imports: 
+    extraDistr
