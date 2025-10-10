@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Example model uncertainty and sensitivity • Rcentury</title>
+<title>Example uncertainty and sensitivity • Rcentury</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example model uncertainty and sensitivity">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example uncertainty and sensitivity">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,7 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Example_uncertainty_sensitivity.html">Example model uncertainty and sensitivity</a></li>
+<li><a class="dropdown-item" href="../articles/Example_uncertainty_sensitivity.html">Example uncertainty and sensitivity</a></li>
     <li><a class="dropdown-item" href="../articles/How-to-run-century.html">How to run CENTURY 4.7</a></li>
   </ul>
 </li>
@@ -55,7 +55,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Example model uncertainty and sensitivity</h1>
+      <h1>Example uncertainty and sensitivity</h1>
             
       
 
@@ -64,9 +64,21 @@
 
     
     
-<div class="section level3">
-<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h3>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>This document will describe the steps one can take to determine how
+uncertainty in input parameters propagates through the CENTURY model. It
+will also specify the procedures used to quantify sensitivity to those
+parameters.</p>
+<p>We will start off by giving some necessary definitions. As stated in
+<span class="citation">(Taylor 2022)</span>, ‘Error analysis is the
+study and evaluation of uncertainty in measurement’. On the other hand,
+we can define sensitivity analysis as ‘The study of how the uncertainty
+in the output of a model (numerical or otherwise) can be apportioned to
+different sources of uncertainty in the model input’ <span class="citation">(Saltelli et al. 2004)</span>.</p>
+<p>As can be seen, both topics may sound somehow related and even
+seemingly partially overlap.</p>
 <p>We can use the Rcentury package to assess how uncertainties (aka
 errors) in a model’s parameters contribute to the overall uncertainty of
 its output. In general, for many models it is possible to derive
@@ -81,32 +93,32 @@ of feeding the model with input parameters of interests which vary
 randomly at each model run following a given distribution of known mean
 and variance.</p>
 <p>For the sake of simplicity we will demonstrate how to perform an
-uncertainty propagation analysis of uncertainty in soil texture
-(i.e. clay, silt and sand) only, keeping all the other parameters of the
-model fixed. In this case, at each model run we will draw random
-proportion values for each of the three parameters, calculate the
-CENTURY model with those values and then save the output. This will be
-done many times to derive reliable confidence intervals for the
-output.</p>
-<p>Texture is always given as a set of 3 proportions which add up to 1
-always, we need to specify a random distribution that accounts for that
-property. Consequently, we turn to Dirichlet distributions, which allow
-us to model probability distributions of outcomes for categorical
-events, such that the total probability adds up to one. For details, see
-Annex below.</p>
+uncertainty propagation analysis for soil texture (i.e. clay, silt and
+sand) only, keeping all the other parameters of the model fixed. In this
+case, at each model run we will draw random proportion values for each
+of the three parameters, calculate the CENTURY model with those values
+and then save the output. This will be done many times to derive
+reliable confidence intervals for the output.</p>
+<p>Soil texture is given as a set of 3 proportions which add up to 1
+always, and thus we need to specify a random distribution that accounts
+for that property. Consequently, we turn to Dirichlet distributions,
+which allow us to model probability distributions of outcomes for
+categorical events, such that the total probability adds up to one. For
+details, see Annex below.</p>
 <p><br></p>
 </div>
-<div class="section level3">
-<h3 id="rcentury-simulations">Rcentury simulations<a class="anchor" aria-label="anchor" href="#rcentury-simulations"></a>
-</h3>
+<div class="section level2">
+<h2 id="rcentury-numerical-simulations">Rcentury numerical simulations<a class="anchor" aria-label="anchor" href="#rcentury-numerical-simulations"></a>
+</h2>
 <p>For this example we will use the forest data from CENTURY example
 files. We will create a temporary directory and move there all necessary
-files (ASCII data files and executables). The simulation will be carried
-out with the so-called
+files (ASCII data files and executables). The simulation below will be
+carried out with the so-called
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext mathvariant="monospace">𝚍𝚞𝚔𝚎.𝟷𝟶𝟶</mtext><annotation encoding="application/x-tex">\texttt{duke.100}</annotation></semantics></math>
-example, though any other site would do.</p>
+file example, though any other site would do.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">from_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/4.forest"</span>,  package <span class="op">=</span> <span class="st">"Rcentury"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Copy all files to temporary folder.</span></span>
+<span><span class="va">from_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/4.forest"</span>,  package <span class="op">=</span> <span class="st">"Rcentury"</span><span class="op">)</span></span>
 <span><span class="va">to_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">from_dir</span>, <span class="va">to_dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">path_exe</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"bin/windows"</span>,  package <span class="op">=</span> <span class="st">"Rcentury"</span><span class="op">)</span></span>
@@ -116,7 +128,7 @@ example, though any other site would do.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">century_exe</span>, <span class="va">to_dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="va">list100_exe</span>, <span class="va">to_dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
-<p>Below we will need package
+<p>We will also need package
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext mathvariant="monospace">𝚎𝚡𝚝𝚛𝚊𝙳𝚒𝚜𝚝𝚛</mtext><annotation encoding="application/x-tex">\texttt{extraDistr}</annotation></semantics></math>,
 available from CRAN, which will provide us with a random-number
 generator for the Dirichlet distribution. We will also load the Rcentury
@@ -125,10 +137,10 @@ package.</p>
 <code class="sourceCode R"><span><span class="co"># install.packages("extraDistr")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/twolodzko/extraDistr" class="external-link">extraDistr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: package 'extraDistr' was built under R version 4.4.3</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">Rcentury</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://emf-creaf.github.io/Rcentury/">Rcentury</a></span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p>We intend to model the propagation of uncertainty for, and
-sensibility to, texture parameters. Those parameters are included in the
+sensitivity to, texture parameters. Those parameters are included in the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext mathvariant="monospace">𝚍𝚞𝚔𝚎.𝟷𝟶𝟶</mtext><annotation encoding="application/x-tex">\texttt{duke.100}</annotation></semantics></math>
 site file, which is then read by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext mathvariant="monospace">𝚌𝚎𝚗𝚝𝚞𝚛𝚢_𝟺𝟽.𝚎𝚡𝚎</mtext><annotation encoding="application/x-tex">\texttt{century_47.exe}</annotation></semantics></math>
@@ -138,8 +150,12 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtext mathvariant="monospace">𝚠𝚛𝚒𝚝𝚎_𝚜𝚒𝚝𝚎.𝚁</mtext><annotation encoding="application/x-tex">\texttt{write_site.R}</annotation></semantics></math>
 to read site data and write it back onto disk at each simulation
 step.</p>
+<p>The output of the CENTURY model may include up to approximately 600
+variables, in this example we will focus on total system carbon
+(variable
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>s</mi><mi>y</mi><mi>s</mi><mi>c</mi></mrow><annotation encoding="application/x-tex">totsysc</annotation></semantics></math>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#</span></span>
+<code class="sourceCode R"><span><span class="co"># Read site characteristics and extract sand, slit and clay values.</span></span>
 <span><span class="va">site</span> <span class="op">&lt;-</span> <span class="va">site2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_site.html">read_site</a></span><span class="op">(</span><span class="va">to_dir</span>, <span class="st">"duke.100"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">site</span><span class="op">$</span><span class="va">`site and control`</span><span class="op">$</span><span class="va">df</span></span>
 <span><span class="va">sand</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"SAND"</span><span class="op">]</span></span>
@@ -147,25 +163,73 @@ step.</p>
 <span><span class="va">clay</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"CLAY"</span><span class="op">]</span></span>
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dirichlet_params.html">dirichlet_params</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">sand</span>, <span class="va">silt</span>, <span class="va">clay</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">.01</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nsimu</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="co"># We need an ASCII text file with a list of variables to extract; in this case, only $totsysc$.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"totsysc"</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">to_dir</span>, <span class="st">"totsysc.txt"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Finally, the simulations.</span></span>
+<span><span class="va">nsimu</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">texture</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, <span class="va">nsimu</span><span class="op">)</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsimu</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="co"># Random Dirichlet triplet.</span></span>
 <span>  <span class="va">texture_random</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/Dirichlet.html" class="external-link">rdirichlet</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">alpha</span><span class="op">)</span></span>
+<span>  <span class="va">texture</span><span class="op">[</span>, <span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">texture_random</span></span>
 <span>  </span>
 <span>  <span class="co"># Save &lt;site&gt;.100 file.</span></span>
 <span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">site2</span><span class="op">$</span><span class="va">`site and control`</span><span class="op">$</span><span class="va">df</span></span>
 <span>  <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"SAND"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">texture_random</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span>  <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"SILT"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">texture_random</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span>  <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"CLAY"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">texture_random</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span>  <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"SILT"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">texture_random</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span>  <span class="va">x</span><span class="op">$</span><span class="va">value</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">field</span> <span class="op">==</span> <span class="st">"CLAY"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">texture_random</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
 <span>  <span class="va">site2</span><span class="op">$</span><span class="va">`site and control`</span><span class="op">$</span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">x</span></span>
 <span>  <span class="fu"><a href="../reference/write_site.html">write_site</a></span><span class="op">(</span><span class="va">site2</span>, <span class="va">to_dir</span>, <span class="st">"duke.100"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  </span>
-<span>  <span class="va">df</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/century_run.html">century_run</a></span><span class="op">(</span><span class="va">to_dir</span>, <span class="st">"duke.sch"</span>, <span class="st">"res.bin"</span>, <span class="st">"res.lis"</span>, <span class="st">"outvars.txt"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">df</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/century_run.html">century_run</a></span><span class="op">(</span><span class="va">to_dir</span>, <span class="st">"duke.sch"</span>, <span class="st">"res.bin"</span>, <span class="st">"res.lis"</span>, <span class="st">"totsysc.txt"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">to_dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"res.bin"</span>, <span class="st">"res.lis"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p><br></p>
+<p>Once we have performed all the simulations, we can proceed to
+determine how the uncertainty propagates through the model and what is
+its sensitivity to each of the three soil components.</p>
+<div class="section level3">
+<h3 id="model-uncertainty">Model uncertainty<a class="anchor" aria-label="anchor" href="#model-uncertainty"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">time</span></span>
+<span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">df</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">totsysc</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">1</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="va">ci_lo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">1</span>, <span class="va">quantile</span>, prob <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span></span>
+<span><span class="va">ci_up</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">1</span>, <span class="va">quantile</span>, prob <span class="op">=</span> <span class="fl">0.975</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, type <span class="op">=</span> <span class="st">"l"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"Time (years)"</span>, ylab <span class="op">=</span> <span class="st">"Total system C"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/polygon.html" class="external-link">polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ci_lo</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">ci_up</span><span class="op">)</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"skyblue"</span>, border <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Example_uncertainty_sensitivity_files/figure-html/calc_ci-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><br></p>
+</div>
+<div class="section level3">
+<h3 id="model-sensitivity">Model sensitivity<a class="anchor" aria-label="anchor" href="#model-sensitivity"></a>
+</h3>
+<p>To determine model sensitivity to the three texture parameters we
+apply a</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="kw">function</span><span class="op">(</span><span class="va">j</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">texture</span><span class="op">[</span><span class="va">j</span>,<span class="op">]</span>, <span class="va">z</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="va">cc</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"Time (years)"</span>, ylab <span class="op">=</span> <span class="st">"R-squared"</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"red"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="va">cc</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span>, col <span class="op">=</span> <span class="st">"blue"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="va">cc</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span>, col <span class="op">=</span> <span class="st">"green"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"right"</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sand"</span>, <span class="st">"Silt"</span>, <span class="st">"Clay"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sweep.html" class="external-link">sweep</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">cc</span>, <span class="fl">2</span>, <span class="va">sum</span><span class="op">)</span>, FUN <span class="op">=</span> <span class="st">"/"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="va">cn</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"Time (years)"</span>, ylab <span class="op">=</span> <span class="st">"Normalized R-squared"</span>,</span>
+<span>     col <span class="op">=</span> <span class="st">"red"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="va">cn</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span>, col <span class="op">=</span> <span class="st">"blue"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html" class="external-link">points</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="va">nx</span>, <span class="va">cn</span><span class="op">[</span><span class="fl">3</span>, <span class="op">]</span>, col <span class="op">=</span> <span class="st">"green"</span>, type <span class="op">=</span> <span class="st">"l"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sand"</span>, <span class="st">"Silt"</span>, <span class="st">"Clay"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="Example_uncertainty_sensitivity_files/figure-html/calc_sens-1.png" width="576" style="display: block; margin: auto;"></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="annex-how-to-draw-multivariate-proportions">Annex: How to draw multivariate proportions<a class="anchor" aria-label="anchor" href="#annex-how-to-draw-multivariate-proportions"></a>
@@ -210,16 +274,27 @@ and
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>a</mi><mi>r</mi><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mn>.17</mn></mrow><annotation encoding="application/x-tex">Var[x_2]=.17</annotation></semantics></math>,
 we can easily generate sequences of Dirichlet-distributed triplets.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dirichlet_params.html">dirichlet_params</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.35</span>, <span class="fl">.12</span>, <span class="fl">.53</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">.042</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/Dirichlet.html" class="external-link">rdirichlet</a></span><span class="op">(</span><span class="fl">10000</span>, <span class="va">alpha</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dirichlet_params.html">dirichlet_params</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.28</span>, <span class="fl">.60</span>, <span class="fl">.12</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">.01</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/Dirichlet.html" class="external-link">rdirichlet</a></span><span class="op">(</span><span class="fl">100000</span>, <span class="va">alpha</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="st">"First component"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="st">"Second component"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="st">"Third component"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="st">"Sand"</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="st">"Silt"</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>, xlab <span class="op">=</span> <span class="st">""</span>, main <span class="op">=</span> <span class="st">"Clay"</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Example_uncertainty_sensitivity_files/figure-html/hist_triplets-1.png" width="672"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-saltelli2004sensitivity" class="csl-entry">
+Saltelli, Andrea, Stefano Tarantola, Francesca Campolongo, Marco Ratto,
+et al. 2004. <em>Sensitivity Analysis in Practice: A Guide to Assessing
+Scientific Models</em>. Vol. 1. Wiley Online Library.
+</div>
+<div id="ref-taylor2022introduction" class="csl-entry">
+Taylor, John R. 2022. <em>An Introduction to Error Analysis: The Study
+of Uncertainties in Physical Measurements</em>. MIT Press.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
