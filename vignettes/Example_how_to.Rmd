@@ -1,0 +1,129 @@
+---
+title: "How to run Rcentury"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example how to run Rcentury}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+<br>
+
+### Install Rcentury locally and set working directory
+
+To run CENTURY from a R session with the Rcentury package we may proceed as follows. First, package Rcentury must be install on our local computer. The package is publicly available at github and can be easily fetched:
+
+```{r install, warning = FALSE, message = FALSE}
+devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
+```
+
+Then, we load it into our R session:
+
+```{r load}
+library(Rcentury)
+```
+
+This ensures that all package functions are available at the R session.
+
+<br>
+
+Next step consists of creating a local folder where we will run CENTURY and where files with simulation results will be saved. For the sake of illustration, let us create a temporary file and set it as our working directory.
+
+
+```{r create_folder, warning = FALSE, message = FALSE}
+temp_dir <- tempdir()     # Random name for the temporary folder.
+dir.create(temp_dir)      # Create folder.
+setwd(temp_dir)           # Set it as current working directory.
+```
+
+<br>
+
+### Preparing input files
+
+There are two main ways to prepare the ASCII files that are required to run a CENTURY simulation successfully, namely doing it from scratch or using the example files available with the compressed '.zip' as templates. Hereby we will be concerned with the latter case.
+
+In the previous section we created a temporary folder where to run CENTURY. Next, we will proceed by copying example files from the folder where they were unzipped over to our working directory (the 'temp_dir' folder already created). We will also copy the two executable files to run CENTURY and read results. Let us assume that those unzipped files are located in 'C:/Century/Century Examples/1.soil_texture_ppt' (though you may unzip the files into another folder of your choice).
+
+```{r move_files, warning = FALSE, message = FALSE}
+from_dir <- 'C:/Century/Century Examples/1.soil_texture_ppt'
+
+# Files with extension '.100'.
+all_files <- list.files(from_dir, pattern = "100", full.names = TRUE)
+nothing <- file.copy(all_files, temp_dir)
+
+# Files with extension '.sch'.
+all_files <- list.files(from_dir, pattern = "sch", full.names = TRUE)
+nothing <- file.copy(all_files, temp_dir)
+
+# Files with extension '.wth'.
+all_files <- list.files(from_dir, pattern = "wth", full.names = TRUE)
+nothing <- file.copy(all_files, temp_dir)
+```
+
+<br>
+
+Now we may open one of the files, modified and save it on disk. To facilitate it the Rcentury package includes functions to read/write files. In our example we will modify the original clay and slit proportions in the Xilingol site to 0.5 and 0.2 (and therefore, a sand proportion of 0.3), respectively, changing the original clay-loam soil type to a clay type.
+
+```{r change_site, message = FALSE}
+clay <- 0.5
+silt <- 0.2
+sand <- 1 - clay - silt
+site <- read_site(temp_dir, "XILIN.100")
+site$`site and control`$df <- within(site$`site and control`$df, 
+                                     value[field == "CLAY"] <- clay,
+                                     value[field == "SILT"] <- silt,
+                                     value[field == "SAND"] <- sand)
+write_site(site, temp_dir, "new_XILIN.100", overwrite = TRUE)
+```
+
+<br>
+
+We will also change the schedule file, first by specifying the name of the new site file **new_XILIN.100** (necessary for CENTURY to find the right site file) and then by modifying the schedule blocks. The new block will be located between first and third blocks and will be similar to block #1. Care must be taken for starting and end years to be correctly specified.
+
+```{r change_schedule, message = FALSE}
+schedule <- read_schedule(temp_dir, "XILI.sch")
+
+# New name site as set above.
+schedule$header$`Site file name` <- "new_XILIN.100"
+
+# Add a new block.
+schedule$block_info <- c(schedule$block_info[1], schedule$block_info[1], schedule$block_info[2])
+
+# Change starting and end years in block #1.
+schedule$block_info[[1]]$`Output starting year` <- 1000
+schedule$block_info[[1]]$`Last year` <- 1499
+
+# Change starting and end years in new block #2.
+schedule$block_info[[2]]$`Output starting year` <- 1500
+schedule$block_info[[2]]$`Last year` <- 3000
+
+# Save on disk.
+write_schedule(schedule, temp_dir, "new_XILI.sch")
+```
+
+<br>
+
+### Running a CENTURY simulation
+
+Finally, we may now proceed to run our CENTURY simulation, but for that we must also copy the two executables **century_47.exe** and **list100_47.exe** to the working directory. We also need an ASCII file specifying the list of variables to extract from the results. Since this example is for illustrative purposes only, we will extract total system carbon only.
+
+```{r run_simu, warning = FALSE, message = FALSE}
+# Files with extension '.exe'.
+all_files <- list.files(from_dir, pattern = "exe", full.names = TRUE)
+nothing <- file.copy(all_files, temp_dir)
+
+# We need an ASCII text file with a list of variables to extract; in this case, only $totsysc$.
+cat("totsysc", file = file.path(temp_dir, "totsysc.txt"))
+
+# Run the simulation.
+out <- century_run(temp_dir, "new_XILI.sch", "res.bin", "res.lis", "totsysc.txt", verbose = FALSE)
+```
+
+<br>
