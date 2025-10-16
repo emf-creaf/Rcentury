@@ -141,7 +141,7 @@ legend("topright", col = c("red", "blue", "green"), lwd = 2, legend = c("Sand", 
 par(mfrow = c(1, 1))
 ```
 
-## Annex: How to draw multivariate proportions
+### Annex: How to draw multivariate proportions
 
 The means of the proportions will be fixed in our simulations.
 
@@ -180,3 +180,8 @@ hist(x[, 2], xlab = "", main = "Silt", breaks = seq(0, 1, length = 50))
 hist(x[, 3], xlab = "", main = "Clay", breaks = seq(0, 1, length = 50))
 par(mfrow = c(1,1))
 ```
+
+<br>
+
+### References
+

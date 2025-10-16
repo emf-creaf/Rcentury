@@ -27,7 +27,7 @@ The goal of the **Rcentury** R package is to run the CENTURY soil dynamics simul
 
 We first need to download and install the CENTURY software locally. This must be done directly from the web site <https://www.soilcarbonsolutionscenter.com> (after filling out a consent form). Two zip-files are automatically downloaded, which must then be unzipped into a local folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples. Any question related to CENTURY must be addressed directly to the creators of that software. See contact information on the <https://www.soilcarbonsolutionscenter.com> web page.
 
-The CENTURY Fortran executable can be used as a stand-alone software to be run on a Windows command prompt. To do so, just follow the instructions in the accompanying documents. Additionally, a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is executed. Those files include:
+The CENTURY software can be used in stand-alone mode, to be run on a Windows command prompt. To do so, just follow the instructions in the accompanying documents (available after uncompressing). Additionally, a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is executed. Those files include:
 
 -   A set of up to 11 option files with extension '.100', containing a large set of parameters. The name of these files is fixed.
 -   A single site file, also with extension '.100', containing site-specific parameters. The name of this file can be chosen at will.
