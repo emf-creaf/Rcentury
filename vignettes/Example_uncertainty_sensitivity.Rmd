@@ -23,7 +23,7 @@ We will start off by giving some necessary definitions. As stated in [@taylor202
 
 As can be seen, both topics may sound somehow related and even seemingly partially overlap.
 
-We can use the Rcentury package to assess how uncertainties (aka errors) in a model's parameters contribute to the overall uncertainty of its output. In general, for many models it is possible to derive approximate analytical expressions for n-error error propagation by using Taylor expansions, which involves calculating analytical n-order derivatives. However, this approach quickly becomes cumbersome and impractical when the number of parameters grows high and, especially, when the function to evaluate is very complex and non-linear like CENTURY. Therefore, to determine error propagation for the CENTURY model we turn to a much simpler Monte Carlo numerical approach, which consists of feeding the model with input parameters of interests which vary randomly at each model run following a given distribution of known mean and variance.
+We can use the **Rcentury** package to assess how uncertainties (aka errors) in a model's parameters contribute to the overall uncertainty of its output. In general, for many models it is possible to derive approximate analytical expressions for n-error error propagation by using Taylor expansions, which involves calculating analytical n-order derivatives. However, this approach quickly becomes cumbersome and impractical when the number of parameters grows high and, especially, when the function to evaluate is very complex and non-linear like CENTURY. Therefore, to determine error propagation for the CENTURY model we turn to a much simpler Monte Carlo numerical approach, which consists of feeding the model with input parameters of interests which vary randomly at each model run following a given distribution of known mean and variance.
 
 For the sake of simplicity we will demonstrate how to perform an uncertainty propagation analysis for soil texture (i.e. clay, silt and sand) only, keeping all the other parameters of the model fixed. In this case, at each model run we will draw random proportion values for each of the three parameters, calculate the CENTURY model with those values and then save the output. This will be done many times to derive reliable confidence intervals for the output.
 
@@ -50,7 +50,7 @@ invisible(file.copy(list100_exe, to_dir, overwrite = TRUE, recursive = TRUE))
 
 <br>
 
-We will also need package $\texttt{extraDistr}$, available from CRAN, which will provide us with a random-number generator for the Dirichlet distribution. We will also load the Rcentury package.
+We will also need package $\texttt{extraDistr}$, available from CRAN, which will provide us with a random-number generator for the Dirichlet distribution. We will also load the **Rcentury** package.
 
 ```{r install_distrib}
 # install.packages("extraDistr")
@@ -105,6 +105,8 @@ Once we have performed all the simulations, we can proceed to determine how the 
 
 ### Model uncertainty
 
+To show how uncertainty spread through the model and over time we have plotted a 95% confidence band around the expected total system carbon projection. Uncertainty grows over time, though it is reset to almost zero every time there is a canopy-burn episode every 500 years.
+
 ```{r calc_ci, fig.width = 6, fig.height = 5, fig.align = 'center'}
 x <- df[[1]]$time
 z <- sapply(df, function(x) x$totsysc)
@@ -120,26 +122,38 @@ points(x, y, type = "l")
 
 ### Model sensitivity
 
-To determine model sensitivity to the three texture parameters we apply a
+To determine model sensitivity to each texture parameters we calculate the correlation coefficient between each parameter and the output.
 
-```{r calc_sens, fig.height = 10, fig.width = 6, fig.align = 'center', fig.show = 'hold'}
-par(mfcol = c(2, 1))
+```{r calc_corr, fig.width = 6, fig.height = 5, fig.align = 'center', fig.show = 'hold'}
 nx <- length(x)
-cc <- sapply(2:nx, function(i) sapply(1:3, function(j) cor(texture[j,], z[i,])^2))
-plot(2:nx, cc[1, ], ylim = c(0, 1), xlab = "Time (years)", ylab = "R-squared",
+cc <- sapply(2:nx, function(i) sapply(1:3, function(j) cor(texture[j,], z[i,])))
+plot(2:nx, cc[1, ], ylim = c(-1, 1), xlab = "Time (years)", ylab = "Correlation coeff.",
      col = "red", type = "l", lwd = 2)
 points(2:nx, cc[2, ], col = "blue", type = "l", lwd = 2)
 points(2:nx, cc[3, ], col = "green", type = "l", lwd = 2)
 legend("right", col = c("red", "blue", "green"), lwd = 2, legend = c("Sand", "Silt", "Clay"))
+```
 
+Notice how sensitivity of model output to the values of the silt parameter is very high at the beginning, but dramatically drops to values close to zero after a few years. However, sensitivity to clay and sand values are high and of opposite sign.
+
+<br>
+
+To determine the relative contribution of each texture parameter to model output we can compute the $R^2$ coefficient for each texture parameter and then normalized it such that the sum of the $R^2$ from each parameter is equal to one. 
+
+```{r calc_sens, fig.height = 6, fig.width = 5, fig.align = 'center', fig.show = 'hold'}
+nx <- length(x)
+cc <- sapply(2:nx, function(i) sapply(1:3, function(j) cor(texture[j,], z[i,])^2))
 cn <- sweep(cc, 2, apply(cc, 2, sum), FUN = "/")
 plot(2:nx, cn[1, ], ylim = c(0, 1), xlab = "Time (years)", ylab = "Normalized R-squared",
      col = "red", type = "l", lwd = 2)
 points(2:nx, cn[2, ], col = "blue", type = "l", lwd = 2)
 points(2:nx, cn[3, ], col = "green", type = "l", lwd = 2)
 legend("topright", col = c("red", "blue", "green"), lwd = 2, legend = c("Sand", "Silt", "Clay"))
-par(mfrow = c(1, 1))
 ```
+
+Clearly, clay content is the most important texture parameter, followed at some distance by sand. The contribution of silt values, on the other hand, is almost negligible.
+
+<br>
 
 ### Annex: How to draw multivariate proportions
 
@@ -167,7 +181,7 @@ $$Var[x_i] = \frac{\tilde{\alpha_i}\cdot(1-\tilde{\alpha_i})}{\alpha_0-1}$$
 
 where:
 
-$$\tilde{\alpha_i}=\frac{\alpha_i}{\alpha_0}$$ We can use those two expressions to calculate the $\alpha_j$ values when we are given four parameters for the $E[x_i]$ or $E[V_i]$. The Rcentury package provides with a function, called $\texttt{dirichlet_params.R}$, that can calculate the $\alpha_j$ values when all the means $E[x_i]\text{ for all } i \in \{1, \dots, K\}$ and one single variance value $Var[x_j]$ are known.
+$$\tilde{\alpha_i}=\frac{\alpha_i}{\alpha_0}$$ We can use those two expressions to calculate the $\alpha_j$ values when we are given four parameters for the $E[x_i]$ or $E[V_i]$. The Rcentury package provides with a function, called **dirichlet_params.R**, that can calculate the $\alpha_j$ values when all the means $E[x_i]\text{ for all } i \in \{1, \dots, K\}$ and one single variance value $Var[x_j]$ are known.
 
 For example, for $K=3$ and $E[x_1]=.35$, $E[x_2]=.12$, $E[x_3]=.53$ and $Var[x_2]=.17$, we can easily generate sequences of Dirichlet-distributed triplets.
 
@@ -182,6 +196,8 @@ par(mfrow = c(1,1))
 ```
 
 <br>
+
+Notice that not all combinations of $E[x_i]\text{ for all } i \in \{1, \dots, K\}$ and $Var[x_j]$ are valid. Introducing $Var[x_2]=.28$ will rise a warning message and negative values for all the $\alpha_i$.
 
 ### References
 

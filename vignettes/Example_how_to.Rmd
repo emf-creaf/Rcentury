@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 
 ### Install Rcentury locally and set working directory
 
-To run CENTURY from a R session with the Rcentury package we may proceed as follows. First, package Rcentury must be install on our local computer. The package is publicly available at github and can be easily fetched:
+To run CENTURY from a R session with the **Rcentury** package we may proceed as follows. First, package **Rcentury** must be install on our local computer. The package is publicly available at github and can be easily fetched:
 
 ```{r install, warning = FALSE, message = FALSE}
-devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
+# devtools::install_github("https://github.com/emf-creaf/Rcentury.git")
 ```
 
 Then, we load it into our R session:
@@ -69,23 +69,20 @@ nothing <- file.copy(all_files, temp_dir)
 
 <br>
 
-Now we may open one of the files, modified and save it on disk. To facilitate it the Rcentury package includes functions to read/write files. In our example we will modify the original clay and slit proportions in the Xilingol site to 0.5 and 0.2 (and therefore, a sand proportion of 0.3), respectively, changing the original clay-loam soil type to a clay type.
+Now we may open one of the files, modified and save it on disk. To facilitate it the Rcentury package includes functions to read/write files. In our example we will modify the original clay and slit proportions in the Xilingol site to 0.5 and 0.2 (and therefore, a sand proportion of 0.3), respectively, changing the original clay-loam soil type to a pure clay type.
 
 ```{r change_site, message = FALSE}
-clay <- 0.5
-silt <- 0.2
-sand <- 1 - clay - silt
 site <- read_site(temp_dir, "XILIN.100")
 site$`site and control`$df <- within(site$`site and control`$df, 
-                                     value[field == "CLAY"] <- clay,
-                                     value[field == "SILT"] <- silt,
-                                     value[field == "SAND"] <- sand)
+                                     value[field == "CLAY"] <- 0.5,
+                                     value[field == "SILT"] <- 0.2,
+                                     value[field == "SAND"] <- 0.3)
 write_site(site, temp_dir, "new_XILIN.100", overwrite = TRUE)
 ```
 
 <br>
 
-We will also change the schedule file, first by specifying the name of the new site file **new_XILIN.100** (necessary for CENTURY to find the right site file) and then by modifying the schedule blocks. The new block will be located between first and third blocks and will be similar to block #1. Care must be taken for starting and end years to be correctly specified.
+We will also change the schedule file, first by specifying the name of the new site file *new_XILIN.100* (necessary for CENTURY to find the right site file) and then by modifying the schedule blocks. We will add a new block that will be located between first and third blocks and will be similar to block #1 (only its duration will differ). Care must be taken for starting and end years to be correctly specified.
 
 ```{r change_schedule, message = FALSE}
 schedule <- read_schedule(temp_dir, "XILI.sch")
@@ -112,7 +109,7 @@ write_schedule(schedule, temp_dir, "new_XILI.sch")
 
 ### Running a CENTURY simulation
 
-Finally, we may now proceed to run our CENTURY simulation, but for that we must also copy the two executables **century_47.exe** and **list100_47.exe** to the working directory. We also need an ASCII file specifying the list of variables to extract from the results. Since this example is for illustrative purposes only, we will extract total system carbon only.
+Finally, we may now proceed to run our CENTURY simulation, but for that we must also copy the two executables 'century_47.exe' and 'list100_47.exe' to the working directory. We also need an ASCII file specifying the list of variables to extract from the results. Since this example is for illustrative purposes only, we will extract total system carbon only.
 
 ```{r run_simu, warning = FALSE, message = FALSE}
 # Files with extension '.exe'.
