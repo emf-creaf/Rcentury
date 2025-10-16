@@ -28,11 +28,11 @@ Any question related to CENTURY must be addressed directly to the
 creators of that software. See contact information on the
 <https://www.soilcarbonsolutionscenter.com> web page.
 
-The CENTURY Fortran executable can be used as a stand-alone software to
-be run on a Windows command prompt. To do so, just follow the
-instructions in the accompanying documents. Additionally, a series of
-ASCII files must also be prepared in advance, which will then be read
-when CENTURY is executed. Those files include:
+The CENTURY software can be used in stand-alone mode, to be run on a
+Windows command prompt. To do so, just follow the instructions in the
+accompanying documents (available after uncompressing). Additionally, a
+series of ASCII files must also be prepared in advance, which will then
+be read when CENTURY is executed. Those files include:
 
 - A set of up to 11 option files with extension ‘.100’, containing a
   large set of parameters. The name of these files is fixed.
