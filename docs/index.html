@@ -35,7 +35,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/Example_uncertainty_sensitivity.html">Example uncertainty and sensitivity</a></li>
+<li><a class="dropdown-item" href="articles/Example_how_to.html">How to run Rcentury</a></li>
+    <li><a class="dropdown-item" href="articles/Example_uncertainty_sensitivity.html">Computing uncertainty and sensitivity</a></li>
     <li><a class="dropdown-item" href="articles/How-to-run-century.html">How to run CENTURY 4.7</a></li>
   </ul>
 </li>
@@ -51,102 +52,63 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="rcentury-soil-dynamics-simulation-with-century-47-and-r">Rcentury: soil dynamics simulation with CENTURY 4.7 and R<a class="anchor" aria-label="anchor" href="#rcentury-soil-dynamics-simulation-with-century-47-and-r"></a>
-</h1></div>
+  <main id="main" class="col-md-9"><div class="section level2">
+<h2 id="rcentury-soil-dynamics-simulation-with-century-and-r">Rcentury: soil dynamics simulation with CENTURY and R<a class="anchor" aria-label="anchor" href="#rcentury-soil-dynamics-simulation-with-century-and-r"></a>
+</h2>
 <!-- badges: start -->
 <!-- badges: end -->
 <p><br></p>
-<div class="section level2">
-<h2 id="first-steps">First steps<a class="anchor" aria-label="anchor" href="#first-steps"></a>
-</h2>
-<p>The goal of the <strong>Rcentury</strong> R package is to run the CENTURY soil dynamics simulation from R on a command window. Since we do not provide any external software with this R package, you first need to download and install the Fortran version of the CENTURY 4.7 software locally. This can be done directly from the web site <a href="https://www.soilcarbonsolutionscenter.com" class="external-link uri">https://www.soilcarbonsolutionscenter.com</a> after filling out a form. Two zip-files are automatically downloaded, which must then be unzipped into a local folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples. Any question related to CENTURY must be addressed directly to the creators of that software. See contact information on the <a href="https://www.soilcarbonsolutionscenter.com" class="external-link uri">https://www.soilcarbonsolutionscenter.com</a> web page.</p>
-<p>The CENTURY Fortran executable can be used as a stand-alone software to be run on a Windows command-prompt console. To do so, just follow the instructions in the accompanying documents. Additionally, a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is executed. Those files include:</p>
+<div class="section level3">
+<h3 id="downloading-and-setting-up-century">Downloading and setting up CENTURY<a class="anchor" aria-label="anchor" href="#downloading-and-setting-up-century"></a>
+</h3>
+<p>The goal of the <strong>Rcentury</strong> R package is to run the CENTURY soil dynamics simulation from R. <strong>Rcentury</strong> is NOT an implementation of CENTURY. Rather, it has been built as an interface in R to the actually CENTURY software, which must have been downloaded in advance and placed in a local folder. This guarantees that calculations are done via the actual CENTURY code.</p>
+<p>We first need to download and install the CENTURY software locally. This must be done directly from the web site <a href="https://www.soilcarbonsolutionscenter.com" class="external-link uri">https://www.soilcarbonsolutionscenter.com</a> (after filling out a consent form). Two zip-files are automatically downloaded, which must then be unzipped into a local folder of our choice. The uncompressed folders contain all the necessary files, plus several user manuals and examples. Any question related to CENTURY must be addressed directly to the creators of that software. See contact information on the <a href="https://www.soilcarbonsolutionscenter.com" class="external-link uri">https://www.soilcarbonsolutionscenter.com</a> web page.</p>
+<p>The CENTURY software can be used in stand-alone mode, to be run on a Windows command prompt. To do so, just follow the instructions in the accompanying documents (available after uncompressing). Additionally, a series of ASCII files must also be prepared in advance, which will then be read when CENTURY is executed. Those files include:</p>
 <ul>
 <li>A set of up to 11 option files with extension ‘.100’, containing a large set of parameters. The name of these files is fixed.</li>
 <li>A single site file, also with extension ‘.100’, containing site-specific parameters. The name of this file can be chosen at will.</li>
 <li>A weather file, with extension ‘.wth’, that includes monthly data for precipitation and minimum and maximum temperature for the site.</li>
-<li>A schedule file, with extension ‘.sch’, which details the timing and sequence of all events in the simulation.</li>
+<li>A schedule file, with extension ‘.sch’, which specifies the timing for scheduling management actions and controlling crop growth throughout the simulation.</li>
 </ul>
-<p>All these ASCII files, together with the executable ‘.exe’ programs, must exist in the same folder.</p>
-<p>CENTURY 4.7 example files can be used as starting templates to prepare our own parameter files. Those example files are located in three sub-folders that are created when unzipping the CENTURY downloaded files:</p>
+<p>All these ASCII files, together with the executable ‘century_47.exe’ and ‘list100_47.exe’ programs, must be in the same folder. Notice that the CENTURY zip-files contain examples of those four types of ASCII input files plus the two ‘.exe’ programs. Therefore, the CENTURY example files can be used as starting templates to prepare our own parameter files. Those example files are located in three sub-folders that are created when unzipping the CENTURY downloaded files:</p>
 <ol style="list-style-type: decimal">
 <li>Grassland with grazing simulation ran for a site in Xilingol, Mongolia (sub-folder “/Century+Examples/Century Examples/1.soil_texture_ppt”).</li>
 <li>Plant production for different grass types with different relative temperature growth curves (sub-folder “/Century+Examples/Century Examples/3.plant_production”).</li>
-<li>DUke and Harvard forests (sub-folder “/Century+Examples/Century Examples/4.forest”).</li>
+<li>Duke and Harvard forests (sub-folder “/Century+Examples/Century Examples/4.forest”).</li>
 </ol>
-<p>In those folders we can also find the two executables <strong>century_47.exe</strong> and <strong>list100_47.exe</strong> that we will use in the simulations.</p>
+<p>In each of those folders we can also find the two executables ‘century_47.exe’ and ‘list100_47.exe’ that we will use in the simulations.</p>
 <p><br></p>
 </div>
-<div class="section level2">
-<h2 id="what-is-rcentury-for">What is Rcentury for?<a class="anchor" aria-label="anchor" href="#what-is-rcentury-for"></a>
-</h2>
-<p>Editing and then saving on disk each of those input ASCII files individually is an extremely tedious and challenging task, particularly when our goal is to apply the CENTURY model to a large number of different sites, and/or under a variety of different climatic and land management scenarios. This manual process is also highly susceptible to errors, given the vast number of parameters that must be carefully tuned-up and adjusted.</p>
-<p>Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. As mentioned above, the goal of package Rcentury is thus to run CENTURY 4.7 (version Fortran) from within R. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into our R session as a <strong>data.frame</strong>. Notice that Rcentury is NOT an implementation of the CENTURY equations in R code. Rather, it is an interface between the original CENTURY Fortran code and R, which guarantees that calculations are done via the actual CENTURY code.</p>
-</div>
-<div class="section level2">
-<h2 id="how-to-set-up-the-rcentury-session">How to set up the Rcentury session<a class="anchor" aria-label="anchor" href="#how-to-set-up-the-rcentury-session"></a>
-</h2>
-<p>To run CENTURY from a R session with the Rcentury package we may proceed as follows. First, package Rcentury must be install on our local computer. The package is publicly available at github and can be easily fetched:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/emf-creaf/Rcentury.git"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using GitHub PAT from the git credential store.</span></span>
-<span><span class="co">#&gt; Downloading GitHub repo emf-creaf/Rcentury@HEAD</span></span>
-<span><span class="co">#&gt; ── R CMD build ─────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt;          checking for file 'C:\Users\Roberto\AppData\Local\Temp\Rtmpuy8arK\remotes44a43da03685\emf-creaf-Rcentury-425a058/DESCRIPTION' ...  ✔  checking for file 'C:\Users\Roberto\AppData\Local\Temp\Rtmpuy8arK\remotes44a43da03685\emf-creaf-Rcentury-425a058/DESCRIPTION'</span></span>
-<span><span class="co">#&gt;       ─  preparing 'Rcentury': (5.7s)</span></span>
-<span><span class="co">#&gt;    checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information</span></span>
-<span><span class="co">#&gt;       ─  checking for LF line-endings in source and make files and shell scripts</span></span>
-<span><span class="co">#&gt;   ─  checking for empty or unneeded directories</span></span>
-<span><span class="co">#&gt; ─  building 'Rcentury_0.0.0.9000.tar.gz'</span></span>
-<span><span class="co">#&gt;      </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Installing package into 'C:/Users/Roberto/AppData/Local/R/win-library/4.4'</span></span>
-<span><span class="co">#&gt; (as 'lib' is unspecified)</span></span></code></pre></div>
-<p>Then, we load it into our R session:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://emf-creaf.github.io/Rcentury/">Rcentury</a></span><span class="op">)</span></span></code></pre></div>
-<p>This ensures that all package functions are available at the R session.</p>
-<p>Access to those folders is granted by using the R function “system.file”:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get paths.</span></span>
-<span><span class="va">path_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/1.soil_texture_ppt"</span>,  package <span class="op">=</span> <span class="st">"Rcentury"</span><span class="op">)</span>,</span>
-<span>             <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/3.plant_production"</span>,  package <span class="op">=</span> <span class="st">"Rcentury"</span><span class="op">)</span>,</span>
-<span>             <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/4.forest"</span>,  package <span class="op">=</span> <span class="st">"Rcentury"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># Check folder content.</span></span>
-<span><span class="co"># sapply(path_in, dir)</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="example-files">Example files<a class="anchor" aria-label="anchor" href="#example-files"></a>
+<h3 id="what-is-rcentury-for">What is Rcentury for?<a class="anchor" aria-label="anchor" href="#what-is-rcentury-for"></a>
 </h3>
-<p>There are two main ways to prepare the ASCII files that are required to run a simulation successfully, namely doing it from scratch or using the example files available with the compressed ‘.zip’. Hereby we will be concerned with the latter case.</p>
-<p>As mentioned above, the Rcentury package includes the example files that accompany the ‘.zip’ file that we may download from the</p>
-</div>
-<div class="section level3">
-<h3 id="prepare-a-century-simulation">Prepare a CENTURY simulation<a class="anchor" aria-label="anchor" href="#prepare-a-century-simulation"></a>
-</h3>
-<p>The steps to follow to prepare a CENTURY simulation with the Rcentury package are as follows:</p>
-<ol style="list-style-type: decimal">
-<li><p>Download the CENTURY 4.7 files as two compressed zip files (as of October 2025) from the web site.</p></li>
-<li><p>Unfold the zip files into a local folder. You will end up with a series of subfolders which enclose manuals and example files.</p></li>
-<li><p>Next, create a directory where you will hold all required CENTURY files and the results of your own simulations. Those files include the 4 types of files described above.</p></li>
-<li><p>Open RStudio</p></li>
-</ol>
-<p>There are three example simulations that accompany the CENTURY ‘.zip’ files.</p>
-<p>The ASCII files that are required by the CENTURY software can be read and write with functions that are provided with the Rcentury package:</p>
+<p>Editing, modifying and then saving on disk each of those input ASCII files individually is an extremely tedious and challenging task, particularly when our goal is to apply the CENTURY model to a large number of different sites, and/or under a variety of different climatic and land management scenarios. This manual process is also highly susceptible to errors, given the vast number of parameters that must be carefully tuned-up and adjusted.</p>
+<p>Therefore, it is a significant improvement in workflow to be able to perform all these file operations from within a comprehensive software environment like R. As mentioned above, the goal of package <strong>Rcentury</strong> is thus to run CENTURY 4.7 from within R. That includes preparing all files (treatments, schedule, weather and site characteristic), and then read and load the result files into our R session as a <strong>data.frame</strong>.</p>
+<p><br></p>
+<div class="section level4">
+<h4 id="main-functions-in-the-rcentury-package">Main functions in the Rcentury package<a class="anchor" aria-label="anchor" href="#main-functions-in-the-rcentury-package"></a>
+</h4>
+<p>The ASCII files that are required by the CENTURY software can be read and write with functions that are provided with the <strong>Rcentury</strong> package:</p>
 <ul>
-<li>read_100/write_100: to read/write all CENTURY files with extension ’*.100’ save for site files.</li>
-<li>read_site/write_site: to read/write ers to create input site files (extension ‘.100’) for the CENTURY soil model.</li>
-<li>read_weather/write_weather:</li>
-<li>read_schedule/write_schedule: read/write *.sch CENTURY files.</li>
-<li>read_lis:</li>
+<li>
+<strong>read_100</strong>/<strong>write_100</strong>: to read/write files with extension ‘.100’, save for site files.</li>
+<li>
+<strong>read_site</strong>/<strong>write_site</strong>: to read/write input site files (also extension ‘.100’).</li>
+<li>
+<strong>read_weather</strong>/<strong>write_weather</strong>: to read/write weather files (extension ‘.wth’).</li>
+<li>
+<strong>read_schedule</strong>/<strong>write_schedule</strong>: to read/write schedule files (extension ‘.sch’).</li>
+<li>
+<strong>read_lis</strong>: utility program to read binary ‘.bin’ files containing results from the simulation.</li>
 </ul>
 <p>These functions allow us to first read the example files provided with the CENTURY software, change the parameters at will and then write the modified dataset on disk.</p>
-<p>Once those files are available in the same directory where they two ‘.exe’ files are located, we can run CENTURY with the ‘century_run.R’ function. Internally, ‘century_run.R’ runs sequentially ‘century_47.exe’ and ‘list100_47.exe’, creating first a ‘.bin’ file and then an ASCII ‘.lis’, which finally be read with the ‘read_lis.R’ function. The output of the latter is, finally, a <strong>data.frame</strong> that can be manipulated and analysed within R.</p>
-</div>
-<div class="section level3">
-<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h3>
-<p>Once installed, you can load it as:</p>
+<p>Once those files are available in the same directory where they two ‘.exe’ files are located, we can run CENTURY with the <strong>century_run.R</strong> function. Internally, <strong>century_run</strong> runs sequentially the following programs:</p>
+<ol style="list-style-type: decimal">
+<li>‘century_47.exe’: it creates a binary file on disk with extension ‘.bin’.</li>
+<li>‘list100_47.exe’: it reads the ‘.bin’ file and builds an ASCII ASCII ‘.lis’ file containing a sequence of columns with results.</li>
+<li>
+<strong>read_lis.R</strong>: it reads the ‘.lis’ ASCII file into the R session as a <strong>data.frame</strong> that can be manipulated and analysed.</li>
+</ol>
 </div>
 </div>
 </div>
@@ -183,7 +145,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

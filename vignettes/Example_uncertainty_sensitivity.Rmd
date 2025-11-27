@@ -1,11 +1,13 @@
 ---
 title: "Computing uncertainty and sensitivity"
-output: rmarkdown::html_vignette
-bibliography: references.bib # Point to my .bib file
-vignette: >
-  %\VignetteIndexEntry{Example uncertainty and sensitivity}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    df_print: paged
+  html_vignette: default
+  pdf_document: default
+bibliography: references.bib
+vignette: "%\\VignetteIndexEntry{Example uncertainty and sensitivity} %\\VignetteEncoding{UTF-8}
+  %\\VignetteEngine{knitr::rmarkdown}\n"
 ---
 
 ```{r, include = FALSE}

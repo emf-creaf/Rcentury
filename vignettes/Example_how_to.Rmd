@@ -1,10 +1,12 @@
 ---
 title: "How to run Rcentury"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Example how to run Rcentury}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    df_print: paged
+  html_vignette: default
+  pdf_document: default
+vignette: "%\\VignetteIndexEntry{Example how to run Rcentury} %\\VignetteEncoding{UTF-8}
+  %\\VignetteEngine{knitr::rmarkdown}\n"
 ---
 
 ```{r, include = FALSE}

@@ -1,10 +1,11 @@
 pandoc: 3.6.3
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  Example_how_to: Example_how_to.html
   Example_uncertainty_sensitivity: Example_uncertainty_sensitivity.html
   How-to-run-century: How-to-run-century.html
-last_built: 2025-10-10T12:46Z
+last_built: 2025-11-27T15:27Z
 urls:
   reference: https://emf-creaf.github.io/Rcentury/reference
   article: https://emf-creaf.github.io/Rcentury/articles
