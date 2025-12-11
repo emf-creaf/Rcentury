@@ -51,7 +51,6 @@
 <span>  name_txt <span class="op">=</span> <span class="va">name_txt</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  extended <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  erase_bin <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -82,18 +81,14 @@ file that contains, in a single column, the name of the fields to extract from t
 
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
-<dd><p><code>logical</code>, if set to TRUE and the file already exists, it will overwrite; if set to
-FALSE and the file exists, it will stop with an error message.</p></dd>
+<dd><p><code>logical</code>, if set to TRUE, files 'name_bin' and
+'name_lis' will be deleted before execution. If set to FALSE and files exist on disk, the execution
+will stop with an error message.</p></dd>
 
 
 <dt id="arg-extended">extended<a class="anchor" aria-label="anchor" href="#arg-extended"></a></dt>
 <dd><p><code>character</code> flag "Y" or "N" to decide whether the computation corresponds to an extended
 one (see CENTURY manual, section 6-1, for details).</p></dd>
-
-
-<dt id="arg-erase-bin">erase_bin<a class="anchor" aria-label="anchor" href="#arg-erase-bin"></a></dt>
-<dd><p><code>logical</code>, if set to TRUE (default) the '.bin' file that results from the CENTURY
-simulation will be erased after the calculations are done.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

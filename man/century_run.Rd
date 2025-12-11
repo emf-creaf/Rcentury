@@ -12,7 +12,6 @@ century_run(
   name_txt = name_txt,
   overwrite = TRUE,
   extended = FALSE,
-  erase_bin = FALSE,
   verbose = TRUE
 )
 }
@@ -28,14 +27,12 @@ century_run(
 \item{name_txt}{\code{character} string specifying the name of the ASCII text (with extension '.txt')
 file that contains, in a single column, the name of the fields to extract from the results.}
 
-\item{overwrite}{\code{logical}, if set to TRUE and the file already exists, it will overwrite; if set to
-FALSE and the file exists, it will stop with an error message.}
+\item{overwrite}{\code{logical}, if set to TRUE, files 'name_bin' and
+'name_lis' will be deleted before execution. If set to FALSE and files exist on disk, the execution
+will stop with an error message.}
 
 \item{extended}{\code{character} flag "Y" or "N" to decide whether the computation corresponds to an extended
 one (see CENTURY manual, section 6-1, for details).}
-
-\item{erase_bin}{\code{logical}, if set to TRUE (default) the '.bin' file that results from the CENTURY
-simulation will be erased after the calculations are done.}
 
 \item{verbose}{\code{logical}, if set to TRUE (default) information about the execution is printed on screen.}
 }

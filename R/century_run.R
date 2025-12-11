@@ -9,12 +9,11 @@
 #' @param name_lis \code{character} string with name to give to output '.lis' ASCII file.
 #' @param name_txt \code{character} string specifying the name of the ASCII text (with extension '.txt')
 #' file that contains, in a single column, the name of the fields to extract from the results.
-#' @param overwrite \code{logical}, if set to TRUE and the file already exists, it will overwrite; if set to
-#' FALSE and the file exists, it will stop with an error message.
+#' @param overwrite \code{logical}, if set to TRUE, files 'name_bin' and
+#' 'name_lis' will be deleted before execution. If set to FALSE and files exist on disk, the execution
+#' will stop with an error message.
 #' @param extended \code{character} flag "Y" or "N" to decide whether the computation corresponds to an extended
 #' one (see CENTURY manual, section 6-1, for details).
-#' @param erase_bin \code{logical}, if set to TRUE (default) the '.bin' file that results from the CENTURY
-#' simulation will be erased after the calculations are done.
 #' @param verbose \code{logical}, if set to TRUE (default) information about the execution is printed on screen.
 #'
 #' @returns
@@ -25,7 +24,7 @@
 #' @examples
 #' # See vignette for details.
 century_run <- function(pathname = pathname, schedule = schedule, name_bin = name_bin, name_lis = name_lis,
-                        name_txt = name_txt, overwrite = TRUE, extended = FALSE, erase_bin = FALSE, verbose = TRUE) {
+                        name_txt = name_txt, overwrite = TRUE, extended = FALSE, verbose = TRUE) {
 
   # First checks.
   if (tools::file_ext(schedule) != "sch") stop("Extension of schedule file should be '.sch'")
@@ -34,11 +33,20 @@ century_run <- function(pathname = pathname, schedule = schedule, name_bin = nam
   if (tools::file_ext(name_txt) != "txt") stop(paste("Extension of", name_txt, "file should be '.txt'"))
 
 
-  # Are all files there?
+  # Are all executable files there?
   if (!file.exists(file.path(pathname))) stop("Wrong path")
   if (!file.exists(file.path(pathname, schedule))) stop(paste("Could not find", schedule, "file"))
   if (!file.exists(file.path(pathname, "century_47.exe"))) stop(paste("Could not find 'century_47.exe' in folder", pathname))
   if (!file.exists(file.path(pathname, "list100_47.exe"))) stop(paste("Could not find 'list100_47.exe' in folder", pathname))
+
+
+  # Do we remove .bin and .lis files before the calculations?
+  if (overwrite) {
+    suppressWarnings(file.remove(file.path(pathname, c(name_bin, name_lis))))
+  } else {
+    if (any(file.exists(pathname, c(name_bin, name_lis))))
+      cli::cli_abort(paste0("Files ", name_bin, " and/or ", name_lis, " already exist", collapse = ""))
+  }
 
 
   # Now, remove extensions to file names.

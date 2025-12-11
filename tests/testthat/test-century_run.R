@@ -8,7 +8,7 @@ test_that("Run Century", {
   # Copy *.exe files.
   x <- c("century_47.exe", "list100_47.exe")
   file.copy(file.path(path_exe, x), path_out, overwrite = TRUE)
-  # expect_true(all(file.copy(file.path(path_exe, x), path_out, overwrite = TRUE)))
+  expect_true(all(file.copy(file.path(path_exe, x), path_out, overwrite = TRUE)))
 
   # Path to files.
   path_in <- c(system.file("extdata/1.soil_texture_ppt",  package = "Rcentury"),
@@ -65,17 +65,16 @@ test_that("Run Century", {
 
     for (s in schedule[[p]]) {
 
-      # Delete previous results, if any.
-      suppressWarnings(file.remove(file.path(path_out, c("delete.bin", "delete.lis", "harvest.csv"))))
-      suppressPackageStartupMessages(century_run(path_out, s, "delete.bin", "delete.lis", "outvars.txt", verbose = FALSE))
-
+      # Delete previous results and run CENTURY.
+      suppressWarnings(file.remove(file.path(path_out, c("delete.bin", "delete.lis"))))
+      century_run(path_out, s, "delete.bin", "delete.lis", "outvars.txt", verbose = FALSE)
       expect_true(file.exists(file.path(path_out, "delete.bin")))
-      file.remove(file.path(path_out, "delete.bin"))
-      expect_false(file.exists(file.path(path_out, "delete.bin")))
-
       expect_true(file.exists(file.path(path_out, "delete.lis")))
-      file.remove(file.path(path_out, "delete.lis"))
-      expect_false(file.exists(file.path(path_out, "delete.lis")))
+
+      # Do not delete previous results and try to run CENTURY with an error message.
+      expect_error(century_run(path_out, s, "delete.bin", "delete.lis", "outvars.txt", verbose = FALSE, overwrite = FALSE))
+      file.remove(file.path(path_out, c("delete.bin", "delete.lis")))
+      expect_false(any(file.exists(file.path(path_out, c("delete.bin", "delete.lis")))))
 
     }
   }
