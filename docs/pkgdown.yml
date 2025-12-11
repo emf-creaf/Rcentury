@@ -5,4 +5,7 @@ articles:
   Example_how_to: Example_how_to.html
   Example_uncertainty_sensitivity: Example_uncertainty_sensitivity.html
   How-to-run-century: How-to-run-century.html
-last_built: 2025-12-11T14:26Z
+last_built: 2025-12-11T15:06Z
+urls:
+  reference: https://emf-creaf.github.io/Rcentury/reference
+  article: https://emf-creaf.github.io/Rcentury/articles
