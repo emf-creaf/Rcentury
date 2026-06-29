@@ -49,6 +49,7 @@ write_weather <- function(df, pathname = pathname, filename = filename, overwrit
   df_wide <- df_long |>
     tidyr::pivot_wider(names_from = month, values_from = value) |>
     dplyr::arrange(year, variable) |>
+    dplyr::relocate(variable, .before = year) |>
     as.data.frame()
   colnames(df_wide) <- NULL
 
